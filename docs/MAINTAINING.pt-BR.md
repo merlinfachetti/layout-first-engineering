@@ -6,11 +6,15 @@ Este repositório tem **Merlin Fachetti (@merlinfachetti)** como criador e mante
 
 1. Instale `git`, `python3` e o [GitHub CLI](https://cli.github.com/) (macOS: `brew install gh`, se você utiliza Homebrew).
 2. Execute `gh auth login` e entre **somente** com `merlinfachetti`; não cole tokens em arquivos do projeto.
-3. Extraia o arquivo `layout-first-engineering-github-ready.zip` em um diretório temporário, fora de `Projects_MerlinFachetti`.
-4. No Terminal, entre na pasta extraída e execute `bash scripts/publish-macos.sh`.
+3. Extraia o arquivo `layout-first-engineering-github-ready-v0.1.2.zip` em um diretório temporário, fora de `Projects_MerlinFachetti`.
+4. Use um caminho que não dependa da pasta atual: `bash "$HOME/Downloads/lfe-publish/PUBLICAR_NO_GITHUB.command"`, **desde que tenha extraído o ZIP em `~/Downloads/lfe-publish`**. Se usou outra pasta, utilize o caminho correspondente. Veja [passo a passo e troubleshooting](PUBLICACAO-GITHUB-MAC.md).
 5. O script faz verificações, pergunta antes de publicar, copia para `/Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering`, inicializa o Git usando apenas sua identidade, cria o repositório **público** na sua conta e envia o primeiro commit.
 
 **Segurança:** por padrão, não sobrescreve diretórios existentes nem repositórios já criados. Se houver erro após a cópia ou criação remota, confira o estado manualmente antes de tentar novamente; não execute operações destrutivas.
+
+## 1A. Atualização após publicação
+
+Se o repositório **já estiver público**, não execute o script de publicação inicial. Use [o Manual Mestre e o atualizador seguro](MANUAL-MESTRE.pt-BR.md#7-como-atualizar-um-repositório-já-publicado).
 
 ## 2. Controles da comunidade
 
@@ -31,7 +35,7 @@ Este repositório tem **Merlin Fachetti (@merlinfachetti)** como criador e mante
 
 - Registre mudanças em `CHANGELOG.md` e incremente a versão no frontmatter de `layout-first-engineering/SKILL.md`.
 - Rode `python3 scripts/build_release.py`. Os ZIPs aparecem na pasta ignorada `dist/`.
-- Após testes e revisão manual, crie uma tag de versão e um GitHub Release usando sua conta: `git tag v0.1.0 && git push origin v0.1.0` e `gh release create v0.1.0 dist/layout-first-engineering-skill.zip dist/layout-first-engineering-opensource.zip --title "v0.1.0" --notes-file CHANGELOG.md` (ajuste as notas para a versão correspondente).
+- Após testes e revisão manual, crie uma tag de versão e um GitHub Release usando sua conta: `git tag <VERSAO> && git push origin <VERSAO>` e `gh release create <VERSAO> dist/layout-first-engineering-skill.zip dist/layout-first-engineering-opensource.zip --title "<VERSAO>" --notes-file CHANGELOG.md` (ajuste as notas para a versão correspondente).
 - A tag e o release só devem ser criados depois de confirmar que a versão ainda não existe.
 
 ## 5. Gestão contínua

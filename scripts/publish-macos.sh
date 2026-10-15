@@ -45,7 +45,7 @@ git config --local user.useConfigOnly true
 git add --all
 GIT_AUTHOR_NAME="$AUTHOR_NAME" GIT_AUTHOR_EMAIL="$AUTHOR_EMAIL" \
 GIT_COMMITTER_NAME="$AUTHOR_NAME" GIT_COMMITTER_EMAIL="$AUTHOR_EMAIL" \
-git commit -m "feat: publish Layout-First Engineering v0.1.0"
+git commit -m "feat: publish Layout-First Engineering v0.1.2"
 
 ACTUAL_AUTHOR="$(git log -1 --pretty='%an <%ae>')"
 [[ "$ACTUAL_AUTHOR" == "${AUTHOR_NAME} <${AUTHOR_EMAIL}>" ]] || fail "Autoria incorreta: ${ACTUAL_AUTHOR}. Nada foi publicado."

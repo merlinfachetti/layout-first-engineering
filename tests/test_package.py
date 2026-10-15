@@ -40,6 +40,24 @@ class SkillStructureTests(unittest.TestCase):
             with self.subTest(file=x):
                 self.assertTrue((SKILL / x).is_file())
 
+    def test_public_guides_and_entrypoint_are_present(self):
+        required = [
+            "docs/INSTALACAO-E-USO.pt-BR.md",
+            "docs/MANUAL-MESTRE.pt-BR.md",
+            "docs/INSTALLATION-AND-USAGE.md",
+            "docs/PROMPTS-MESTRES.pt-BR.md",
+            "docs/PUBLICACAO-GITHUB-MAC.md",
+            "PUBLICAR_NO_GITHUB.command",
+            "scripts/publish-macos.sh",
+        ]
+        for x in required:
+            with self.subTest(file=x):
+                self.assertTrue((ROOT / x).is_file())
+        readme = (ROOT / "README.pt-BR.md").read_text(encoding="utf-8")
+        self.assertIn("docs/INSTALACAO-E-USO.pt-BR.md", readme)
+        self.assertIn("docs/MANUAL-MESTRE.pt-BR.md", readme)
+        self.assertIn("docs/PROMPTS-MESTRES.pt-BR.md", readme)
+
     def test_project_template_is_valid(self):
         errors, warnings = mod.validate(SKILL / "assets/PROJECT_STATE.md")
         self.assertEqual(errors, [], (errors, warnings))

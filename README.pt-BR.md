@@ -27,7 +27,18 @@ Primeiro a IA propõe **conceitos visuais realmente diferentes**, cria as primei
 
 A skill não inventa integrações ou preços: se não houver conector de Figma, por exemplo, ela documenta o design em formato possível e esclarece a limitação. Se não houver pesquisa web, não apresenta valores de fornecedores como preços atualizados.
 
-## Como instalar
+## Instalação completa, uso e publicação
+
+**Documentação para consulta permanente:**
+
+- **[MANUAL MESTRE — Tudo sobre funcionamento, instalação, GitHub e manutenção](docs/MANUAL-MESTRE.pt-BR.md)** — a página principal, completa e preservada no repositório.
+
+- **[Instalar e usar em ChatGPT, Claude, Gemini CLI, Codex, DeepSeek, Qwen e outros](docs/INSTALACAO-E-USO.pt-BR.md)** — com comandos, diferenças entre plataformas, conectores, exemplos, retomada e troubleshooting.
+- **[Publicar no GitHub (macOS) e corrigir erros de caminho](docs/PUBLICACAO-GITHUB-MAC.md)** — comando independente do diretório atual e diagnóstico.
+- **[Dois prompts mestres originais: design e engenharia](docs/PROMPTS-MESTRES.pt-BR.md)** — para consulta e fallback em qualquer IA.
+- [Manter o repositório e lançar novas versões](docs/MAINTAINING.pt-BR.md).
+
+## Como instalar (resumo)
 
 Baixe o ZIP da skill ou clone o repositório. Copie **a pasta inteira** `layout-first-engineering`, incluindo `SKILL.md`, `references/`, `assets/` e `scripts/`.
 
@@ -70,4 +81,4 @@ Código e documentação licenciados sob MIT. Contribuições podem propor melho
 
 **Criado e mantido por [Merlin Fachetti (@merlinfachetti)](https://github.com/merlinfachetti).** O copyright MIT identifica o criador original, e contribuições humanas posteriores mantêm sua devida atribuição. Os scripts de publicação não adicionam coautoria de IA.
 
-Para publicar o projeto no GitHub como repositório público e salvar a cópia local no Mac em `/Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering`, siga [o guia de manutenção](docs/MAINTAINING.pt-BR.md). Execute `bash scripts/publish-macos.sh` dentro da pasta extraída: ele verifica sua conta e pede autorização antes de enviar. O CI roda nos commits, PRs e semanalmente sem criar commits.
+**Se o repositório já existir, NÃO repita a publicação inicial:** veja [atualização do GitHub](docs/MANUAL-MESTRE.pt-BR.md#7-como-atualizar-um-repositório-já-publicado). Para publicar o projeto no GitHub como repositório público e salvar a cópia local no Mac em `/Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering`, siga [o guia de manutenção](docs/MAINTAINING.pt-BR.md). Execute `bash "$HOME/Downloads/lfe-publish/PUBLICAR_NO_GITHUB.command"` após extrair o ZIP em `~/Downloads/lfe-publish` (ou `bash scripts/publish-macos.sh` de dentro da raiz extraída): ele verifica sua conta e pede autorização antes de enviar. O CI roda nos commits, PRs e semanalmente sem criar commits.

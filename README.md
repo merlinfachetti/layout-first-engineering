@@ -2,7 +2,7 @@
 
 **A human-led, design-first product-to-production Agent Skill.**
 
-[Leia em português](README.pt-BR.md)
+[Leia em português](README.pt-BR.md) · [Complete Portuguese manual](docs/MANUAL-MESTRE.pt-BR.md)
 
 LFE guides an AI assistant to start with **art direction and editable interface prototypes**, ask focused questions only when they matter, reconcile what a beautiful UI implies about the product, then plan architecture, costs, security and engineering before writing production code.
 
@@ -44,6 +44,8 @@ flowchart TD
 ```
 
 The automation cannot bypass a user decision; routine tasks within approved scope can proceed without extra approvals.
+
+**Full guides:** [Installation & usage](docs/INSTALLATION-AND-USAGE.md) · [Portuguese cross-platform guide](docs/INSTALACAO-E-USO.pt-BR.md) · [macOS GitHub publication/troubleshooting](docs/PUBLICACAO-GITHUB-MAC.md) · [two master prompts](docs/PROMPTS-MESTRES.pt-BR.md).
 
 ## Install (agent skills)
 

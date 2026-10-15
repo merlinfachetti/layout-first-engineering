@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.2 — 2026-10-15
+
+- Added one permanent canonical Portuguese manual covering usage, installation, initial publication, existing-repository upgrades, community governance and releases.
+- Added safe macOS updater for already-published GitHub repositories, with account, remote, clean-worktree and fast-forward checks.
+- Linked original individual guides and master prompts; none were removed.
+
+## 0.1.1 — 2026-10-15
+
+- Added comprehensive persistent Portuguese and English guides for native skill installation, fallback and cross-agent use.
+- Restored the two master prompts as permanent documentation.
+- Added an absolute-path macOS publication entrypoint and troubleshooting instructions.
+- Corrected ChatGPT web skills eligibility guidance and linked official platform docs.
+
 ## 0.1.0 — 2026-10-15
 
 - Initial open-source MVP of the Layout-First Engineering skill.
