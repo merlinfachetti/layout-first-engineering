@@ -1,0 +1,31 @@
+name: Validate portable skill
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly verification; never modifies the repository.
+    - cron: '23 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-check-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate skill files and gate logic
+        run: python -m unittest discover -s tests -v
+      - name: Validate initial state template
+        run: python layout-first-engineering/scripts/verify_project.py layout-first-engineering/assets/PROJECT_STATE.md
+      - name: Build distributable archives
+        run: python scripts/build_release.py
