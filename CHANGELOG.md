@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.3 — 2026-10-16
+
+- Added community governance, contributor conduct, support, roadmap and accessibility policy.
+- Added privacy/data-handling notice and private-vulnerability-reporting procedures (manual GitHub toggle required).
+- Added compatibility Issue template, improved PR checklist and security guidance without claiming regulatory certification.
+- Replaced legacy direct-`main` update flow with human-reviewed protected-branch PR flow, with explicit identity and no AI co-authorship.
+- Added offline community documentation checks and a permanent end-to-end maintainer guide.
+
+
 ## 0.1.2 — 2026-10-15
 
 - Added one permanent canonical Portuguese manual covering usage, installation, initial publication, existing-repository upgrades, community governance and releases.

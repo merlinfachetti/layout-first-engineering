@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support and documentation / Suporte e documentação
+    url: https://github.com/merlinfachetti/layout-first-engineering/blob/main/SUPPORT.md
+    about: Read the support guide before opening an issue.
+  - name: Security vulnerabilities / Vulnerabilidades de segurança
+    url: https://github.com/merlinfachetti/layout-first-engineering/security/advisories
+    about: Do not post vulnerabilities publicly; use private reporting only if enabled.
+  - name: Product ideas and community conversation / Discussões
+    url: https://github.com/merlinfachetti/layout-first-engineering/discussions
+    about: Requires Discussions to be enabled in repository settings.

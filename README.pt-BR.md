@@ -1,5 +1,9 @@
 # Layout-First Engineering (LFE)
 
+**Comunidade e governança:** [Comece pelo guia de colaboração, privacidade, segurança e atualização](docs/OPEN-SOURCE-MAINTENANCE.pt-BR.md). Consulte também [GOVERNANCE](GOVERNANCE.md), [CONTRIBUTING](CONTRIBUTING.md), [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md), [SECURITY](SECURITY.md), [PRIVACY](PRIVACY.md), [SUPPORT](SUPPORT.md), [ROADMAP](ROADMAP.md).
+
+**Atenção:** o repositório já foi publicado e a `main` está protegida. **Não repita a publicação inicial nem execute push direto na `main`**; faça alterações por branch e Pull Request. O procedimento atualizado é o guia acima.
+
 **Uma skill open source para transformar uma ideia visual em um produto digital real, com o usuário no comando.**
 
 [English README](README.md)
