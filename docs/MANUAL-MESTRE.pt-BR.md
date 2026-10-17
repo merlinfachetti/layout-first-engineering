@@ -3,7 +3,9 @@
 **Documento canônico e permanente da comunidade**  
 **Projeto:** https://github.com/merlinfachetti/layout-first-engineering  
 **Criador e mantenedor original:** Merlin Fachetti — [@merlinfachetti](https://github.com/merlinfachetti)  
-**Licença:** MIT · **Versão desta documentação:** 0.1.2 · **Atualizado:** 15/10/2026
+**Licença:** MIT · **Versão desta documentação:** 0.1.3 · **Atualizado:** 16/10/2026
+
+> **ATUALIZAÇÃO DE MANUTENÇÃO (0.1.3):** o Ruleset `protect-main` já está ativo. **Atualizações por push direto na `main` foram substituídas pelo fluxo de branch + Pull Request**, documentado em [Comunidade, segurança e privacidade](OPEN-SOURCE-MAINTENANCE.pt-BR.md). Não use comandos antigos de atualização direta.
 
 > **Comece por este documento.** Ele consolida o funcionamento da skill, os prompts, a instalação em clientes de IA, os conectores, a publicação original, as atualizações, a governança open source e os problemas mais frequentes. Os links para os documentos específicos são preservados — nenhum guia anterior foi removido.
 
@@ -193,52 +195,19 @@ Mais detalhes em [Publicação GitHub no Mac](PUBLICACAO-GITHUB-MAC.md).
 
 ## 7. Como atualizar um repositório JÁ PUBLICADO
 
-### Caminho recomendado: pacote de documentação v0.1.2
+**A partir da versão 0.1.3, todo update passa por branch e PR**, porque o `protect-main` já exige Pull Requests e verificações. Não tente fazer push direto na `main`.
 
-Baixe e extraia o ZIP **v0.1.2**. A partir de qualquer diretório, execute:
-
-```bash
-bash "$HOME/Downloads/lfe-update/ATUALIZAR_GITHUB.command"
-```
-
-**Esse caminho pressupõe que você extraiu o ZIP em `~/Downloads/lfe-update`**. Se sua pasta tiver outro nome, ajuste o caminho. O atualizador verifica:
-
-1. GitHub autenticado como `merlinfachetti`, correspondência do ID e URL do repositório.
-2. Branch `main`, status local limpo e sem divergência em relação a `origin/main`.
-3. Integridade do pacote e teste automatizado antes de qualquer cópia.
-4. Exibe lista de arquivos e exige `ATUALIZAR_DOCUMENTACAO` antes de sincronizar.
-5. Após sincronizar, executa novamente os testes e chama o script de commit/push que exige `ATUALIZAR` e uma mensagem de commit.
-
-Ele **não utiliza force-push**, não reescreve commits anteriores, não adiciona trailer `Co-authored-by` e não sobrescreve alterações locais não commitadas. Se estiver em estado inesperado, para e mostra o problema.
-
-### Atualização manual após qualquer edição
+Faça download do ZIP `layout-first-engineering-community-v0.1.3.zip` e rode:
 
 ```bash
-cd /Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering
-git status
-git pull --ff-only
-# edite documentação ou código e revise o diff
-git diff --check
-bash scripts/push-update-macos.sh
+cd ~/Downloads
+unzip -q layout-first-engineering-community-v0.1.3.zip -d lfe-community-update
+bash "$HOME/Downloads/lfe-community-update/ATUALIZAR_GITHUB.command"
 ```
 
-O script de atualização faz testes, pede confirmação, usa a identidade Git local configurada e envia a alteração para `main`. **Se a branch `main` estiver protegida para aceitar somente Pull Requests, use branch + PR**; o push direto deverá falhar como medida de segurança.
+Este instalador **não** recria o repo nem apaga arquivos existentes: valida usuário/remoto/estado local, solicita `PREPARAR_PR`, cria a branch `docs/community-governance-v0.1.3`, copia apenas arquivos permitidos, roda testes e solicita `PUBLICAR_PR` antes de enviar ao GitHub e abrir o PR. É necessário revisar e integrar o PR manualmente após CI e avaliação dos arquivos. **Ele não altera Rulesets, configurações da conta nem cria releases.**
 
-### Contribuições e branches (recomendado)
-
-```bash
-cd /Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering
-git switch main
-git pull --ff-only
-git switch -c docs/minha-melhoria
-# editar, testar, revisar
-git add -A
-git commit -m "docs: aprimorar orientacoes de uso"
-git push -u origin docs/minha-melhoria
-gh pr create --base main --head docs/minha-melhoria --fill
-```
-
-Revise o PR e faça merge com sua conta GitHub somente depois de os testes passarem. Não habilite auto-merge se quiser revisão humana obrigatória.
+Para mudanças futuras editadas manualmente, consulte [guia de manutenção e comunidade](OPEN-SOURCE-MAINTENANCE.pt-BR.md#d-fluxo-protegido-de-manutenção-local--macos) e [MAINTAINING](MAINTAINING.pt-BR.md).
 
 ## 8. Como manter open source para a comunidade
 

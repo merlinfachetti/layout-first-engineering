@@ -1,5 +1,9 @@
 # Layout-First Engineering (LFE)
 
+**Community and maintenance:** [Governance](GOVERNANCE.md) · [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Privacy](PRIVACY.md) · [Support](SUPPORT.md) · [Roadmap](ROADMAP.md) · [Maintainer guide (PT-BR)](docs/OPEN-SOURCE-MAINTENANCE.pt-BR.md).
+
+**The repository is already public and `main` is protected.** Use a feature branch and pull request; never rerun initial publication or push directly to `main`.
+
 **A human-led, design-first product-to-production Agent Skill.**
 
 [Leia em português](README.pt-BR.md) · [Complete Portuguese manual](docs/MANUAL-MESTRE.pt-BR.md)

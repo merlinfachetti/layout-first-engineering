@@ -1,3 +1,5 @@
+> **ATENÇÃO — projeto já publicado:** `merlinfachetti/layout-first-engineering` já existe e sua branch `main` tem Ruleset ativo. Este guia de **primeira publicação** é histórico e NÃO deve ser executado novamente. Para atualizações use [Comunidade, segurança, privacidade e PR](OPEN-SOURCE-MAINTENANCE.pt-BR.md).
+
 # Publicar Layout-First Engineering no GitHub — macOS
 
 **Objetivo:** criar o repositório público `merlinfachetti/layout-first-engineering` e sua cópia local em `/Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering`, com o usuário `merlinfachetti` como autor do commit inicial e **sem `Co-authored-by` de IA**.
