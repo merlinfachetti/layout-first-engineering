@@ -178,11 +178,13 @@ def _state(doc):
         required += ["G2", "G3", "G4"]
     if stage >= 8:
         required += ["G5"]
+    # A stored state may stay in a stage after an approved gate turned `stale` (content changed);
+    # entering the stage requires valid gates, which `lfe stage` checks on computed status.
     for gate in required:
-        if cache[gate]["status"] != "approved":
+        if cache[gate]["status"] not in ("approved", "stale"):
             issues.append(Issue("STAGE_GATE_VIOLATION", f"$.gatesCache.{gate}",
                                 f"stage {doc['stage']} requires {gate} approved"))
-    if stage == 9 and cache["G6"]["status"] not in ("approved", "not_applicable"):
+    if stage == 9 and cache["G6"]["status"] not in ("approved", "not_applicable", "stale"):
         issues.append(Issue("STAGE_GATE_VIOLATION", "$.gatesCache.G6", "S9 requires G6 approved or not_applicable"))
     for gate, entry in cache.items():
         if entry["status"] in ("approved", "not_applicable") and not entry["decisionId"]:
