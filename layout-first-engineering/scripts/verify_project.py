@@ -9,14 +9,14 @@ import re
 import sys
 
 GATES = [f"G{i}" for i in range(1, 7)]
-STATUSES = {"not_started", "exploring", "proposed", "approved", "needs_revision", "blocked"}
+# `stale` and `not_applicable` come from `lfe render` (RFC-0001, section 10); neither counts as approved.
+STATUSES = {"not_started", "exploring", "proposed", "approved", "needs_revision", "blocked",
+            "stale", "not_applicable"}
 
 
-def validate(path: Path):
-    errors, warnings = [], []
-    if not path.is_file():
-        return [f"Missing state file: {path}"], warnings
-    content = path.read_text(encoding="utf-8")
+def parse(content: str):
+    """Return (stage, gate_rows, errors) from PROJECT_STATE.md text. Shared with `lfe import-md`."""
+    errors = []
     stage_match = re.search(r"(?im)^- \*\*Current stage:\*\*\s*(S[0-9])\s*$", content)
     stage = int(stage_match.group(1)[1]) if stage_match else None
     if stage is None:
@@ -35,6 +35,14 @@ def validate(path: Path):
     for gate in GATES:
         if gate not in gate_rows:
             errors.append(f"Missing gate {gate}")
+    return stage, gate_rows, errors
+
+
+def validate(path: Path):
+    warnings = []
+    if not path.is_file():
+        return [f"Missing state file: {path}"], warnings
+    stage, gate_rows, errors = parse(path.read_text(encoding="utf-8"))
     if stage is not None and stage >= 6:
         for gate in ("G2", "G3", "G4"):
             if gate in gate_rows and gate_rows[gate][2] != "approved":
