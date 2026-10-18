@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "lfe.action/0.1",
+  "actor": "agent",
+  "tool": "Write",
+  "targets": [
+    "../../.ssh/config"
+  ],
+  "command": null
+}

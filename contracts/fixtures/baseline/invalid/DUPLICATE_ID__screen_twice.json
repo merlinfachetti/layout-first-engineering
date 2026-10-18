@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "lfe.baseline/0.1",
+  "id": "DESIGN-001",
+  "revision": 2,
+  "title": "Minhas leituras",
+  "medium": "local-html",
+  "mediumDecisionId": "DEC-010",
+  "fidelity": "static-layout",
+  "screens": [
+    {
+      "screenId": "UI-001",
+      "name": "Minhas leituras",
+      "goal": "Adicionar e acompanhar leituras",
+      "states": [
+        "default",
+        "empty",
+        "error"
+      ],
+      "viewports": [
+        {
+          "width": 390,
+          "height": 844
+        },
+        {
+          "width": 1280,
+          "height": 800
+        }
+      ],
+      "prototype": {
+        "path": "prototype/index.html",
+        "query": "state=empty"
+      },
+      "preview": {
+        "path": "prototype/previews/ui-001-mobile.png"
+      }
+    },
+    {
+      "screenId": "UI-001",
+      "name": "Minhas leituras",
+      "goal": "Adicionar e acompanhar leituras",
+      "states": [
+        "default",
+        "empty",
+        "error"
+      ],
+      "viewports": [
+        {
+          "width": 390,
+          "height": 844
+        },
+        {
+          "width": 1280,
+          "height": 800
+        }
+      ],
+      "prototype": {
+        "path": "prototype/index.html",
+        "query": "state=empty"
+      },
+      "preview": {
+        "path": "prototype/previews/ui-001-mobile.png"
+      }
+    }
+  ],
+  "tokens": {
+    "path": "prototype/tokens.json"
+  },
+  "flows": [
+    {
+      "id": "FLOW-001",
+      "steps": [
+        "UI-001"
+      ]
+    }
+  ],
+  "provenance": [
+    {
+      "asset": "textos de exemplo",
+      "source": "escritos para a demo",
+      "license": "MIT"
+    }
+  ],
+  "files": [
+    {
+      "path": "prototype/index.html",
+      "sha256": "sha256:1bc04b5291c26a46d918139138b992d2de976d6851d0893b0476b85bfbdfc6e6"
+    },
+    {
+      "path": "prototype/previews/ui-001-mobile.png",
+      "sha256": "sha256:8f8cbb7dcf46e0bc7d53265749a6c17d116093a6ba95e442764060c76fd4a86c"
+    },
+    {
+      "path": "prototype/tokens.json",
+      "sha256": "sha256:c51e455b41df6c017327e16001dd064b8b6733faeaa69b23d9bd79c8079237d5"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/evidence.schema.json",
+  "title": "LFE EvidenceReceipt v0.1 (RFC-0001, 8.6)",
+  "type": "object",
+  "required": ["schemaVersion", "id", "testId", "requirementIds", "argv", "cwd", "environment", "sourceRevision", "startedAt", "durationMs", "exitCode", "testsRun", "testsSkipped", "status", "artifacts", "limitations", "producer"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.evidence/0\\.1$"},
+    "id": {"type": "string", "pattern": "^EVID-[0-9]{3,}$"},
+    "testId": {"type": "string", "pattern": "^TEST-[0-9]{3,}$"},
+    "requirementIds": {"type": "array", "items": {"type": "string", "pattern": "^(FR|NFR|SEC|UX)-[0-9]{3,}$"}},
+    "argv": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "cwd": {"type": "string", "minLength": 1},
+    "environment": {
+      "type": "object",
+      "required": ["os", "python"],
+      "additionalProperties": false,
+      "properties": {
+        "os": {"type": "string"},
+        "osRelease": {"type": "string"},
+        "python": {"type": "string"},
+        "tools": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
+    },
+    "sourceRevision": {
+      "type": "object",
+      "required": ["git", "dirty"],
+      "additionalProperties": false,
+      "properties": {
+        "git": {"type": ["string", "null"], "pattern": "^[0-9a-f]{7,40}$"},
+        "dirty": {"type": "boolean"}
+      }
+    },
+    "startedAt": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "durationMs": {"type": "integer", "minimum": 0},
+    "exitCode": {"type": ["integer", "null"]},
+    "testsRun": {"type": "integer", "minimum": 0},
+    "testsSkipped": {"type": "integer", "minimum": 0},
+    "status": {"enum": ["pass", "fail", "blocked", "skipped", "not_executed"]},
+    "reason": {"type": "string"},
+    "artifacts": {"type": "array", "items": {
+      "type": "object", "required": ["path", "sha256"], "additionalProperties": false,
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "producer": {"type": "string", "pattern": "^lfe-run/[0-9]+\\.[0-9]+$"}
+  }
+}

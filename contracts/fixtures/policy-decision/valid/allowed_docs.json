@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "lfe.policy-decision/0.1",
+  "allowed": true,
+  "class": "docs",
+  "reasonCode": null,
+  "message": "",
+  "missing": [],
+  "evaluatedAt": "2026-10-19T09:00:00Z"
+}

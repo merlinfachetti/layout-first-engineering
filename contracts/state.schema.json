@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/state.schema.json",
+  "title": "LFE ProjectState v0.1 (RFC-0001, 8.1)",
+  "type": "object",
+  "required": ["schemaVersion", "projectId", "name", "locale", "mode", "stage", "artifacts", "gatesCache", "nextAction", "updatedAt"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.state/0\\.1$"},
+    "projectId": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64},
+    "name": {"type": "string", "minLength": 1},
+    "locale": {"type": "string", "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$"},
+    "mode": {"enum": ["project", "demo"]},
+    "stage": {"enum": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"]},
+    "artifacts": {
+      "type": "object",
+      "propertyNames": {"pattern": "^(DIR|DESIGN|SCOPE|ADR|RC|DEPLOY)-[0-9]{3,}$"},
+      "additionalProperties": {
+        "type": "object",
+        "required": ["kind", "revision", "path", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {"enum": ["direction-set", "experience-baseline", "requirements-set", "architecture-decision", "release-candidate", "deployment-plan"]},
+          "revision": {"type": "integer", "minimum": 1},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status"],
+        "additionalProperties": false,
+        "properties": {
+          "status": {"enum": ["available", "limited", "unavailable", "unknown"]},
+          "checkedAt": {"$ref": "#/$defs/timestamp"},
+          "method": {"type": "string"},
+          "blockedReason": {"type": "string"}
+        }
+      }
+    },
+    "gatesCache": {
+      "type": "object",
+      "required": ["G1", "G2", "G3", "G4", "G5", "G6"],
+      "additionalProperties": false,
+      "properties": {
+        "G1": {"$ref": "#/$defs/gateCache"}, "G2": {"$ref": "#/$defs/gateCache"},
+        "G3": {"$ref": "#/$defs/gateCache"}, "G4": {"$ref": "#/$defs/gateCache"},
+        "G5": {"$ref": "#/$defs/gateCache"}, "G6": {"$ref": "#/$defs/gateCache"}
+      }
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "stage", "question", "class"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^Q-[0-9]{3,}$"},
+          "stage": {"enum": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"]},
+          "question": {"type": "string", "minLength": 1},
+          "class": {"enum": ["blocker", "important", "deferred"]}
+        }
+      }
+    },
+    "nextAction": {"type": "string", "minLength": 1},
+    "updatedAt": {"$ref": "#/$defs/timestamp"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "gateCache": {
+      "type": "object",
+      "required": ["status", "decisionId"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["not_started", "exploring", "proposed", "approved", "needs_revision", "blocked", "stale", "not_applicable"]},
+        "decisionId": {"type": ["string", "null"], "pattern": "^DEC-[0-9]{3,}$"}
+      }
+    }
+  }
+}

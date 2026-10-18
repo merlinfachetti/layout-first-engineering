@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/policy-decision.schema.json",
+  "title": "LFE PolicyDecision v0.1 (RFC-0001, 8.5)",
+  "type": "object",
+  "required": ["schemaVersion", "allowed", "class", "reasonCode", "message", "missing", "evaluatedAt"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.policy-decision/0\\.1$"},
+    "allowed": {"type": "boolean"},
+    "class": {"enum": ["docs", "prototype", "lfe_state", "lfe_human_command", "production_code", "deploy", "publish", "cost", "delete", "secret"]},
+    "reasonCode": {"type": ["string", "null"], "pattern": "^[A-Z][A-Z_]+$"},
+    "message": {"type": "string"},
+    "missing": {"type": "array", "items": {"enum": ["G1", "G2", "G3", "G4", "G5", "G6"]}},
+    "evaluatedAt": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"}
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/requirements.schema.json",
+  "title": "LFE RequirementSet v0.1, artifact SCOPE-### (RFC-0001, 8.4)",
+  "type": "object",
+  "required": ["schemaVersion", "id", "revision", "items", "tests"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.requirements/0\\.1$"},
+    "id": {"type": "string", "pattern": "^SCOPE-[0-9]{3,}$"},
+    "revision": {"type": "integer", "minimum": 1},
+    "items": {"type": "array", "minItems": 1, "items": {
+      "type": "object",
+      "required": ["id", "title", "acceptance", "priority", "uiRefs", "testRefs", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^(FR|NFR|SEC|UX)-[0-9]{3,}$"},
+        "title": {"type": "string", "minLength": 1},
+        "acceptance": {"type": "array", "minItems": 1, "items": {
+          "type": "object", "required": ["given", "when", "then"], "additionalProperties": false,
+          "properties": {"given": {"type": "string", "minLength": 1}, "when": {"type": "string", "minLength": 1}, "then": {"type": "string", "minLength": 1}}}},
+        "priority": {"enum": ["must", "should", "could", "wont"]},
+        "uiRefs": {"type": "array", "items": {"type": "string", "pattern": "^UI-[0-9]{3,}$"}},
+        "testRefs": {"type": "array", "items": {"type": "string", "pattern": "^TEST-[0-9]{3,}$"}},
+        "status": {"enum": ["proposed", "approved", "implemented", "verified"]}
+      }
+    }},
+    "tests": {"type": "array", "items": {
+      "type": "object",
+      "required": ["id", "kind", "covers"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^TEST-[0-9]{3,}$"},
+        "kind": {"enum": ["unit", "contract", "e2e", "manual-review"]},
+        "argv": {"type": "array", "items": {"type": "string"}},
+        "requires": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "covers": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^(FR|NFR|SEC|UX)-[0-9]{3,}$"}}
+      }
+    }}
+  }
+}
