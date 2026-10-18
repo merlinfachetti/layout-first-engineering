@@ -335,5 +335,14 @@ class DecisionLifecycleTests(unittest.TestCase):
             self.assertEqual(ctx.exception.code, "UNSAFE_PATH")
 
 
+
+class CommandDiscoveryTests(unittest.TestCase):
+    def test_cli_modules_are_discovered(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(cli(["version"]), 0)
+        self.assertIn("lfe.decision/0.1", out.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

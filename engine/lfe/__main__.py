@@ -6,7 +6,9 @@ Exit codes: 0 ok · 1 internal error · 2 usage, environment or non-interactive 
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
+import pkgutil
 import sys
 from pathlib import Path
 
@@ -189,6 +191,14 @@ def build_parser():
     stg = sub.add_parser("stage", help="move to a stage; refused when its gates are not valid")
     stg.add_argument("stage", choices=STAGES)
     stg.set_defaults(func=cmd_stage)
+
+    # Extension point: every module named `cli_<topic>.py` in this package exposes
+    # `register(subparsers)`. New commands live in their own module, so parallel work
+    # never has to edit this file.
+    package = sys.modules[__package__]
+    for info in sorted(pkgutil.iter_modules(package.__path__), key=lambda m: m.name):
+        if info.name.startswith("cli_"):
+            importlib.import_module(f"{__package__}.{info.name}").register(sub)
     return parser
 
 
