@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from . import gates, ledger, workspace
+from . import evidence, gates, ledger, workspace
 from .workspace import LfeError
 
 
@@ -95,6 +95,8 @@ def decide(root: Path, gate, verdict, *, option=None, rationale=None, exceptions
         current = _current_scope(state, [s["id"] for s in scope])
         if current != scope:
             raise LfeError("STALE_PROPOSAL", f"the content proposed for {gate} changed; propose again", 6)
+    if gate == "G5" and verdict == "approved":
+        evidence.require_complete(root)  # D-06
     exc_list = [{"id": f"EXC-{i:03d}", "description": d, "owner": o, "mustResolveBefore": g}
                 for i, (d, o, g) in enumerate(exceptions, start=1)]
     out(summary(root, gate, verdict, scope, exc_list))
