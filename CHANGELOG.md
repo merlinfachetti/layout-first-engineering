@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — v0.1.4-rc.1 candidate (not an official release)
+
+- Added optional repository stewardship protocol S0–S9 and auditable publication state.
+- Added required visual G1 baseline template with local image proof and theme/hybrid support.
+- Added interaction contracts for cards/carousels, asset/API provenance and accessibility/motion.
+- Added offline G1 baseline path validator, 12 behavioral evaluation scenarios and test-harness integrity checks.
+- Expanded state tracking, CI failure diagnosis and separate local/remote verification.
+- Real Codex/Gemini/Claude behavioral evaluations are pending; this candidate does not assert cross-model validation.
+
+
 ## 0.1.3 — 2026-10-16
 
 - Added community governance, contributor conduct, support, roadmap and accessibility policy.

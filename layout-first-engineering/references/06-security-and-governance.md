@@ -10,6 +10,11 @@
 - Avoid unreviewed dependency install scripts, automatic `curl | sh`, untrusted model-generated commands, destructive migrations and supply-chain assumptions. Inspect scripts and permissions.
 - Keep user consent for charges, publication, external emails, production deployments and irreversible operations separate from generic project approval.
 
+## Third-party asset and API rights inventory
+
+For a project relying on third-party imagery (cover art, posters, product photos) or any third-party media, record each source, attribution needs, permission for display and commercial reuse, API quotas and charges, caching/storage/derivative rules, territorial restrictions where relevant, expected data retention, source/date of verification, and a fallback strategy. Fetched metadata does not grant unrestricted rights to cover art. If terms are unavailable, mark `unverified` and block publication of dependent real assets until reviewed. Do not claim GDPR, copyright or accessibility certification solely from a checklist.
+
+
 ## Tailored threat review
 
 Draw trust boundaries and data flow; inventory data categories and retention. Assess misuse/abuse, user-to-user access, IDOR/BOLA, injection, file upload, account recovery, auth/session, CSRF where relevant, third-party API data transfer, logging leaks and error handling. Choose mitigations proportionate to data sensitivity and product surface. OWASP ASVS can guide verification; privacy laws depend on location and product context.

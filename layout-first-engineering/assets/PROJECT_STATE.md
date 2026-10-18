@@ -42,6 +42,15 @@ Valid statuses: `not_started`, `exploring`, `proposed`, `approved`, `needs_revis
 | --- | --- | --- | --- | --- | --- | --- |
 | Q-001 | S0 | What is the product and who uses it? | Enables the first relevant visual sketch | blocker | — | open |
 
+**Workspace and repository continuation (optional)**
+- Canonical workspace: unknown
+- Historical workspace: none
+- Repository stewardship record: not created (see `assets/REPOSITORY_STATE.md` when requested)
+- Approved visual baseline revision and link: not approved
+- Interaction contracts and verification: not created
+- Current CI state (local and remote separately): unverified
+
+
 ## Linked artifacts and evidence
 
 - Product brief: not created

@@ -3,7 +3,7 @@ name: layout-first-engineering
 description: Guide design-first website and application creation from visual concept through product discovery, UX/UI sign-off, architecture, budgeting, secure engineering, testing and delivery. Use when a user wants to create a website, web app, SaaS, platform or digital product with human-led decisions, proactive questions and an approved layout as the visual source of truth. Behave as product manager, creative director, engineering manager and senior software architect. Resume work from project state and ask only questions needed at each checkpoint.
 license: MIT
 metadata:
-  version: "0.1.3"
+  version: "0.1.4-rc.1"
   author: "Merlin Fachetti (@merlinfachetti)"
 ---
 
@@ -57,6 +57,11 @@ Status for each gate: `not_started | exploring | proposed | approved | needs_rev
 - **S4:** Read `references/04-architecture-costs.md`. Research *current* technology maturity, pricing and licenses using available trustworthy sources. Compare at least two credible stacks where material; recommend one, with trade-offs and migration/lock-in strategy. If live lookup unavailable, mark all prices `UNVERIFIED` and give formulas/ranges explicitly as assumptions rather than market quotes.
 - **S5–S8:** Read `references/05-delivery-and-quality.md`, then `references/06-security-and-governance.md` when designing auth/data/CI/CD, before sensitive integration, and before launch. Apply appropriate engineering rigor, not boilerplate infrastructure.
 - **All stages:** Follow `references/01-conversation-and-state.md` for questioning, decision IDs and state retention.
+- **Repository only when authorized:** Read `references/07-repository-and-contribution-workflow.md` before the first Git/GitHub publication, any PR/merge, workspace migration or CI diagnosis. A repo link does not grant publishing rights. Preserve state in `assets/REPOSITORY_STATE.md` when relevant. GitHub is optional.
+- **G1 evidence:** Following explicit G1 approval, create a project `docs/design/APPROVED_VISUAL_BASELINE.md` from `assets/APPROVED_VISUAL_BASELINE.md`. Embed locally versioned, verified previews in Markdown and link to actual editable sources; keep original concepts. A G1 baseline is **not G2**, and a Figma frame is **not** a verified interactive prototype.
+- **S2 interactive components:** For complex cards/carousels/dialogs, use `assets/INTERACTION_CONTRACT.md` to specify primary/secondary actions, keyboard/touch, responsive states, motion/reduced motion, failure modes and evidence.
+- **Image/API provenance:** For media- or data-rich projects, record licensing, attribution, caching, vendor API limits, data retention and unanswered legal questions progressively; do not assume public APIs authorize copyrighted image reuse.
+- **Evaluation discipline:** `scripts/verify_visual_baseline.py` checks local image paths only. `tests/evals/scenarios.json` are evaluation specifications, not results. Use `docs/VALIDATION-MATRIX.md` to document actual client/model test runs separately from offline test success.
 
 ## Every substantive turn: operating loop
 

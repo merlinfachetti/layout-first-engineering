@@ -20,6 +20,11 @@ Definition of Done (DoD): code reviewed, type/lint checks, required tests execut
 
 Never treat a generated file or passing unit tests as evidence of successful production behavior. Report actual commands and results, failures and missing environment prerequisites. Avoid arbitrary 100% coverage claims. For UI snapshots, ensure baselines correspond to approved current design and compare at appropriate viewports.
 
+## Repository operation is not a verified build
+
+When the user wants GitHub integrated across stages, follow `references/07-repository-and-contribution-workflow.md`. A green local test is not a passing remote status check. Required CI that cannot run due to runner/billing/policy problems blocks normal merge and must be reported distinctly from test failures; never invent the root cause or bypass it to manufacture a green release. Verify commit/PR state remotely and synchronize the canonical workspace only after a confirmed merge. Record `specified`, `implemented`, `executed`, `passed`, `blocked` separately.
+
+
 ## Verification matrix
 
 - Functional: happy-path + failure-path E2E, auth/role boundaries, validation, concurrency where relevant.
