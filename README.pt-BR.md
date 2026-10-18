@@ -29,6 +29,66 @@ Primeiro a IA propõe **conceitos visuais realmente diferentes**, cria as primei
 | S8 | Preparar lançamento, rollback, monitoramento e operação | **G6:** autorizar publicação |
 | S9 | Acompanhar resultados e iterar | Conforme mudanças |
 
+### Fluxo visual
+
+```mermaid
+flowchart LR
+  classDef stage fill:#eef4ff,stroke:#3b6fd8,color:#0f1f3d
+  classDef gate fill:#fff4d6,stroke:#c98a00,color:#3d2a00,stroke-width:2px
+  classDef unlock fill:#ffe3e3,stroke:#c92a2a,color:#3d0000,stroke-width:2px
+
+  subgraph P1["1 · Ver primeiro"]
+    direction TB
+    S0["S0 · Visão + ferramentas reais<br/>sem escolher stack"]
+    S1["S1 · 2–3 direções visuais<br/>realmente diferentes"]
+    G1{{"G1 · Você escolhe a direção<br/>híbridos e temas valem"}}
+    S2["S2 · Protótipo: telas,<br/>estados e tokens"]
+    G2{{"G2 · Você aprova<br/>a baseline visual"}}
+    S0 --> S1 --> G1 --> S2 --> G2
+    G1 -. revisar .-> S1
+    G2 -. revisar .-> S2
+  end
+
+  subgraph P2["2 · Tornar real"]
+    direction TB
+    S3["S3 · Regras, dados, papéis,<br/>riscos e MVP"]
+    G3{{"G3 · Você aprova escopo<br/>+ design revisado"}}
+    S4["S4 · 2+ arquiteturas,<br/>custos e segurança"]
+    G4{{"G4 · Você aprova stack<br/>+ envelope de custo"}}
+    S3 --> G3 --> S4 --> G4
+    G3 -. revisar .-> S3
+    G4 -. revisar .-> S4
+  end
+
+  subgraph P3["3 · Construir com evidência"]
+    direction TB
+    LOCK["🔓 Código de produção liberado<br/>só enquanto G2 + G3 + G4 valem"]
+    S5["S5 · Planejar fatias<br/>verticais pequenas"]
+    S6["S6 · Implementar<br/>fatia por fatia"]
+    S7["S7 · Verificar com testes reais:<br/>E2E, visual, acessibilidade, segurança"]
+    G5{{"G5 · Você aceita a<br/>versão candidata"}}
+    LOCK --> S5 --> S6 --> S7 --> G5
+    G5 -. ainda não .-> S6
+  end
+
+  subgraph P4["4 · Lançar e aprender"]
+    direction TB
+    S8["S8 · Plano de lançamento,<br/>rollback e monitoramento"]
+    G6{{"G6 · Você autoriza<br/>este deploy específico"}}
+    S9["S9 · Observar e iterar<br/>↺ uma mudança reabre só<br/>os gates que ela afeta"]
+    S8 --> G6 --> S9
+    G6 -. ainda não .-> S8
+  end
+
+  P1 ==> P2 ==> P3 ==> P4
+
+  class S0,S1,S2,S3,S4,S5,S6,S7,S8,S9 stage
+  class G1,G2,G3,G4,G5,G6 gate
+  class LOCK unlock
+```
+
+**Como ler:** caixas azuis são trabalho da IA; hexágonos amarelos são decisões **suas** (gates); a caixa vermelha é o único ponto em que código de produção passa a ser permitido. Setas tracejadas são voltas de revisão: nada avança por silêncio.
+
 A skill não inventa integrações ou preços: se não houver conector de Figma, por exemplo, ela documenta o design em formato possível e esclarece a limitação. Se não houver pesquisa web, não apresenta valores de fornecedores como preços atualizados.
 
 ## Instalação completa, uso e publicação

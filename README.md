@@ -24,28 +24,62 @@ This is an **open-source workflow skill** based on the [Agent Skills specificati
 ## Lifecycle and approval gates
 
 ```mermaid
-flowchart TD
-  A[S0 Vision + tool audit] --> B[S1 Creative directions]
-  B --> G1{G1: Direction approved?}
-  G1 -- Yes --> C[S2 Interface prototypes]
-  G1 -- Revise --> B
-  C --> G2{G2: Visual baseline approved?}
-  G2 -- Yes --> D[S3 Product discovery + reconcile UI]
-  G2 -- Revise --> C
-  D --> G3{G3: Scope + UI handoff approved?}
-  G3 -- Yes --> E[S4 Architecture + costs + risks]
-  G3 -- Revise --> D
-  E --> G4{G4: Stack + cost envelope approved?}
-  G4 -- Yes --> F[S5 Plan + S6 Implement]
-  G4 -- Revise --> E
-  F --> H[S7 Test and verify]
-  H --> G5{G5: Release candidate accepted?}
-  G5 -- Yes --> I[S8 Release preparation]
-  G5 -- No --> F
-  I --> G6{G6: Explicit deploy authorization?}
-  G6 -- Yes --> J[Deploy + S9 Observe and iterate]
-  G6 -- No --> I
+flowchart LR
+  classDef stage fill:#eef4ff,stroke:#3b6fd8,color:#0f1f3d
+  classDef gate fill:#fff4d6,stroke:#c98a00,color:#3d2a00,stroke-width:2px
+  classDef unlock fill:#ffe3e3,stroke:#c92a2a,color:#3d0000,stroke-width:2px
+
+  subgraph P1["1 · See it first"]
+    direction TB
+    S0["S0 · Vision + real tool audit<br/>no tech stack yet"]
+    S1["S1 · 2–3 truly different<br/>visual directions"]
+    G1{{"G1 · You pick a direction<br/>hybrids and themes allowed"}}
+    S2["S2 · Prototype: screens,<br/>states and design tokens"]
+    G2{{"G2 · You approve<br/>the visual baseline"}}
+    S0 --> S1 --> G1 --> S2 --> G2
+    G1 -. revise .-> S1
+    G2 -. revise .-> S2
+  end
+
+  subgraph P2["2 · Make it real"]
+    direction TB
+    S3["S3 · Rules, data, roles,<br/>risks and MVP"]
+    G3{{"G3 · You approve<br/>scope + revised UI"}}
+    S4["S4 · 2+ architectures,<br/>costs and security"]
+    G4{{"G4 · You approve stack<br/>+ cost envelope"}}
+    S3 --> G3 --> S4 --> G4
+    G3 -. revise .-> S3
+    G4 -. revise .-> S4
+  end
+
+  subgraph P3["3 · Build with evidence"]
+    direction TB
+    LOCK["🔓 Production code unlocked<br/>only while G2 + G3 + G4 stay valid"]
+    S5["S5 · Plan small<br/>vertical slices"]
+    S6["S6 · Implement<br/>slice by slice"]
+    S7["S7 · Verify with real tests:<br/>E2E, visual, a11y, security"]
+    G5{{"G5 · You accept the<br/>release candidate"}}
+    LOCK --> S5 --> S6 --> S7 --> G5
+    G5 -. not yet .-> S6
+  end
+
+  subgraph P4["4 · Ship and learn"]
+    direction TB
+    S8["S8 · Release plan,<br/>rollback, monitoring"]
+    G6{{"G6 · You authorize<br/>this specific deploy"}}
+    S9["S9 · Observe and iterate<br/>↺ a change reopens only<br/>the gates it affects"]
+    S8 --> G6 --> S9
+    G6 -. not yet .-> S8
+  end
+
+  P1 ==> P2 ==> P3 ==> P4
+
+  class S0,S1,S2,S3,S4,S5,S6,S7,S8,S9 stage
+  class G1,G2,G3,G4,G5,G6 gate
+  class LOCK unlock
 ```
+
+**How to read it:** blue boxes are work the assistant does; yellow hexagons are **your** decisions (gates); the red box is the only point where production code becomes allowed. Dashed arrows are revision loops: nothing advances on silence.
 
 The automation cannot bypass a user decision; routine tasks within approved scope can proceed without extra approvals.
 
