@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/decision.schema.json",
+  "title": "LFE GateDecision v0.1, one line of .lfe/decisions.jsonl (RFC-0001, 8.2)",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "seq", "id", "gate", "scope", "channel", "authenticity", "at", "prevHash", "hash"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.decision/0\\.1$"},
+    "kind": {"enum": ["proposal", "decision"]},
+    "seq": {"type": "integer", "minimum": 1},
+    "id": {"type": "string", "pattern": "^(PROP|DEC)-[0-9]{3,}$"},
+    "gate": {"enum": ["G1", "G2", "G3", "G4", "G5", "G6"]},
+    "verdict": {"enum": ["approved", "rejected", "revoked", "not_applicable"]},
+    "option": {"type": "string", "minLength": 1},
+    "composition": {
+      "type": "object",
+      "required": ["primary"],
+      "additionalProperties": false,
+      "properties": {
+        "primary": {"type": "string", "minLength": 1},
+        "themeVariants": {"type": "array", "items": {"type": "object", "required": ["theme", "direction"], "additionalProperties": false,
+          "properties": {"theme": {"type": "string", "minLength": 1}, "direction": {"type": "string", "minLength": 1}}}},
+        "complementary": {"type": "array", "items": {"type": "object", "required": ["direction", "usage"], "additionalProperties": false,
+          "properties": {"direction": {"type": "string", "minLength": 1}, "usage": {"type": "string", "minLength": 1}}}},
+        "nonNegotiables": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "owner", "mustResolveBefore"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^EXC-[0-9]{3,}$"},
+          "description": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "minLength": 1},
+          "mustResolveBefore": {"enum": ["G2", "G3", "G4", "G5", "G6"]}
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["artifacts"],
+      "additionalProperties": false,
+      "properties": {
+        "artifacts": {"type": "array", "items": {
+          "type": "object",
+          "required": ["id", "revision", "sha256"],
+          "additionalProperties": false,
+          "properties": {
+            "id": {"type": "string", "pattern": "^(DIR|DESIGN|SCOPE|ADR|RC|DEPLOY)-[0-9]{3,}$"},
+            "revision": {"type": "integer", "minimum": 1},
+            "sha256": {"$ref": "#/$defs/sha256"}
+          }
+        }},
+        "notes": {"type": "string"}
+      }
+    },
+    "rationale": {"type": "string"},
+    "actorDeclared": {"type": "string", "minLength": 1},
+    "channel": {"enum": ["agent", "chat-quote", "human-cli", "studio-export", "simulated-human", "imported-legacy"]},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "quote": {"type": "string"},
+        "quotedAt": {"$ref": "#/$defs/timestamp"},
+        "receipts": {"type": "array", "items": {"type": "string", "pattern": "^EVID-[0-9]{3,}$"}}
+      }
+    },
+    "authenticity": {"enum": ["host-asserted", "unverified", "simulated"]},
+    "at": {"$ref": "#/$defs/timestamp"},
+    "supersedes": {"type": ["string", "null"], "pattern": "^DEC-[0-9]{3,}$"},
+    "prevHash": {"$ref": "#/$defs/sha256"},
+    "hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"}
+  }
+}

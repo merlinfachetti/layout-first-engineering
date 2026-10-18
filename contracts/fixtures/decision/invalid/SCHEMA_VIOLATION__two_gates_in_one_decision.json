@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "lfe.decision/0.1",
+  "kind": "decision",
+  "seq": 4,
+  "id": "DEC-002",
+  "gate": [
+    "G2",
+    "G3"
+  ],
+  "verdict": "approved",
+  "scope": {
+    "artifacts": [
+      {
+        "id": "DESIGN-001",
+        "revision": 2,
+        "sha256": "sha256:a77de8a6daa1129516b14c8ca1e233a51a8414b202eac7c8acfbb9b485046ad4"
+      }
+    ]
+  },
+  "actorDeclared": "Pessoa usuária",
+  "channel": "human-cli",
+  "exceptions": [
+    {
+      "id": "EXC-001",
+      "description": "click-through do protótipo ainda não testado",
+      "owner": "agente",
+      "mustResolveBefore": "G5"
+    }
+  ],
+  "authenticity": "host-asserted",
+  "at": "2026-10-19T09:00:00Z",
+  "prevHash": "sha256:b25fb447574feab409093910b94127cc7d33e64d4a7f3bef2f867c94099782cd",
+  "hash": "sha256:a1797bb470db059f6b5e9e667d560e41ec83ca3e581c729420fe9ec9487de287"
+}

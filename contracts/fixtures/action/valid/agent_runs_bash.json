@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "lfe.action/0.1",
+  "actor": "agent",
+  "tool": "Bash",
+  "targets": [],
+  "command": "python3 -m lfe status"
+}

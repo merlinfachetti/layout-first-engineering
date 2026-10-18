@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "lfe.state/0.1",
+  "projectId": "vs01-leituras",
+  "name": "Lista de leituras",
+  "locale": "pt-BR",
+  "mode": "demo",
+  "stage": "S3",
+  "artifacts": {
+    "DIR-001": {
+      "kind": "direction-set",
+      "revision": 1,
+      "path": ".lfe/directions/DIR-001.r1.json",
+      "sha256": "sha256:2b64c6d9afd8a34ed0dbf35f7de171a8825a50d9f42f05e98fe2b1addf00ab44"
+    },
+    "DESIGN-001": {
+      "kind": "experience-baseline",
+      "revision": 2,
+      "path": ".lfe/baselines/DESIGN-001.r2.json",
+      "sha256": "sha256:a77de8a6daa1129516b14c8ca1e233a51a8414b202eac7c8acfbb9b485046ad4"
+    }
+  },
+  "gatesCache": {
+    "G1": {
+      "status": "approved",
+      "decisionId": "DEC-001"
+    },
+    "G2": {
+      "status": "approved",
+      "decisionId": "DEC-002"
+    },
+    "G3": {
+      "status": "proposed",
+      "decisionId": null
+    },
+    "G4": {
+      "status": "not_started",
+      "decisionId": null
+    },
+    "G5": {
+      "status": "not_started",
+      "decisionId": null
+    },
+    "G6": {
+      "status": "not_started",
+      "decisionId": null
+    }
+  },
+  "nextAction": "Propor G3",
+  "updatedAt": "2026-10-19T09:00:00Z",
+  "capabilities": {
+    "design.figma": {
+      "status": "limited",
+      "checkedAt": "2026-10-19T09:00:00Z",
+      "method": "connector call",
+      "blockedReason": "cota de chamadas esgotada"
+    },
+    "files": {
+      "status": "available"
+    }
+  }
+}

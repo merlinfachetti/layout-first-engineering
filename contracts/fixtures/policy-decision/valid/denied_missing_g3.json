@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "lfe.policy-decision/0.1",
+  "allowed": false,
+  "class": "production_code",
+  "reasonCode": "GATE_NOT_APPROVED",
+  "message": "S6 exige G3 aprovado e válido para SCOPE-001@1.",
+  "missing": [
+    "G3"
+  ],
+  "evaluatedAt": "2026-10-19T09:00:00Z"
+}

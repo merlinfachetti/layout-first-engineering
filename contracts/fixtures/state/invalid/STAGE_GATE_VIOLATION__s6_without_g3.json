@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "lfe.state/0.1",
+  "projectId": "minha-ideia",
+  "name": "Minha ideia",
+  "locale": "pt-BR",
+  "mode": "project",
+  "stage": "S6",
+  "artifacts": {},
+  "gatesCache": {
+    "G1": {
+      "status": "not_started",
+      "decisionId": null
+    },
+    "G2": {
+      "status": "approved",
+      "decisionId": "DEC-002"
+    },
+    "G3": {
+      "status": "not_started",
+      "decisionId": null
+    },
+    "G4": {
+      "status": "approved",
+      "decisionId": "DEC-004"
+    },
+    "G5": {
+      "status": "not_started",
+      "decisionId": null
+    },
+    "G6": {
+      "status": "not_started",
+      "decisionId": null
+    }
+  },
+  "nextAction": "Perguntar objetivo e público",
+  "updatedAt": "2026-10-19T09:00:00Z"
+}

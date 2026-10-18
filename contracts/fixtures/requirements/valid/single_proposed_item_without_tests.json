@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "lfe.requirements/0.1",
+  "id": "SCOPE-002",
+  "revision": 1,
+  "tests": [],
+  "items": [
+    {
+      "id": "FR-001",
+      "title": "x",
+      "acceptance": [
+        {
+          "given": "a",
+          "when": "b",
+          "then": "c"
+        }
+      ],
+      "priority": "should",
+      "uiRefs": [],
+      "testRefs": [],
+      "status": "proposed"
+    }
+  ]
+}

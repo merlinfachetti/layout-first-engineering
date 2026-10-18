@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "lfe.action/0.1",
+  "actor": "system",
+  "tool": "Write",
+  "targets": [
+    "app/src/store.js"
+  ],
+  "command": null
+}
