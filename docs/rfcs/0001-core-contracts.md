@@ -147,7 +147,7 @@ do protótipo invalida a baseline sem que ninguém precise lembrar de atualizar 
 | `mode` | enum | sim | `project` ou `demo` |
 | `stage` | enum | sim | `S0`…`S9` |
 | `artifacts` | objeto | sim | `id → {kind, revision, path, sha256}`; aponta a revisão **corrente** |
-| `capabilities` | objeto | não | `nome → {status: available/unavailable/unknown, checkedAt, method}` |
+| `capabilities` | objeto | não | `nome → {status: available/limited/unavailable/unknown, checkedAt, method, blockedReason}`. Ex.: Figma com cota esgotada → `limited` com motivo; o agente segue por outra frente autorizada (ex.: protótipo HTML local) em vez de repassar tarefas mecânicas ao usuário |
 | `gatesCache` | objeto | sim | `G1…G6 → {status, decisionId}`; derivado, nunca autoridade |
 | `openQuestions` | lista | não | `{id, stage, question, class: blocker/important/deferred}` |
 | `nextAction` | string | sim | uma única próxima ação |
@@ -213,7 +213,9 @@ linha, em ordem.
 | `id` | string | sim | `PROP-###` para proposta, `DEC-###` para decisão |
 | `gate` | enum | sim | **exatamente um** de `G1`…`G6` |
 | `verdict` | enum | decisão | `approved`, `rejected`, `revoked`, `not_applicable` |
-| `option` | string | não | ex.: `A` (direção escolhida em G1) |
+| `option` | string | não | ex.: `A` (direção escolhida em G1, caso simples) |
+| `composition` | objeto | não | G1 híbrido: `{primary, themeVariants[{theme, direction}], complementary[{direction, usage}], nonNegotiables[]}`. Ex.: A como dark padrão, B como light, padrões de C para coleções. É **um único produto e design system**, não três |
+| `exceptions` | lista | não | só com `approved`: `[{id: EXC-###, description, owner, mustResolveBefore: G#}]`. Dívida aceita explicitamente; `mustResolveBefore` DEVE ser um gate posterior ao da decisão |
 | `scope.artifacts` | lista | sim | `[{id, revision, sha256}]`; tipos exigidos pelo gate (tabela 8.1) |
 | `rationale` | string | condicional | obrigatório para `not_applicable` e `revoked` |
 | `actorDeclared` | string | decisão | nome declarado de quem decide |
@@ -258,6 +260,10 @@ Invariantes:
   ordem de `seq`; `revoked` torna o gate não aprovado.
 - **D-08 Rótulo de simulação.** Decisões `simulated-human` DEVEM aparecer como "simulado" em todo
   relatório e handoff.
+- **D-09 Aprovação com exceções.** Um gate aprovado com `exceptions` é válido para avançar, mas
+  cada exceção aberta bloqueia o gate indicado em `mustResolveBefore` até ser resolvida por nova
+  decisão humana. Ex.: G2 aprovado com "click-through ainda não testado" (`mustResolveBefore: G5`)
+  permite S3, mas impede G5. Nunca autoriza produção antes de G3/G4.
 
 Cascata de invalidação (I-04): como G3 inclui `DESIGN-` e `SCOPE-`, G4 inclui `SCOPE-` e `ADR-`,
 e G6 inclui `RC-` e `DEPLOY-`, uma mudança de baseline torna G2 e G3 `stale` automaticamente, e uma
@@ -271,7 +277,8 @@ contém o artefato e os requisitos e testes ligados a ele. A reabertura é sempr
 | `schemaVersion` | `lfe.baseline/0.1` |
 | `id`, `revision` | `DESIGN-###`, inteiro ≥ 1 |
 | `medium` | `local-html`, `figma`, `penpot`, `image` ou `spec`. Para `local-html`, DEVE referenciar a decisão que escolheu protótipo codificado (`SKILL.md:55`, `references/01-conversation-and-state.md:53`) |
-| `screens[]` | `{screenId: UI-###, name, goal, states[], viewports[{width, height}], prototype: {path, query}}` |
+| `fidelity` | `moodboard`, `static-layout`, `editable-frames` ou `interactive-prototype`. `interactive-prototype` só com evidência de interação executada; um frame editável no Figma **não** é protótipo interativo |
+| `screens[]` | `{screenId: UI-###, name, goal, states[], viewports[{width, height}], prototype: {path, query}, preview: {path}}`. `preview` é uma imagem local versionada, para a revisão ser visual e não só descritiva |
 | `states` | subconjunto de `default`, `empty`, `loading`, `error`, `success`, `disabled` |
 | `tokens` | `{path}` para um arquivo no formato do W3C Design Tokens Community Group (subconjunto `$value`/`$type`; versão estável a confirmar na implementação) |
 | `flows[]` | `{id, steps: [UI-###]}` |
@@ -384,7 +391,7 @@ importação é decidido no PR `feat/contracts-v0.1`).
 
 Códigos de saída: `0` ok ou permitido; `1` erro interno; `2` uso ou ambiente inválido;
 `3` ação negada pela política; `4` `INCOMPATIBLE_SCHEMA`; `5` integridade violada
-(`LEDGER_TAMPERED`, `EVIDENCE_TAMPERED`).
+(`LEDGER_TAMPERED`, `EVIDENCE_TAMPERED`); `6` documento viola o contrato (`lfe validate`).
 
 `approve` sem terminal interativo responde `CHANNEL_NOT_INTERACTIVE` (exit 2). É a primeira
 barreira contra autoaprovação; a regra `lfe_human_command` do hook é a segunda.
@@ -460,3 +467,30 @@ virá depois e só leitura primeiro); MCP próprio (desnecessário enquanto hook
    primeira barreira de `approve`).
 3. Versão estável vigente do formato do W3C Design Tokens Community Group.
 4. Suporte a Windows (caminhos e TTY), fora do primeiro marco.
+
+## 16. Relação com o candidato v0.1.4-rc.1 e com o piloto real
+
+O proprietário preparou fora da `main` um candidato `v0.1.4-rc.1` (patch + pacotes), a partir do
+primeiro piloto real da skill (projeto privado, executado com Codex e Figma). Ele aplica limpo
+sobre `c780665` (`git apply --check`) e **não conflita** com esta RFC: os dois trilhos se
+complementam.
+
+| Trilho | O que resolve | Onde vive |
+|---|---|---|
+| **Método (rc.1)** | O que o agente DEVE fazer: baseline visual G1 com imagens, protocolo de repositório, contratos de interação, diagnóstico de CI, inventário de direitos, cenários de avaliação | `SKILL.md`, `references/07`, `assets/*.md`, `tests/evals/scenarios.json` |
+| **Core (esta RFC)** | O que o agente NÃO CONSEGUE fazer sem o humano: gates verificados por hash e canal, negação na fronteira de ação, recibos de evidência | `.lfe/`, `contracts/`, `engine/lfe/` |
+
+Correspondências usadas para manter um vocabulário só:
+
+| rc.1 | Contrato desta RFC |
+|---|---|
+| `APPROVED_VISUAL_BASELINE.md` + `verify_visual_baseline.py` | `ExperienceBaseline` com `fidelity`, `screens[].preview` e `files[]` com hash; o Markdown passa a ser uma visão gerada |
+| Classificação `moodboard / static layout / editable frames / interactive prototype (verified)` | campo `fidelity` (8.3) |
+| G1 híbrido (direção principal, temas, padrões complementares) | `GateDecision.composition` (8.2) |
+| G2 aprovado com pendências (laboratório v0.3, LFE-015) | `GateDecision.exceptions` + D-09 |
+| Bloqueio de ferramenta com recuperação (LFE-013) | `capabilities.*.status = limited` + `blockedReason` |
+| Ledger `intent → authorization → execution → verification` de `REPOSITORY_STATE.md` | mesmo princípio de `EvidenceReceipt`; um contrato próprio de ação de repositório fica para versão futura, reaproveitando os estados `planned / prepared / local_commit / remote_branch / pr_open / merged / synced / failed / blocked` |
+| `tests/evals/scenarios.json` (especificações, não resultados) | evals comportamentais do PR `test/agent-evals`; resultados viram recibos |
+
+Dados privados do piloto (nomes, caminhos, links de Figma) NÃO DEVEM entrar no repositório
+público sem consentimento explícito do proprietário.
