@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "lfe.decision/0.1",
+  "kind": "decision",
+  "seq": 2,
+  "id": "DEC-002",
+  "gate": "G2",
+  "verdict": "approved",
+  "scope": {
+    "artifacts": [
+      {
+        "id": "DESIGN-001",
+        "revision": 2,
+        "sha256": "sha256:a77de8a6daa1129516b14c8ca1e233a51a8414b202eac7c8acfbb9b485046ad4"
+      }
+    ]
+  },
+  "actorDeclared": "Pessoa usuária",
+  "channel": "chat-quote",
+  "evidence": {
+    "quote": "Quero a A como dark padrão, a B como light e as coleções da C.",
+    "quotedAt": "2026-10-19T09:00:00Z"
+  },
+  "authenticity": "unverified",
+  "at": "2026-10-19T09:00:00Z",
+  "supersedes": null,
+  "prevHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "hash": "sha256:d3c3a2a155720bf825a8254ba4cb95eb068a2095339ad36d6ee4f36a0e0dc973"
+}

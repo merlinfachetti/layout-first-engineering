@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "lfe.evidence/0.1",
+  "id": "EVID-003",
+  "testId": "TEST-003",
+  "requirementIds": [
+    "FR-001"
+  ],
+  "argv": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests"
+  ],
+  "cwd": ".",
+  "environment": {
+    "os": "Darwin",
+    "osRelease": "25.6.0",
+    "python": "3.11.5",
+    "tools": {}
+  },
+  "sourceRevision": {
+    "git": "16414d6",
+    "dirty": false
+  },
+  "startedAt": "2026-10-19T09:00:00Z",
+  "durationMs": 0,
+  "exitCode": null,
+  "testsRun": 0,
+  "testsSkipped": 0,
+  "status": "not_executed",
+  "artifacts": [],
+  "limitations": [
+    "ambiente local; não representa produção"
+  ],
+  "producer": "lfe-run/0.1",
+  "reason": "tool_unavailable:playwright"
+}

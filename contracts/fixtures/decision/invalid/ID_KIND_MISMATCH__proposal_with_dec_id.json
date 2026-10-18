@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "lfe.decision/0.1",
+  "kind": "proposal",
+  "seq": 3,
+  "id": "DEC-099",
+  "gate": "G2",
+  "scope": {
+    "artifacts": [
+      {
+        "id": "DESIGN-001",
+        "revision": 2,
+        "sha256": "sha256:a77de8a6daa1129516b14c8ca1e233a51a8414b202eac7c8acfbb9b485046ad4"
+      }
+    ]
+  },
+  "channel": "agent",
+  "authenticity": "host-asserted",
+  "at": "2026-10-19T09:00:00Z",
+  "prevHash": "sha256:d3c3a2a155720bf825a8254ba4cb95eb068a2095339ad36d6ee4f36a0e0dc973",
+  "hash": "sha256:b25fb447574feab409093910b94127cc7d33e64d4a7f3bef2f867c94099782cd"
+}

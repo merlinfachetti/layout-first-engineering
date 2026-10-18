@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "lfe.decision/0.1",
+  "kind": "decision",
+  "seq": 2,
+  "id": "DEC-001",
+  "gate": "G1",
+  "verdict": "approved",
+  "composition": {
+    "primary": "A",
+    "themeVariants": [
+      {
+        "theme": "dark",
+        "direction": "A"
+      },
+      {
+        "theme": "light",
+        "direction": "B"
+      }
+    ],
+    "complementary": [
+      {
+        "direction": "C",
+        "usage": "coleções"
+      }
+    ],
+    "nonNegotiables": [
+      "mesma hierarquia de informação nos dois temas"
+    ]
+  },
+  "scope": {
+    "artifacts": [
+      {
+        "id": "DIR-001",
+        "revision": 1,
+        "sha256": "sha256:2b64c6d9afd8a34ed0dbf35f7de171a8825a50d9f42f05e98fe2b1addf00ab44"
+      }
+    ]
+  },
+  "actorDeclared": "Pessoa usuária",
+  "channel": "chat-quote",
+  "evidence": {
+    "quote": "Quero a A como dark padrão, a B como light e as coleções da C.",
+    "quotedAt": "2026-10-19T09:00:00Z"
+  },
+  "authenticity": "unverified",
+  "at": "2026-10-19T09:00:00Z",
+  "supersedes": null,
+  "prevHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "hash": "sha256:d3c3a2a155720bf825a8254ba4cb95eb068a2095339ad36d6ee4f36a0e0dc973"
+}

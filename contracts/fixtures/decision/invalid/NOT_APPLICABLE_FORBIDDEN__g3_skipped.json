@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "lfe.decision/0.1",
+  "kind": "decision",
+  "seq": 9,
+  "id": "DEC-003",
+  "gate": "G3",
+  "verdict": "not_applicable",
+  "scope": {
+    "artifacts": []
+  },
+  "rationale": "app local, sem deploy",
+  "actorDeclared": "Pessoa usuária",
+  "channel": "human-cli",
+  "authenticity": "host-asserted",
+  "at": "2026-10-19T09:00:00Z",
+  "prevHash": "sha256:d0511eb7c3b5af7b831eb9dae4fa768dd55160e694d5fc675f77fb00527fe6d6",
+  "hash": "sha256:668bcd53e37801b60f6e0843f28e5ea2110686e6210fce2a4c8f5e220724ce84"
+}

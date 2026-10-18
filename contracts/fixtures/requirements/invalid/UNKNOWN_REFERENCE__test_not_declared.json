@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "lfe.requirements/0.1",
+  "id": "SCOPE-001",
+  "revision": 1,
+  "items": [
+    {
+      "id": "FR-001",
+      "title": "Adicionar leitura com título obrigatório",
+      "acceptance": [
+        {
+          "given": "um título válido",
+          "when": "salvo",
+          "then": "o item aparece na lista"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-003"
+      ],
+      "status": "implemented"
+    },
+    {
+      "id": "FR-004",
+      "title": "Recusar título vazio",
+      "acceptance": [
+        {
+          "given": "título só com espaços",
+          "when": "salvo",
+          "then": "nada é salvo e o erro é anunciado"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-999"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "UX-001",
+      "title": "Ações principais por teclado",
+      "acceptance": [
+        {
+          "given": "só teclado",
+          "when": "adiciono e concluo",
+          "then": "tudo funciona com foco visível"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [],
+      "status": "proposed"
+    }
+  ],
+  "tests": [
+    {
+      "id": "TEST-003",
+      "kind": "e2e",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests_e2e.test_vs01"
+      ],
+      "requires": [
+        "python:playwright"
+      ],
+      "covers": [
+        "FR-001"
+      ]
+    },
+    {
+      "id": "TEST-004",
+      "kind": "e2e",
+      "covers": [
+        "FR-004"
+      ]
+    }
+  ]
+}

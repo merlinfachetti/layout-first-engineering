@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/action.schema.json",
+  "title": "LFE ActionRequest v0.1 (RFC-0001, 8.5)",
+  "type": "object",
+  "required": ["schemaVersion", "actor", "tool", "targets"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.action/0\\.1$"},
+    "actor": {"enum": ["agent", "human"]},
+    "tool": {"type": "string", "minLength": 1},
+    "targets": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "command": {"type": ["string", "null"]}
+  }
+}
