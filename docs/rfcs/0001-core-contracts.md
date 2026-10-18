@@ -167,11 +167,14 @@ Tipos de artefato e o gate que cada um alimenta:
 Invariantes:
 
 - **S-01** caminhos seguros (seção 6).
-- **S-02** `gatesCache` DEVE ser igual ao status calculado; divergência → `STATE_CACHE_MISMATCH`.
-- **S-03** `stage` ≥ S6 exige G2, G3 e G4 válidos → senão `STAGE_GATE_VIOLATION` (preserva
-  `SKILL.md:51`).
-- **S-04** `stage` ≥ S8 exige G5 válido; `stage` = S9 exige G6 válido ou `not_applicable`
-  (corrige a sonda P4).
+- **S-02** `gatesCache` NÃO DEVE afirmar uma decisão que o ledger não contém (decisão inexistente,
+  outro ID ou outro veredito) → `STATE_CACHE_MISMATCH`. O cache pode ficar atrás de uma mudança de
+  arquivo (`approved` que virou `stale`); por isso a comparação é com o ledger, não com os hashes.
+- **S-03** **Entrar** em `stage` ≥ S6 exige G2, G3 e G4 válidos → senão `STAGE_GATE_VIOLATION`
+  (preserva `SKILL.md:51`). **Permanecer** em S6 com um desses gates `stale` é permitido: o estado
+  continua salvável, mas ações de produção são negadas até a reaprovação.
+- **S-04** Entrar em `stage` ≥ S8 exige G5 válido; entrar em S9 exige G6 válido ou `not_applicable`
+  (corrige a sonda P4). Mesma regra de permanência com gate `stale`.
 
 ```json
 {
