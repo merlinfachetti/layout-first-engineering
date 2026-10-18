@@ -16,6 +16,14 @@ For unresolved item Q: estimate (impact of wrong choice × irreversibility × un
 Sample:
 "The main page could prioritize (A) discovering content, or (B) starting a new project. I recommend B because [reason]. Which should be primary? You can say 'not sure' or add context."
 
+
+### Operational evidence and workspace continuity
+
+- Persist the canonical project workspace; if the user migrates directories, check old/new locations and uncommitted files, update links/remotes, and clearly retire the old path **without deleting it**.
+- When remote Git is requested, link the optional `REPOSITORY_STATE.md` evidence ledger (`intent → authorization → execution → verification`) instead of repeating Git metadata in every answer.
+- Keep `approved visual direction` (G1) separate from `approved UI prototype` (G2); theme variants and partially reused discarded concepts are valid **single-product** G1 outcomes.
+- Use explicit, source-verified publication states. Do not mark PR or remote merge successful from a local commit or push attempt alone.
+
 ## State fields
 
 Use `assets/PROJECT_STATE.md` as the schema. Keep:

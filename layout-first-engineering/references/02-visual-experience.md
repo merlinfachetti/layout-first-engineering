@@ -21,6 +21,17 @@ Produce 2–3 *meaningfully different* directions. Describe for each:
 
 Never use the same generic hero/cards/dashboard layout three times with different colors. At G1 offer a recommendation, not a false forced choice. Allow hybridization.
 
+### A.1. Durable G1 approval artifact
+
+After explicit G1 approval, generate a baseline from `assets/APPROVED_VISUAL_BASELINE.md` and store it in the project's `docs/design/APPROVED_VISUAL_BASELINE.md` if filesystem access is available. The artifact must:
+- Embed real locally versioned preview images with Markdown `![alt](relative/path.png)` rather than text links alone; verify images and links, and add a discoverable README link and image.
+- Cite editable design frames/nodes only when actually created/inspected. Record art provenance, license status, desktop/mobile samples, approved core principles, decision ID and date, version and known unverified aspects.
+- Support approved hybrid identities: one system with semantic dark/light theme tokens, common information hierarchy, shared components and device behavior; rejected concept elements may be reused explicitly.
+- Preserve all original proposals and previews. Differentiate moodboard, static composition, editable frame and **verified working interactive prototype**.
+- Leave G2 pending. Changes to an approved G1 baseline require a superseding decision, not silent image replacement.
+- When practical, use `scripts/verify_visual_baseline.py ... --approved` to check local asset paths (structural check only).
+
+
 ### B. Design baseline (G2)
 
 Create an initial information architecture and visually coherent prototype for the **minimum screens needed to test the primary task**, then remaining priority screens. Include desktop/tablet/mobile where applicable, navigation, hierarchy, content states and visual hierarchy. Avoid filler text and arbitrary fake metrics in final mockups; clearly label demonstration data.
@@ -28,6 +39,11 @@ Create an initial information architecture and visually coherent prototype for t
 Components: tokens, semantic colors, type scales, spacing, surfaces, breakpoints, focus/hover/disabled, aria semantics, reusable patterns, media and illustrations, localization and RTL if applicable, loading/empty/error/success, motion duration/easing and reduced motion.
 
 If design tool allows, deliver actual editable nodes/components with link and a verified creation action. If not, deliver a structured artifact with screen-by-screen annotations, design tokens and interaction descriptions. Static AI images cannot stand in for actual editable prototypes when editability is required.
+
+### B.1. Interaction contract for visually rich elements
+
+Use `assets/INTERACTION_CONTRACT.md` as a starting point for cards, carousels and key navigational patterns. Cards need distinguishable primary navigation vs secondary actions and no nested controls. State the `pointer/keyboard/touch` paths, empty/loading/error feedback, focus behavior, motion limits, reduced-motion fallback and evidence of what really works. Carousels must have visible controls, usable keyboard access and normally no autoplay; reserve grids/lists for efficient search and management. Never imply motion or interaction was tested based on a static image.
+
 
 ### C. Product reconciliation (after G2, before G3)
 

@@ -138,3 +138,12 @@ To publish from macOS to `~/Projects_MerlinFachetti/layout-first-engineering`, r
 ## Contributing, safety and license
 
 Contributions and portability reports welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`SECURITY.md`](SECURITY.md). MIT licensed; see [`LICENSE`](LICENSE). No vendor endorsement or trademark affiliation.
+
+
+## Experimental improvement track (not released)
+
+- [Evolution Lab — candidate improvements](docs/LFE-EVOLUTION-LAB.md)
+- [Behavioral validation matrix](docs/VALIDATION-MATRIX.md)
+- [Candidate upgrade and Codex handoff](docs/UPGRADE-V014-RC.md)
+
+The `v0.1.4-rc.1` proposal requires human review and real agent runs; do not interpret offline tests as production certification.
