@@ -53,6 +53,16 @@ Você vê G1 a G4 como `proposed`, G5 e G6 como `not_started` e `production code
 Nenhum gate está aprovado: as propostas `PROP-001` a `PROP-004` estão no ledger, cada uma presa
 ao hash exato dos arquivos que você vai revisar.
 
+Pergunte à política o que um agente pode fazer agora:
+
+```bash
+python3 -m lfe check-action --target app/app.js
+```
+
+A resposta é `"allowed": false`, `"reasonCode": "GATE_NOT_APPROVED"`, com G2, G3 e G4 em
+`missing`, e o comando sai com código 3. É o que o hook do agente consulta antes de cada escrita.
+Já `--target prototype/index.html` é permitido: protótipo nunca conta como produção.
+
 ## Passo 2: escolher a direção (G1)
 
 Abra `directions/A-editorial.html` e `directions/B-biblioteca.html` no navegador. As duas têm,
@@ -88,7 +98,7 @@ python3 -m lfe approve G2 --option local-html
 ```
 
 O comando mostra o que você está aprovando (o hash de `DESIGN-001`) e pede que você digite `G2`.
-A decisão vira `DEC-002`, que é o número que a baseline já cita em `mediumDecisionId`: aprovar
+A decisão vira `DEC-002`, que é o número que a baseline já cita em `mediumDecisionId`. Aprovar
 G2 com `--option local-html` é também escolher o protótipo HTML local como meio.
 
 ## Passo 4: aprovar o escopo (G3)
@@ -109,8 +119,9 @@ proposta é local-only.
 python3 -m lfe approve G4 --option local-only
 ```
 
-Agora `lfe status` mostra G1 a G4 `approved` e `production code: unlocked`. Só agora o projeto
-pode entrar em S6:
+Agora `lfe status` mostra G1 a G4 `approved` e `production code: unlocked`, e
+`lfe check-action --target app/app.js` responde `"allowed": true`. Só agora o projeto pode
+entrar em S6:
 
 ```bash
 python3 -m lfe stage S6
@@ -174,6 +185,20 @@ python3 -m lfe handoff
 Gera `.lfe/HANDOFF.md`: estágio, gates calculados, últimos recibos e o que o agente não pode
 fazer. É o que uma próxima sessão lê para retomar sem adivinhar.
 
+## Atalho: replay simulado
+
+Para ver o fim da cadeia sem digitar as aprovações, use o replay. Ele trabalha numa cópia nova,
+muda a cópia para `mode: demo` e grava G1 a G4 com o canal `simulated-human`:
+
+```bash
+python3 -m lfe demo examples/vs01-leituras --workdir ../lfe-vs01-replay
+```
+
+(Rode na raiz do repositório, com o `PYTHONPATH` acima.) A saída diz
+`simulated approvals (not real human decisions): G1, G2, G3, G4` e `production code unlocked`.
+Essas decisões só valem dentro da cópia em modo demo e aparecem como simuladas no handoff.
+O exemplo original não muda.
+
 ## Testes automáticos deste exemplo
 
 Na raiz do repositório, sem navegador:
@@ -182,10 +207,14 @@ Na raiz do repositório, sem navegador:
 python3 -m unittest tests.test_vs01_example -v
 ```
 
-O teste confere que os contratos são válidos, que todo hash bate com o disco, que o ledger está
-íntegro e só tem propostas, que o HTML do app tem rótulo, `aria-live` e os IDs que o E2E vai
-usar, que os tokens batem com o CSS e que nenhum arquivo cita caminho absoluto ou recurso de
-rede.
+O teste confere que:
+
+- os contratos são válidos e todo hash bate com o disco;
+- o ledger está íntegro e só tem propostas;
+- a política nega `app/` e o replay destrava, com G2 igual ao `mediumDecisionId`;
+- o HTML do app tem rótulo, `aria-live` e os IDs que o E2E vai usar;
+- as cores do CSS batem com os tokens;
+- nenhum arquivo cita caminho absoluto ou recurso de rede.
 
 ### IDs que o E2E vai usar
 
@@ -222,7 +251,10 @@ Esta demo prova menos do que parece à primeira vista. O que ela **não** prova:
 - **Política do core em uso.** TEST-001 prova, com o motor real, que escrever em `app/` é negado antes de
   G2, G3 e G4 e que o agente não consegue rodar `lfe approve`.
 - **O app vem pronto antes das aprovações.** Num projeto real, `app/` só seria escrito depois de
-  G2, G3 e G4 válidos. Aqui ele vem junto para a demo rodar offline e ser reproduzível.
+  G2, G3 e G4 válidos, e `lfe check-action` negaria a escrita antes disso. Aqui ele vem junto
+  para a demo rodar offline e ser reproduzível.
+- **A política é uma camada de defesa, não uma prova.** A classificação de comandos de shell é
+  heurística. A integridade do ledger é o que detecta uma aprovação forjada.
 - **A decisão de meio não tem comando próprio.** A baseline cita `DEC-002` porque, seguindo os
   passos na ordem, a aprovação de G2 com `--option local-html` recebe esse número. Se você
   registrar outra decisão antes, os números deixam de bater.
@@ -234,4 +266,5 @@ Esta demo prova menos do que parece à primeira vista. O que ela **não** prova:
 - **Ambiente.** Testado em macOS com Python 3.11. Windows não foi testado. Não há tema escuro.
 - **`localStorage`** tem limite de alguns megabytes, pode ser apagado pela pessoa ou pelo
   navegador e não sincroniza entre aparelhos (ver ADR-001).
-- **Replay automático** (`lfe demo vs01`, com decisões `simulated-human`) ainda não existe.
+- **O replay não prova decisão humana.** `lfe demo` grava aprovações simuladas, que nunca
+  valem fora de `mode: demo`.
