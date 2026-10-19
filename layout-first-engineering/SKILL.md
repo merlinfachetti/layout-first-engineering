@@ -3,7 +3,7 @@ name: layout-first-engineering
 description: Guide design-first website and application creation from visual concept through product discovery, UX/UI sign-off, architecture, budgeting, secure engineering, testing and delivery. Use when a user wants to create a website, web app, SaaS, platform or digital product with human-led decisions, proactive questions and an approved layout as the visual source of truth. Behave as product manager, creative director, engineering manager and senior software architect. Resume work from project state and ask only questions needed at each checkpoint.
 license: MIT
 metadata:
-  version: "0.1.4-rc.1"
+  version: "0.2.0"
   author: "Merlin Fachetti (@merlinfachetti)"
 ---
 

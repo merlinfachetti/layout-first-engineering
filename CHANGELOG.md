@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — v0.2.0 candidate (not an official release)
+## 0.2.0 — 2026-10-19
 
 - **Engine `lfe` (RFC-0001):** strict contracts v0.1, project state, hash-chained decision ledger, gate status
   computed from the ledger and current file hashes (stale on change), human-only approvals at an interactive
@@ -16,8 +16,12 @@
   reproducible release zips, step-by-step guides.
 - **VS-01:** reading-list example with two directions, prototype, app, and an end-to-end Chromium proof in CI.
 - **Behavioural evals:** `scripts/agent_evals.py` (5 cases, deterministic grading); real runs pending a logged-in CLI.
+- **Method:** delegated execution and tool-blocker recovery (`references/08`), gate acceptance with tracked
+  exceptions, 17 evaluation scenarios.
+- **Known limits:** real Claude Code sessions (hooks and evals) not yet executed; `vs01-proof` approvals are
+  simulated; Windows untested.
 
-## v0.1.4-rc.1 method track (merged, part of the candidate above)
+### Included from the v0.1.4-rc.1 method track
 
 - Added optional repository stewardship protocol S0–S9 and auditable publication state.
 - Added required visual G1 baseline template with local image proof and theme/hybrid support.

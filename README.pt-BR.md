@@ -160,10 +160,10 @@ Código e documentação licenciados sob MIT. Contribuições podem propor melho
 **Se o repositório já existir, NÃO repita a publicação inicial:** veja [atualização do GitHub](docs/MANUAL-MESTRE.pt-BR.md#7-como-atualizar-um-repositório-já-publicado). Para publicar o projeto no GitHub como repositório público e salvar a cópia local no Mac em `/Users/alden.fachetti/Projects_MerlinFachetti/layout-first-engineering`, siga [o guia de manutenção](docs/MAINTAINING.pt-BR.md). Execute `bash "$HOME/Downloads/lfe-publish/PUBLICAR_NO_GITHUB.command"` após extrair o ZIP em `~/Downloads/lfe-publish` (ou `bash scripts/publish-macos.sh` de dentro da raiz extraída): ele verifica sua conta e pede autorização antes de enviar. O CI roda nos commits, PRs e semanalmente sem criar commits.
 
 
-## Experimental improvement track (not released)
+## Evolução e validação
 
-- [Evolution Lab — candidate improvements](docs/LFE-EVOLUTION-LAB.md)
-- [Behavioral validation matrix](docs/VALIDATION-MATRIX.md)
-- [Candidate upgrade and Codex handoff](docs/UPGRADE-V014-RC.md)
+- [Laboratório de evolução — índice público de melhorias](docs/LFE-EVOLUTION-LAB.md)
+- [Matriz de validação — o que de fato rodou, com datas](docs/VALIDATION-MATRIX.md)
+- [RFCs: contratos do core e a primeira fatia vertical](docs/rfcs/README.md)
 
-The `v0.1.4-rc.1` proposal requires human review and real agent runs; do not interpret offline tests as production certification.
+Os testes offline e a prova do VS-01 no navegador são evidência do motor e do exemplo, não certificação do comportamento do agente em todos os clientes; as execuções com agentes reais ficam na matriz de validação.

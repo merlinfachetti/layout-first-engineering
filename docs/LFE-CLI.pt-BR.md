@@ -33,7 +33,7 @@ source ~/.zshrc
 lfe version
 ```
 
-A última linha deve mostrar `lfe 0.1.0.dev0` e a lista de contratos. Os exemplos abaixo usam o apelido `lfe`.
+A última linha deve mostrar `lfe 0.2.0` e a lista de contratos. Os exemplos abaixo usam o apelido `lfe`.
 
 ## 2. Quem roda o quê
 
