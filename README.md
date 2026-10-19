@@ -89,7 +89,23 @@ The automation cannot bypass a user decision; routine tasks within approved scop
 
 The skill lives in [`layout-first-engineering/`](layout-first-engineering/SKILL.md). Copy the **whole directory**, not only `SKILL.md`. All commands below are examples run from the cloned repository.
 
-### Claude Code
+### Claude Code — plugin (recommended)
+
+Installs the skill, the `lfe` engine, the approval-gate policy hook and the resume hooks in one step,
+plus `/lfe:status`, `/lfe:next`, `/lfe:resume` and `/lfe:studio`:
+
+```bash
+claude plugin marketplace add merlinfachetti/layout-first-engineering
+```
+
+```bash
+claude plugin install lfe@layout-first-engineering
+```
+
+Inside a session the same commands are `/plugin marketplace add merlinfachetti/layout-first-engineering`
+and `/plugin install lfe@layout-first-engineering`. Restart Claude Code afterwards. Guide: [docs/LFE-CLI.md](docs/LFE-CLI.md).
+
+### Claude Code — skill folder only
 
 ```bash
 mkdir -p /path/to/your-project/.claude/skills

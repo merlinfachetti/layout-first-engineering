@@ -1,0 +1,15 @@
+{
+  "description": "LFE: deny production code before G2+G3+G4 and agent-made approvals (PreToolUse); resume context (SessionStart); refresh handoff (Stop). Any engine failure blocks with exit 2.",
+  "hooks": {
+    "PreToolUse": [
+      {"matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+       "hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/layout-first-engineering/scripts/lfe.py\" --root \"${CLAUDE_PROJECT_DIR}\" hook-pre-tool-use || exit 2"}]}
+    ],
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/layout-first-engineering/scripts/lfe.py\" --root \"${CLAUDE_PROJECT_DIR}\" hook-session-start"}]}
+    ],
+    "Stop": [
+      {"hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/layout-first-engineering/scripts/lfe.py\" --root \"${CLAUDE_PROJECT_DIR}\" hook-stop"}]}
+    ]
+  }
+}

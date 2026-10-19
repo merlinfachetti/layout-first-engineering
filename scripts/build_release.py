@@ -45,7 +45,8 @@ def archive(target: Path, entries):
         for source, arcname in entries:
             info = ZipInfo(arcname, date_time=FIXED_DATE)
             info.compress_type = ZIP_DEFLATED
-            info.external_attr = (0o755 if source.suffix in {".sh", ".command"} else 0o644) << 16
+            executable = source.suffix in {".sh", ".command"} or source.parent.name == "bin"
+            info.external_attr = (0o755 if executable else 0o644) << 16
             z.writestr(info, source.read_bytes(), compresslevel=9)
     return hashlib.sha256(target.read_bytes()).hexdigest()
 

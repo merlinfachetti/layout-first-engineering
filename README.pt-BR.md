@@ -107,7 +107,18 @@ A skill não inventa integrações ou preços: se não houver conector de Figma,
 
 Baixe o ZIP da skill ou clone o repositório. Copie **a pasta inteira** `layout-first-engineering`, incluindo `SKILL.md`, `references/`, `assets/` e `scripts/`.
 
-- **Claude Code:** coloque a pasta em `.claude/skills/` (no projeto) ou `~/.claude/skills/` (uso pessoal).
+- **Claude Code — plugin (recomendado):** instala a skill, o motor `lfe`, o bloqueio por gates e a retomada automática de uma vez, com os comandos `/lfe:status`, `/lfe:next`, `/lfe:resume` e `/lfe:studio`. No terminal, rode um comando por vez e depois reinicie o Claude Code:
+
+  ```bash
+  claude plugin marketplace add merlinfachetti/layout-first-engineering
+  ```
+
+  ```bash
+  claude plugin install lfe@layout-first-engineering
+  ```
+
+  Dentro de uma sessão, os equivalentes são `/plugin marketplace add merlinfachetti/layout-first-engineering` e `/plugin install lfe@layout-first-engineering`. Guia: [docs/LFE-CLI.pt-BR.md](docs/LFE-CLI.pt-BR.md).
+- **Claude Code — só a pasta da skill:** coloque a pasta em `.claude/skills/` (no projeto) ou `~/.claude/skills/` (uso pessoal).
 - **Gemini CLI:** coloque em `.gemini/skills/` ou `.agents/skills/`; use `/skills list` para conferir. No repositório publicado, `gemini skills install <URL> --path layout-first-engineering` também é uma opção, conforme a versão.
 - **OpenAI Codex:** coloque em `.agents/skills/` (projeto) ou `~/.agents/skills/` (usuário).
 - **Claude.ai:** envie o ZIP no recurso de Skills customizadas, caso esteja disponível para o plano e conta.
