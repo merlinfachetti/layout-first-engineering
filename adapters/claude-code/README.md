@@ -16,7 +16,7 @@ O que fica bloqueado para o agente:
 |---|---|---|---|
 | `docs` | `docs/**`, `*.md`, artefatos em `.lfe/` (baselines, requisitos, ADR), `ls`, `git status`, `lfe status`, `lfe propose` | permitido | — |
 | `prototype` | `prototype/**`, `directions/**` | permitido em qualquer estágio | — |
-| `lfe_state` | `.lfe/state.json`, `.lfe/decisions.jsonl`, `.lfe/evidence/**`, `.lfe/policy.json`, `.lfe/HANDOFF.md`, `.claude/settings*.json` | sempre negado; use a CLI | `PROTECTED_STATE` |
+| `lfe_state` | `.lfe/state.json`, `.lfe/decisions.jsonl`, `.lfe/evidence/**`, `.lfe/policy.json`, `.lfe/HANDOFF.md`, `.claude/settings*.json`, `.claude/hooks/**`, `.claude/skills/layout-first-engineering/**` | sempre negado; use a CLI | `PROTECTED_STATE` |
 | `lfe_human_command` | `lfe approve`, `reject`, `revoke` (também via `python3 -m lfe`) | sempre negado | `HUMAN_CHANNEL_REQUIRED` |
 | `production_code` | tudo que não foi classificado (ex.: `app/x.js`, `node app.js`) | só em S6+ com G2, G3 e G4 válidos | `GATE_NOT_APPROVED`, `GATE_STALE`, `STAGE_NOT_REACHED` |
 | `deploy`, `publish`, `cost`, `delete`, `secret` | `vercel deploy`, `npm publish`, `gh release create`, `aws …`, `rm -rf`, `git push --force`, `.env` | sempre negado, mesmo com G6 | `DENY_REQUIRES_EXPLICIT_AUTH` |
@@ -91,6 +91,11 @@ mesmo que o arquivo não as repita.
   são a camada de detecção (RFC-0001, 8.5 e 12).
 - Comandos `Bash` não classificados contam como `production_code`, então antes de S6 só passam os
   comandos de leitura e os comandos `lfe` do agente. Isso é intencional (padrão conservador).
+- Um comando da lista permitida só vale como `docs` se carregar código de onde o agente não
+  consegue escrever: fora do projeto ou em caminho protegido (como
+  `.claude/skills/layout-first-engineering/**`). `PYTHONPATH=prototype python3 -m lfe status`,
+  `cd prototype && python3 -m lfe …`, `python3 docs/lfe.py …`, `LD_PRELOAD=…` e afins contam como
+  `production_code`.
 - Ler arquivos nunca passa pela política.
 
 ---
@@ -106,7 +111,7 @@ action does not happen.
 |---|---|---|---|
 | `docs` | `docs/**`, `*.md`, artifacts in `.lfe/` (baselines, requirements, ADR), `ls`, `git status`, `lfe status`, `lfe propose` | allowed | — |
 | `prototype` | `prototype/**`, `directions/**` | allowed at any stage | — |
-| `lfe_state` | `.lfe/state.json`, `.lfe/decisions.jsonl`, `.lfe/evidence/**`, `.lfe/policy.json`, `.lfe/HANDOFF.md`, `.claude/settings*.json` | always denied; use the CLI | `PROTECTED_STATE` |
+| `lfe_state` | `.lfe/state.json`, `.lfe/decisions.jsonl`, `.lfe/evidence/**`, `.lfe/policy.json`, `.lfe/HANDOFF.md`, `.claude/settings*.json`, `.claude/hooks/**`, `.claude/skills/layout-first-engineering/**` | always denied; use the CLI | `PROTECTED_STATE` |
 | `lfe_human_command` | `lfe approve`, `reject`, `revoke` (also through `python3 -m lfe`) | always denied | `HUMAN_CHANNEL_REQUIRED` |
 | `production_code` | anything not classified (e.g. `app/x.js`, `node app.js`) | only at S6+ with G2, G3 and G4 valid | `GATE_NOT_APPROVED`, `GATE_STALE`, `STAGE_NOT_REACHED` |
 | `deploy`, `publish`, `cost`, `delete`, `secret` | `vercel deploy`, `npm publish`, `gh release create`, `aws …`, `rm -rf`, `git push --force`, `.env` | always denied, even with G6 | `DENY_REQUIRES_EXPLICIT_AUTH` |
@@ -180,4 +185,9 @@ repeat them.
   (RFC-0001, 8.5 and 12).
 - Unclassified `Bash` commands count as `production_code`, so before S6 only read-only commands and
   the agent's own `lfe` commands pass. This is intentional (conservative default).
+- An allowlisted command only counts as `docs` when the code it loads comes from somewhere the
+  agent cannot write: outside the project or a protected path (such as
+  `.claude/skills/layout-first-engineering/**`). `PYTHONPATH=prototype python3 -m lfe status`,
+  `cd prototype && python3 -m lfe …`, `python3 docs/lfe.py …`, `LD_PRELOAD=…` and the like count as
+  `production_code`.
 - Reading files never goes through the policy.
