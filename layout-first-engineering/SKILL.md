@@ -29,6 +29,11 @@ A user-directed, design-led product-to-production workflow. **Start with the int
 - Establish tool reality: model/client, read/write filesystem, browser, design service, image generation, code execution, git, deployment; each `available / unavailable / unknown`. Do not assume a specific Figma, MagicPath, Framer, v0, Lovable, GitHub or cloud connector exists.
 - If the user is new: ask for **what the product is**, **who it serves**, and optionally **visual references/desired feel**. Start visual discovery even if budget/stack isn't known. Offer a default direction only as a proposal.
 - Give a compact orientation: current stage, next concrete deliverable, and the next decision required.
+- **If the `lfe` command is available, `.lfe/` is the source of truth for project state:**
+  - read state with `lfe status`; register content with `lfe artifact` and request a gate with `lfe propose`;
+  - never edit the gate table by hand; refresh `PROJECT_STATE.md` with `lfe render`;
+  - only the person approves G2–G6, by typing `lfe approve` in their own terminal (a chat quote records at most G1);
+  - a legacy `PROJECT_STATE.md` enters through `lfe import-md`; imported approvals must be reconfirmed.
 - Read `references/01-conversation-and-state.md` now. Load the stage-specific reference when reaching that stage; avoid loading all references at once.
 
 ## Staged state machine

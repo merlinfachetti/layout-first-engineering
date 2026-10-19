@@ -235,7 +235,8 @@ def _decision(doc):
                                 "a chat quote can only record G1 (DEC-RFC-002, I-02)"))
         if not doc.get("evidence", {}).get("quote", "").strip():
             issues.append(Issue("MISSING_EVIDENCE", "$.evidence.quote", "chat-quote needs the verbatim user message"))
-    if verdict == "approved" and not doc["scope"]["artifacts"]:
+    # A legacy import has no registered artifact to bind; it never counts anyway (N-4, I-08).
+    if verdict == "approved" and not doc["scope"]["artifacts"] and channel != "imported-legacy":
         issues.append(Issue("EMPTY_SCOPE", "$.scope.artifacts", "an approval must be bound to artifact hashes (D-05)"))
     if verdict == "not_applicable" and gate not in ("G1", "G6"):
         issues.append(Issue("NOT_APPLICABLE_FORBIDDEN", "$.verdict", "only G1 and G6 may be not_applicable in v0.1"))

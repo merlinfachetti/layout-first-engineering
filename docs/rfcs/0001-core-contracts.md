@@ -421,6 +421,13 @@ barreira contra autoaprovação; a regra `lfe_human_command` do hook é a segund
 - `lfe import-md PROJECT_STATE.md` reaproveita a lógica de parsing do validador legado e grava cada
   `approved` como decisão `channel: imported-legacy`, `authenticity: unverified`. Essas decisões
   aparecem como "reconfirmar" e **nunca** destravam S6 (N-4).
+  - *Nota de implementação (PR-7).* Uma decisão importada não tem artefato registrado a vincular,
+    então `scope.artifacts` vazio é aceito **somente** com `channel: imported-legacy` (os dados
+    legados vão em `scope.notes`); qualquer outra aprovação com escopo vazio continua
+    `EMPTY_SCOPE`. Como importadas nunca são válidas, o estágio importado é rebaixado ao maior
+    estágio que os gates calculados permitem (na prática, S6+ vira S5) e a pendência de
+    reconfirmação vai para `nextAction`. Um gate que já tem decisão no ledger não é importado, para
+    que um import nunca substitua uma decisão humana.
 - `SKILL.md` receberá cerca de cinco linhas: "se o comando `lfe` estiver disponível, ele é a fonte
   de verdade do estado; use-o em vez de editar a tabela à mão".
 

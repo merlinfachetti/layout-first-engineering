@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "lfe.decision/0.1",
+  "kind": "decision",
+  "seq": 1,
+  "id": "DEC-001",
+  "gate": "G2",
+  "verdict": "approved",
+  "scope": {
+    "artifacts": [],
+    "notes": "imported from PROJECT_STATE.md: legacy decision DEC-004, approved on 2026-09-30, evidence protótipo revisado"
+  },
+  "actorDeclared": "Pessoa usuária",
+  "channel": "imported-legacy",
+  "authenticity": "unverified",
+  "at": "2026-10-19T09:00:00Z",
+  "prevHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "hash": "sha256:6f1c3d9a0b7e4c2d8a5f1e3b9c7d2a4e6f8b0c1d3e5a7f9b2c4d6e8a0b1c3d5e"
+}
