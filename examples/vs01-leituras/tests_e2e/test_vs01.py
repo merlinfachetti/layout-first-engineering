@@ -50,6 +50,12 @@ class Browser(unittest.TestCase):
     def stored(self, page):
         return page.evaluate(f"JSON.parse(localStorage.getItem('{KEY}') || 'null')")
 
+    def error_text(self, page, selector="#reading-error"):
+        # The app writes messages ~50 ms after clearing them, so screen readers re-announce
+        # the same sentence; wait for the text instead of reading it immediately.
+        page.wait_for_function(f"document.querySelector('{selector}').textContent.trim().length > 0", timeout=3000)
+        return page.inner_text(selector).strip()
+
     def titles(self, page):
         return [t.strip() for t in page.locator("#reading-list li.entry").all_inner_texts()]
 
@@ -98,13 +104,14 @@ class Test004Errors(Browser):
         self.assertIsNone(self.stored(page))
         self.assertEqual(page.get_attribute("#reading-title", "aria-invalid"), "true")
         self.assertEqual(page.get_attribute("#reading-error", "aria-live"), "assertive")
-        self.assertTrue(page.inner_text("#reading-error").strip())
+        self.assertTrue(self.error_text(page))
         self.assertTrue(page.is_visible("#reading-error"))
 
     def test_fr005_write_failure_keeps_list_and_title(self):
         page = self.open(init_script=BREAK_STORAGE)
         page.fill("#reading-title", "Livro que não pode ser salvo")
         page.press("#reading-title", "Enter")
+        self.assertTrue(self.error_text(page, "#storage-error"))
         self.assertTrue(page.is_visible("#storage-error"))
         self.assertEqual(page.get_attribute("#storage-error", "role"), "alert")
         self.assertEqual(self.titles(page), [])
@@ -131,7 +138,7 @@ class Test005Keyboard(Browser):
         self.assertEqual(page.evaluate("document.activeElement.id"), "reading-title")
         self.assertTrue(self.focus_ring(page), f"no visible focus on the title field ({viewport})")
         page.keyboard.press("Enter")
-        self.assertTrue(page.inner_text("#reading-error").strip())
+        self.assertTrue(self.error_text(page))
         page.keyboard.type("Bordado para dias de chuva")
         page.keyboard.press("Enter")
         self.assertIn("Bordado para dias de chuva", self.titles(page)[0])

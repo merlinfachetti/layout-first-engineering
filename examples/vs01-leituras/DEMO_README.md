@@ -211,10 +211,10 @@ Esta demo prova menos do que parece à primeira vista. O que ela **não** prova:
   1280×800) com Playwright 1.49.1 e Chromium. A prova completa roda com um comando, na raiz do repositório:
 
   ```bash
-  sh scripts/vs01-proof.sh /tmp/lfe-vs01
+  sh scripts/vs01-proof.sh ../lfe-vs01-prova
   ```
 
-  Ela copia o exemplo para `/tmp/lfe-vs01`, aprova os gates como **simulados**, roda TEST-001 a TEST-005 com
+  Ela copia o exemplo para `../lfe-vs01-prova` (fora do repositório), aprova os gates como **simulados**, roda TEST-001 a TEST-005 com
   `lfe run`, confere os recibos e a rastreabilidade e grava `TEST_REPORT.json`, `.lfe/HANDOFF.md` e
   `.lfe/studio.html`. Sem o Playwright instalado, TEST-003 a TEST-005 ficam `not_executed` e a
   rastreabilidade fica **incompleta** (saída 6). Isso é proposital: sem prova, nada passa. No GitHub, o job
