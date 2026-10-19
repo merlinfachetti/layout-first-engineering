@@ -1,0 +1,65 @@
+{
+  "id": "DIR-001",
+  "revision": 1,
+  "title": "Direções visuais para UI-001 Minhas leituras",
+  "question": "Qual direção vai guiar o protótipo e a baseline?",
+  "options": [
+    {
+      "id": "A",
+      "name": "Sumário",
+      "character": "editorial e contemplativa",
+      "path": "directions/A-editorial.html",
+      "structure": "Coluna única em serifa. A lista é composta como o sumário de um livro: caixa de marcação na margem, título, pontilhado e data. Sem menus, filtros ou busca.",
+      "tradeoffs": {
+        "gains": [
+          "Leitura sem ruído; o campo da próxima leitura vem primeiro.",
+          "Ordem de foco curta: campo, botão, itens.",
+          "Pouco para construir e testar: um formulário, uma lista, quatro estados."
+        ],
+        "costs": [
+          "Acima de uns 40 títulos, achar um item exige rolar; não há busca.",
+          "Ordem só cronológica.",
+          "A serifa vem do sistema e muda entre aparelhos."
+        ],
+        "bestWhen": [
+          "Lista pessoal e curta, consultada por poucos minutos."
+        ]
+      }
+    },
+    {
+      "id": "B",
+      "name": "Fichário",
+      "character": "biblioteca explorável, navegação rápida",
+      "path": "directions/B-biblioteca.html",
+      "structure": "Barra com busca, trilho lateral com nova ficha, estantes com contagem e ordem, índice A–Z fixo e grade de fichas catalográficas agrupadas por letra, com carimbo de lida.",
+      "tradeoffs": {
+        "gains": [
+          "Achar um título entre centenas pelo índice ou pela busca.",
+          "Contagem por estante sempre visível.",
+          "Escala para listas longas ou compartilhadas."
+        ],
+        "costs": [
+          "Com poucas fichas, parece um armário vazio.",
+          "Mais estados para desenhar e testar (busca sem resultado, estante vazia).",
+          "Mais trabalho de teclado (atalho /, foco entre trilho, índice e grade).",
+          "A ficha pede autor e assunto, que o escopo atual não guarda."
+        ],
+        "bestWhen": [
+          "Lista acima de uns 50 títulos ou acervo de um grupo."
+        ]
+      }
+    }
+  ],
+  "decision": "G1: a pessoa escolhe uma direção no chat (por exemplo, \"quero a A\"). O agente só registra a citação literal.",
+  "content": "Todos os títulos e datas são fictícios, escritos para a demo.",
+  "files": [
+    {
+      "path": "directions/A-editorial.html",
+      "sha256": "sha256:1f702e19669392ff9d6b84097c14324926840f54386d95ab6ef1ca5ed26ec878"
+    },
+    {
+      "path": "directions/B-biblioteca.html",
+      "sha256": "sha256:1f8db0ad7cb608982f15c9f0f364e456814f4a7a82637fe7ad3af84e9556a174"
+    }
+  ]
+}

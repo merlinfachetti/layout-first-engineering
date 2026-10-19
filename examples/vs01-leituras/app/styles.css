@@ -1,0 +1,390 @@
+/*
+ * VS-01 Lista de leituras, direção A (Sumário).
+ * Os valores de --color-* espelham os tokens semânticos de ../prototype/tokens.json;
+ * tests/test_vs01_example.py falha se os dois divergirem.
+ */
+
+:root {
+  --color-surface-page: #f4f5f0;
+  --color-surface-raised: #ffffff;
+  --color-surface-error: #f8e6e2;
+  --color-surface-highlight: #e3ee9e;
+  --color-text-primary: #1f2a30;
+  --color-text-muted: #4f5a60;
+  --color-text-inverse: #f4f5f0;
+  --color-text-error: #a12a1f;
+  --color-border-control: #1f2a30;
+  --color-border-subtle: #c7ccc6;
+  --color-border-error: #a12a1f;
+  --color-decor-leader: #8c9590;
+  --color-accent: #1e5c4f;
+  --color-focus: #1e5c4f;
+
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", P052, "Book Antiqua", Georgia, serif;
+  --size-measure: 40rem;
+  --size-check: 1.5rem;
+  --border-control: 2px;
+  --border-focus: 3px;
+  --radius: 3px;
+  --motion-highlight: 1400ms;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  font-variant-numeric: oldstyle-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: var(--border-focus) solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* ---- Página ---------------------------------------------------------- */
+
+.page {
+  max-width: calc(var(--size-measure) + 2.5rem);
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 2.375rem;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  margin: 0.5rem 0 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ---- Aviso de armazenamento (FR-005) ---------------------------------- */
+
+.notice {
+  margin: 2rem 0 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--color-border-error);
+  background: var(--color-surface-error);
+  color: var(--color-text-primary);
+}
+
+.notice[hidden] {
+  display: none;
+}
+
+.notice strong {
+  color: var(--color-text-error);
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice p + p {
+  margin-top: 0.25rem;
+}
+
+/* ---- Formulário (FR-001, FR-004) -------------------------------------- */
+
+.add-form {
+  margin-top: 2.5rem;
+}
+
+.add-label {
+  display: block;
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+.add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  margin-top: 0.25rem;
+}
+
+.add-input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  padding: 0.35rem 0;
+  border: 0;
+  border-bottom: var(--border-control) solid var(--color-border-control);
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.375rem;
+  line-height: 1.3;
+}
+
+.add-input:focus-visible {
+  outline-offset: 4px;
+}
+
+.add-input[aria-invalid="true"] {
+  border-bottom-color: var(--color-border-error);
+}
+
+.button {
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: var(--border-control) solid var(--color-border-control);
+  border-radius: var(--radius);
+  background: var(--color-border-control);
+  color: var(--color-text-inverse);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.field-error {
+  min-height: 1.55em;
+  margin: 0.5rem 0 0;
+  color: var(--color-text-error);
+  font-size: 0.9375rem;
+}
+
+/* ---- Sumário (a lista) ------------------------------------------------ */
+
+.contents {
+  margin-top: 3rem;
+}
+
+.contents-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.contents-head h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.summary {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: var(--size-check) minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 0.75rem;
+  padding: 0.85rem 0;
+}
+
+.entry-check {
+  appearance: none;
+  -webkit-appearance: none;
+  align-self: start;
+  width: var(--size-check);
+  height: var(--size-check);
+  margin: 0.2rem 0 0;
+  border: var(--border-control) solid var(--color-border-control);
+  border-radius: var(--radius);
+  background: var(--color-surface-raised) center / 1.05rem no-repeat;
+  cursor: pointer;
+}
+
+.entry-check:checked {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8.6l3.6 3.4 7.4-8' fill='none' stroke='%23f4f5f0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.entry-line {
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.entry-title {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: 1.1875rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.entry-leader {
+  flex: 1 1 1.5rem;
+  min-width: 1.5rem;
+  height: 1.3em;
+  margin: 0 0.5rem;
+  background-image: radial-gradient(circle, var(--color-decor-leader) 1.1px, transparent 1.6px);
+  background-position: left bottom 0.32em;
+  background-repeat: repeat-x;
+  background-size: 0.5rem 0.5rem;
+}
+
+.entry-date {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-style: italic;
+  white-space: nowrap;
+  line-height: 1.3;
+  padding-bottom: 0.1em;
+}
+
+.entry.is-done .entry-title {
+  color: var(--color-text-muted);
+}
+
+.entry.is-new .entry-title {
+  animation: marca-texto var(--motion-highlight) ease-out 1;
+}
+
+@keyframes marca-texto {
+  from {
+    background-color: var(--color-surface-highlight);
+  }
+
+  60% {
+    background-color: var(--color-surface-highlight);
+  }
+
+  to {
+    background-color: transparent;
+  }
+}
+
+/* ---- Vazio ------------------------------------------------------------ */
+
+.empty {
+  padding: 2rem 0 0;
+}
+
+.empty[hidden] {
+  display: none;
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 1.375rem;
+}
+
+.empty p:not(.empty-title) {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+}
+
+/* ---- Rodapé ----------------------------------------------------------- */
+
+.colophon {
+  margin-top: 4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.colophon p {
+  margin: 0;
+}
+
+/* ---- Telas largas: título maior e marcação na margem ------------------- */
+
+@media (min-width: 56rem) {
+  .page {
+    padding-top: 5rem;
+  }
+
+  .masthead h1 {
+    font-size: 3.25rem;
+  }
+
+  .entries {
+    margin-left: calc(-1 * (var(--size-check) + 1rem));
+  }
+
+  .entry {
+    column-gap: 1rem;
+  }
+
+  .entry-title {
+    font-size: 1.375rem;
+  }
+
+  .entry-date {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .entry-check:checked {
+    background-image: none;
+    background-color: CanvasText;
+  }
+
+  .entry-leader {
+    background-image: none;
+  }
+}

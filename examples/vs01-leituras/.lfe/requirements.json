@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "lfe.requirements/0.1",
+  "id": "SCOPE-001",
+  "revision": 1,
+  "items": [
+    {
+      "id": "FR-001",
+      "title": "Adicionar leitura com título obrigatório",
+      "acceptance": [
+        {
+          "given": "um título com texto, como “Cartas a um relojoeiro”",
+          "when": "a pessoa escolhe Adicionar ou pressiona Enter no campo",
+          "then": "o item aparece no topo do sumário, o campo fica vazio e o foco volta para ele"
+        },
+        {
+          "given": "um título com espaços nas pontas",
+          "when": "a leitura é adicionada",
+          "then": "o título é guardado sem os espaços das pontas"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-003"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "FR-002",
+      "title": "Persistir a lista neste navegador",
+      "acceptance": [
+        {
+          "given": "uma leitura salva",
+          "when": "a página é recarregada",
+          "then": "a leitura continua lá, na chave lfe-vs01:readings:v1 do localStorage, como {id, title, done, createdAt}"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-003"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "FR-003",
+      "title": "Marcar uma leitura como lida",
+      "acceptance": [
+        {
+          "given": "uma leitura para ler",
+          "when": "a pessoa marca a caixa ao lado do título",
+          "then": "o item aparece como lido, a contagem muda e o estado continua após recarregar"
+        },
+        {
+          "given": "uma leitura lida",
+          "when": "a pessoa desmarca a caixa",
+          "then": "o item volta a ser para ler, também após recarregar"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-003"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "FR-004",
+      "title": "Recusar título vazio ou só com espaços",
+      "acceptance": [
+        {
+          "given": "o campo vazio ou só com espaços",
+          "when": "a pessoa tenta adicionar",
+          "then": "nada é salvo, o campo fica marcado como inválido e o erro é anunciado por aria-live"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-004"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "FR-005",
+      "title": "Mostrar falha de armazenamento sem fingir sucesso",
+      "acceptance": [
+        {
+          "given": "o localStorage lança erro ao gravar",
+          "when": "a pessoa adiciona ou marca uma leitura",
+          "then": "um aviso visível (role=alert) explica a falha, a lista não muda e o título digitado continua no campo"
+        },
+        {
+          "given": "o localStorage lança erro ao abrir a página",
+          "when": "a página carrega",
+          "then": "um aviso visível informa que nada será salvo"
+        },
+        {
+          "given": "dados ilegíveis na chave lfe-vs01:readings:v1",
+          "when": "a página carrega",
+          "then": "um aviso visível aparece e a página não grava por cima desses dados"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-004"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "UX-001",
+      "title": "Todas as ações principais por teclado, com foco visível",
+      "acceptance": [
+        {
+          "given": "só teclado, em 390×844 e em 1280×800",
+          "when": "a pessoa usa Tab, Enter e Espaço",
+          "then": "consegue adicionar, ver o erro e marcar como lida, sempre com um anel de foco visível"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-005",
+        "TEST-006"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "SEC-001",
+      "title": "Código de produção só depois de G2, G3 e G4 válidos",
+      "acceptance": [
+        {
+          "given": "G2, G3 ou G4 sem aprovação válida",
+          "when": "o agente tenta escrever em app/",
+          "then": "a ação é negada com GATE_NOT_APPROVED ou GATE_STALE"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-001"
+      ],
+      "status": "proposed"
+    },
+    {
+      "id": "NFR-001",
+      "title": "Artefatos do projeto válidos nos contratos LFE v0.1",
+      "acceptance": [
+        {
+          "given": "os arquivos de .lfe/ e os arquivos que eles listam",
+          "when": "os contratos são validados",
+          "then": "não há problema de schema, de hash ou de caminho"
+        }
+      ],
+      "priority": "must",
+      "uiRefs": [
+        "UI-001"
+      ],
+      "testRefs": [
+        "TEST-002"
+      ],
+      "status": "proposed"
+    }
+  ],
+  "tests": [
+    {
+      "id": "TEST-001",
+      "kind": "unit",
+      "requires": [
+        "lfe check-action (política do core, PR-4)"
+      ],
+      "covers": [
+        "SEC-001"
+      ]
+    },
+    {
+      "id": "TEST-002",
+      "kind": "contract",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests.test_contracts",
+        "tests.test_vs01_example"
+      ],
+      "requires": [
+        "executar na raiz do repositório"
+      ],
+      "covers": [
+        "NFR-001"
+      ]
+    },
+    {
+      "id": "TEST-003",
+      "kind": "e2e",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests_e2e"
+      ],
+      "requires": [
+        "python:playwright"
+      ],
+      "covers": [
+        "FR-001",
+        "FR-002",
+        "FR-003"
+      ]
+    },
+    {
+      "id": "TEST-004",
+      "kind": "e2e",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests_e2e"
+      ],
+      "requires": [
+        "python:playwright"
+      ],
+      "covers": [
+        "FR-004",
+        "FR-005"
+      ]
+    },
+    {
+      "id": "TEST-005",
+      "kind": "e2e",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests_e2e"
+      ],
+      "requires": [
+        "python:playwright"
+      ],
+      "covers": [
+        "UX-001"
+      ]
+    },
+    {
+      "id": "TEST-006",
+      "kind": "manual-review",
+      "requires": [
+        "revisão humana de acessibilidade, registrada à parte"
+      ],
+      "covers": [
+        "UX-001"
+      ]
+    }
+  ]
+}

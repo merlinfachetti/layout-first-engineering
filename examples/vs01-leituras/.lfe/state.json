@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "lfe.state/0.1",
+  "projectId": "vs01-leituras",
+  "name": "Lista de leituras",
+  "locale": "pt-BR",
+  "mode": "project",
+  "stage": "S1",
+  "artifacts": {
+    "DIR-001": {
+      "kind": "direction-set",
+      "revision": 1,
+      "path": ".lfe/directions/DIR-001.json",
+      "sha256": "sha256:b60867dc971ce079d73af1474bbdd314185f5e82ac469f4d04e6eb5553aaa35a"
+    },
+    "DESIGN-001": {
+      "kind": "experience-baseline",
+      "revision": 1,
+      "path": ".lfe/baselines/DESIGN-001.json",
+      "sha256": "sha256:8a83e54d163cb25f212ce2e202d9f7c8ef8e7834ed903396e20845727e195fed"
+    },
+    "SCOPE-001": {
+      "kind": "requirements-set",
+      "revision": 1,
+      "path": ".lfe/requirements.json",
+      "sha256": "sha256:3c068c812f62be276432e3da9afd0b1efd6c81332d8703032832f953253dc135"
+    },
+    "ADR-001": {
+      "kind": "architecture-decision",
+      "revision": 1,
+      "path": ".lfe/adr/ADR-001.md",
+      "sha256": "sha256:3b7d9840cf9aca3c7cede811a794e3ad585cdda85650f69c2471bc4648c5eb89"
+    }
+  },
+  "gatesCache": {
+    "G1": {
+      "status": "proposed",
+      "decisionId": null
+    },
+    "G2": {
+      "status": "proposed",
+      "decisionId": null
+    },
+    "G3": {
+      "status": "proposed",
+      "decisionId": null
+    },
+    "G4": {
+      "status": "proposed",
+      "decisionId": null
+    },
+    "G5": {
+      "status": "not_started",
+      "decisionId": null
+    },
+    "G6": {
+      "status": "not_started",
+      "decisionId": null
+    }
+  },
+  "nextAction": "Escolher a direção A ou B (G1); depois revisar o protótipo e aprovar G2 no terminal",
+  "updatedAt": "2026-10-19T04:43:04Z"
+}

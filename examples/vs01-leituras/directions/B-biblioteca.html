@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Direção B: Fichário</title>
+  <style>
+/* Direção B (Fichário). Fichas catalográficas num arquivo de aço: filtro, índice e grade. */
+
+:root {
+  --steel: #e3e7ea;
+  --panel: #f7f8f9;
+  --card: #ffffff;
+  --ink: #1f2933;
+  --muted: #4a5560;
+  --line: #c3cbd3;
+  --rule-red: #c2352b;
+  --rule-blue: #d3e0ee;
+  --stamp: #5b3b8c;
+  --action: #1d4e89;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --typewriter: "American Typewriter", "Courier Prime", "Courier New", Courier, monospace;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--steel);
+  color: var(--ink);
+  font: 1rem/1.5 var(--sans);
+}
+
+a { color: var(--action); }
+
+:focus-visible {
+  outline: 3px solid var(--action);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* ---- Moldura de revisão -------------------------------------------- */
+
+.review-top {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--card);
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.9375rem;
+}
+.review-top p { margin: 0; }
+.review-top a { color: inherit; }
+
+/* ---- Barra superior --------------------------------------------------- */
+
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "title count" "search search";
+  gap: 0.75rem 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+.bar h1 { grid-area: title; margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; }
+.bar .count { grid-area: count; margin: 0; color: var(--muted); font-size: 0.9375rem; }
+.search { grid-area: search; position: relative; }
+.search input {
+  width: 100%; min-height: 2.75rem; padding: 0.5rem 2.75rem 0.5rem 0.875rem;
+  border: 1px solid var(--muted); border-radius: 6px; background: var(--card);
+  color: inherit; font: inherit;
+}
+.search input::placeholder { color: var(--muted); opacity: 1; }
+.search kbd {
+  position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+  min-width: 1.6rem; padding: 0.05rem 0.4rem; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--panel); color: var(--muted); font: 0.8125rem/1.4 var(--sans); text-align: center;
+}
+
+/* ---- Trilho (nova ficha, estantes, ordem) ---------------------------- */
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr); }
+
+.rail { padding: 1.25rem; background: var(--panel); border-bottom: 1px solid var(--line); }
+.rail h2, .rail legend { margin: 0 0 0.5rem; padding: 0; font-size: 0.9375rem; font-weight: 700; }
+.rail fieldset { margin: 1.25rem 0 0; padding: 0; border: 0; }
+
+.new-card label { display: block; margin-bottom: 0.35rem; font-size: 0.9375rem; font-weight: 700; }
+.new-card .row { display: flex; gap: 0.5rem; }
+.new-card input {
+  flex: 1 1 auto; min-width: 0; min-height: 2.75rem; padding: 0.5rem 0.75rem;
+  border: 1px solid var(--muted); border-radius: 6px; background: var(--card); color: inherit; font: inherit;
+}
+.btn {
+  min-height: 2.75rem; padding: 0.5rem 1rem; border: 0; border-radius: 6px;
+  background: var(--action); color: #ffffff; font: inherit; font-weight: 600; cursor: pointer;
+}
+
+.shelves { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.shelf { position: relative; }
+.shelf input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.shelf span {
+  display: inline-flex; gap: 0.5rem; align-items: center; min-height: 2.5rem; padding: 0.35rem 0.85rem;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 0.9375rem;
+}
+.shelf b { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+.shelf input:checked + span { background: var(--ink); border-color: var(--ink); color: #ffffff; }
+.shelf input:checked + span b { color: var(--steel); }
+.shelf input:focus-visible + span { outline: 3px solid var(--action); outline-offset: 2px; }
+
+.order { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.9375rem; }
+.order label { display: inline-flex; gap: 0.4rem; align-items: center; min-height: 2rem; }
+.order input { width: 1.1rem; height: 1.1rem; accent-color: var(--action); }
+.order-note { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.8125rem; }
+
+/* ---- Gaveta: índice A–Z e fichas ------------------------------------- */
+
+.drawer { padding: 0 1.25rem 3rem; }
+
+.index {
+  position: sticky; top: 0; z-index: 1;
+  margin: 0 -1.25rem; padding: 0.5rem 1.25rem;
+  background: var(--steel); border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.index ul { display: flex; gap: 0.125rem; margin: 0; padding: 0; list-style: none; }
+.index a, .index span {
+  display: grid; place-items: center; min-width: 1.75rem; height: 2rem; border-radius: 4px;
+  font-size: 0.875rem; font-weight: 700; text-decoration: none;
+}
+.index a { color: var(--ink); background: var(--card); }
+.index a:hover { background: var(--ink); color: #ffffff; }
+.index span { color: #8a949d; font-weight: 400; }
+
+.letter { margin-top: 1.75rem; scroll-margin-top: 3.5rem; }
+
+/* A divisória da gaveta: uma aba com a letra. */
+.tab {
+  display: inline-block; margin: 0; padding: 0.15rem 0.9rem 0.1rem;
+  border: 1px solid var(--line); border-bottom: 0; border-radius: 6px 6px 0 0;
+  background: var(--panel); font-size: 1.125rem; line-height: 1.6;
+}
+
+.cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 0.875rem;
+  margin: 0; padding: 0.875rem; list-style: none;
+  border: 1px solid var(--line); border-radius: 0 6px 6px 6px; background: var(--panel);
+}
+
+.ficha {
+  position: relative; display: flex; flex-direction: column; min-height: 9.5rem;
+  padding: 0.75rem 0.9rem 0.6rem;
+  border: 1px solid var(--line); border-radius: 2px;
+  background: var(--card);
+}
+.ficha::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 2.85rem;
+  border-top: 2px solid var(--rule-red);
+}
+.ficha-title {
+  min-height: 2.1rem; margin: 0; font: 700 1rem/1.25 var(--typewriter);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.ficha-meta { margin: 0.6rem 0 0.5rem; font: 0.875rem/1.45rem var(--typewriter); }
+.ficha-meta div { display: flex; gap: 0.5rem; padding: 0.15rem 0; border-bottom: 1px solid var(--rule-blue); }
+.ficha-meta dt { color: var(--muted); }
+.ficha-meta dt::after { content: ":"; }
+.ficha-meta dd { margin: 0; }
+.ficha-check {
+  display: inline-flex; gap: 0.45rem; align-items: center; align-self: flex-start;
+  min-height: 2rem; margin-top: auto; font-size: 0.875rem; cursor: pointer;
+}
+.ficha-check input { width: 1.25rem; height: 1.25rem; margin: 0; accent-color: var(--stamp); }
+
+/* O carimbo: a única ousadia desta direção. */
+.stamp {
+  position: absolute; right: 0.8rem; bottom: 0.7rem;
+  padding: 0.1rem 0.55rem;
+  border: 3px double var(--stamp); border-radius: 4px;
+  color: var(--stamp); font: 700 0.9375rem/1.3 var(--typewriter);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  transform: rotate(-7deg); opacity: 0.88;
+}
+
+/* Estantes filtram as fichas sem JavaScript. */
+body:has(#estante-ler:checked) .ficha[data-status="lida"],
+body:has(#estante-lidas:checked) .ficha[data-status="ler"] { display: none; }
+
+/* ---- Trade-offs ------------------------------------------------------ */
+
+.tradeoffs { padding: 2.5rem 1.25rem 3rem; background: var(--card); border-top: 1px dashed var(--line); }
+.tradeoffs-inner { max-width: 60rem; margin: 0 auto; }
+.tradeoffs h2 { margin: 0 0 0.25rem; font-size: 1.125rem; }
+.tradeoffs-intro { max-width: 44rem; margin: 0 0 1.5rem; color: var(--muted); }
+.tradeoffs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.5rem 2.5rem; }
+.tradeoffs h3 { margin: 0 0 0.35rem; font-size: 1rem; }
+.tradeoffs ul { margin: 0; padding-left: 1.1rem; }
+.tradeoffs li + li { margin-top: 0.35rem; }
+
+/* ---- Telas largas: trilho fixo à esquerda ---------------------------- */
+
+@media (min-width: 52rem) {
+  .bar { grid-template-columns: 16.5rem minmax(0, 1fr) auto; grid-template-areas: "title search count"; padding: 0.9rem 1.5rem; }
+  .layout { grid-template-columns: 16.5rem minmax(0, 1fr); align-items: start; }
+  .rail { position: sticky; top: 0; min-height: calc(100vh - 4.6rem); padding: 1.5rem; border-bottom: 0; border-right: 1px solid var(--line); }
+  .new-card .row { flex-direction: column; }
+  .shelves { flex-direction: column; gap: 0.35rem; }
+  .shelf span { display: flex; justify-content: space-between; border-radius: 6px; }
+  .drawer { padding: 0 1.5rem 3rem; }
+  .index { margin: 0 -1.5rem; padding: 0.6rem 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+@media (forced-colors: active) {
+  .ficha { background: Canvas; }
+  .shelf input:checked + span { outline: 2px solid Highlight; }
+}
+  </style>
+</head>
+<body>
+  <div class="review-top">
+    <p><strong>Direção B: Fichário.</strong> Achar rápido numa lista longa.</p>
+    <p>Conteúdo fictício. Compare com a <a href="A-editorial.html">direção A, Sumário</a>.</p>
+  </div>
+
+  <header class="bar">
+    <h1>Fichário de leituras</h1>
+    <form class="search" role="search" onsubmit="return false">
+      <label class="visually-hidden" for="b-search">Buscar por título</label>
+      <input id="b-search" type="search" placeholder="Buscar por título" autocomplete="off" aria-describedby="b-search-key">
+      <kbd id="b-search-key" title="Atalho: barra">/</kbd>
+    </form>
+    <p class="count">16 fichas</p>
+  </header>
+
+  <div class="layout">
+    <aside class="rail" aria-label="Nova ficha e filtros">
+      <form class="new-card" onsubmit="return false">
+        <label for="b-new">Nova ficha</label>
+        <div class="row">
+          <input id="b-new" type="text" autocomplete="off">
+          <button class="btn" type="submit">Adicionar</button>
+        </div>
+      </form>
+
+      <fieldset>
+        <legend>Estante</legend>
+        <div class="shelves">
+          <label class="shelf"><input type="radio" name="estante" id="estante-todas" checked><span>Todas <b>16</b></span></label>
+          <label class="shelf"><input type="radio" name="estante" id="estante-ler"><span>Para ler <b>10</b></span></label>
+          <label class="shelf"><input type="radio" name="estante" id="estante-lidas"><span>Lidas <b>6</b></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Ordem</legend>
+        <div class="order">
+          <label><input type="radio" name="ordem" checked> Alfabética</label>
+          <label><input type="radio" name="ordem"> Mais recentes</label>
+        </div>
+        <p class="order-note">Artigos iniciais são ignorados, como nos catálogos de biblioteca: “O inventário” fica no I.</p>
+      </fieldset>
+    </aside>
+
+    <main class="drawer" aria-label="Tela proposta: fichas">
+      <nav class="index" aria-label="Índice alfabético"><ul><li><a href="#letra-a">A</a></li><li><a href="#letra-b">B</a></li><li><a href="#letra-c">C</a></li><li><a href="#letra-d">D</a></li><li><a href="#letra-e">E</a></li><li><span aria-hidden="true">F</span></li><li><span aria-hidden="true">G</span></li><li><a href="#letra-h">H</a></li><li><a href="#letra-i">I</a></li><li><span aria-hidden="true">J</span></li><li><span aria-hidden="true">K</span></li><li><span aria-hidden="true">L</span></li><li><a href="#letra-m">M</a></li><li><a href="#letra-n">N</a></li><li><span aria-hidden="true">O</span></li><li><a href="#letra-p">P</a></li><li><a href="#letra-q">Q</a></li><li><span aria-hidden="true">R</span></li><li><span aria-hidden="true">S</span></li><li><span aria-hidden="true">T</span></li><li><span aria-hidden="true">U</span></li><li><a href="#letra-v">V</a></li><li><span aria-hidden="true">W</span></li><li><span aria-hidden="true">X</span></li><li><span aria-hidden="true">Y</span></li><li><span aria-hidden="true">Z</span></li></ul></nav>
+      <section class="letter" id="letra-a" aria-labelledby="t-a">
+        <h2 class="tab" id="t-a">A</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="lida">
+            <h3 class="ficha-title">O ano em que choveu sal</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>02/07/2026</dd></div><div><dt>Situação</dt><dd>Lida</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox" checked> Lida</label>
+            <span class="stamp" aria-hidden="true">Lida</span>
+          </li>
+          <li class="ficha" data-status="lida">
+            <h3 class="ficha-title">Atlas das cozinhas vazias</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>21/08/2026</dd></div><div><dt>Situação</dt><dd>Lida</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox" checked> Lida</label>
+            <span class="stamp" aria-hidden="true">Lida</span>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-b" aria-labelledby="t-b">
+        <h2 class="tab" id="t-b">B</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Bordado para dias de chuva</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>16/10/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-c" aria-labelledby="t-c">
+        <h2 class="tab" id="t-c">C</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Cartas a um relojoeiro</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>11/10/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">A cidade sob a serra</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>28/09/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-d" aria-labelledby="t-d">
+        <h2 class="tab" id="t-d">D</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Diário de uma ponte</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>12/08/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-e" aria-labelledby="t-e">
+        <h2 class="tab" id="t-e">E</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Estudos sobre o silêncio das casas</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>05/09/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-h" aria-labelledby="t-h">
+        <h2 class="tab" id="t-h">H</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="lida">
+            <h3 class="ficha-title">Herbário de bolso</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>19/06/2026</dd></div><div><dt>Situação</dt><dd>Lida</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox" checked> Lida</label>
+            <span class="stamp" aria-hidden="true">Lida</span>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-i" aria-labelledby="t-i">
+        <h2 class="tab" id="t-i">I</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">O inventário das marés</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>17/10/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-m" aria-labelledby="t-m">
+        <h2 class="tab" id="t-m">M</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="lida">
+            <h3 class="ficha-title">Manual do jardim noturno</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>14/09/2026</dd></div><div><dt>Situação</dt><dd>Lida</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox" checked> Lida</label>
+            <span class="stamp" aria-hidden="true">Lida</span>
+          </li>
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Os mapas que não fizemos</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>02/09/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-n" aria-labelledby="t-n">
+        <h2 class="tab" id="t-n">N</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Notas de um tradutor cansado</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>25/09/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-p" aria-labelledby="t-p">
+        <h2 class="tab" id="t-p">P</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="lida">
+            <h3 class="ficha-title">A paciência dos faróis</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>30/07/2026</dd></div><div><dt>Situação</dt><dd>Lida</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox" checked> Lida</label>
+            <span class="stamp" aria-hidden="true">Lida</span>
+          </li>
+          <li class="ficha" data-status="lida">
+            <h3 class="ficha-title">Pequeno tratado das esperas</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>03/10/2026</dd></div><div><dt>Situação</dt><dd>Lida</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox" checked> Lida</label>
+            <span class="stamp" aria-hidden="true">Lida</span>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-q" aria-labelledby="t-q">
+        <h2 class="tab" id="t-q">Q</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Quando o rio aprendeu a ler</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>18/10/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+      <section class="letter" id="letra-v" aria-labelledby="t-v">
+        <h2 class="tab" id="t-v">V</h2>
+        <ul class="cards">
+          <li class="ficha" data-status="ler">
+            <h3 class="ficha-title">Uma varanda em agosto</h3>
+            <dl class="ficha-meta"><div><dt>Entrada</dt><dd>09/10/2026</dd></div><div><dt>Situação</dt><dd>Para ler</dd></div></dl>
+            <label class="ficha-check"><input type="checkbox"> Lida</label>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <aside class="tradeoffs" aria-labelledby="b-tradeoffs">
+    <div class="tradeoffs-inner">
+      <h2 id="b-tradeoffs">Trade-offs da direção B</h2>
+      <p class="tradeoffs-intro">Cada leitura vira uma ficha catalográfica numa gaveta de aço. A tela privilegia encontrar: busca, estantes com contagem e índice A–Z. As estantes desta página já filtram de verdade; a busca e a ordem são só desenho.</p>
+      <div class="tradeoffs-grid">
+        <section>
+          <h3>Ganha</h3>
+          <ul>
+            <li>Achar um título entre centenas em dois gestos: letra do índice ou busca.</li>
+            <li>Visão de conjunto: quantas para ler e quantas lidas, sempre à vista.</li>
+            <li>Escala sem redesenho para listas longas ou compartilhadas.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Custa</h3>
+          <ul>
+            <li>Com poucas fichas, o trilho e o índice parecem um armário vazio.</li>
+            <li>Mais estados para desenhar e testar: busca sem resultado, estante vazia, letra vazia.</li>
+            <li>Mais trabalho de teclado: atalho “/”, ordem de foco entre trilho, índice e grade.</li>
+            <li>A ficha pede autor e assunto, que o escopo atual não guarda.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Funciona melhor quando</h3>
+          <ul>
+            <li>A lista passa de uns 50 títulos ou vira acervo de um grupo.</li>
+            <li>A pergunta mais comum é “eu já tenho esse?”, e não “o que leio agora?”.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </aside>
+</body>
+</html>
