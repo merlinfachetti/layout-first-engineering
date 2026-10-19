@@ -83,7 +83,7 @@ flowchart LR
 
 The automation cannot bypass a user decision; routine tasks within approved scope can proceed without extra approvals.
 
-**Full guides:** [Installation & usage](docs/INSTALLATION-AND-USAGE.md) · [Portuguese cross-platform guide](docs/INSTALACAO-E-USO.pt-BR.md) · [macOS GitHub publication/troubleshooting](docs/PUBLICACAO-GITHUB-MAC.md) · [two master prompts](docs/PROMPTS-MESTRES.pt-BR.md).
+**Full guides:** [`lfe` engine: lock, remember, prove](docs/LFE-CLI.md) · [Installation & usage](docs/INSTALLATION-AND-USAGE.md) · [Portuguese cross-platform guide](docs/INSTALACAO-E-USO.pt-BR.md) · [macOS GitHub publication/troubleshooting](docs/PUBLICACAO-GITHUB-MAC.md) · [two master prompts](docs/PROMPTS-MESTRES.pt-BR.md).
 
 ## Install (agent skills)
 
