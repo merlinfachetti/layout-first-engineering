@@ -331,6 +331,29 @@ class TraceTests(unittest.TestCase):
             self.assertEqual(ctx.exception.code, "NO_REQUIREMENTS")
 
 
+class MustNeedsProofTests(unittest.TestCase):
+    """Regression: an approved-but-unmarked `must` requirement used to need no proof, so G5
+    could be approved with zero test evidence (marking it implemented changes the approved scope)."""
+
+    def test_must_requirement_needs_proof_even_when_only_approved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Project(tmp, status="approved")
+            report = evidence.trace(p.root)
+            self.assertFalse(report["complete"])
+            row = next(r for r in report["requirements"] if r["id"] == "FR-001")
+            self.assertFalse(row["ok"])
+            with self.assertRaises(LfeError) as ctx:
+                evidence.require_complete(p.root)
+            self.assertEqual(ctx.exception.code, "EVIDENCE_INCOMPLETE")
+
+    def test_should_requirement_without_proof_does_not_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Project(tmp, status="approved")
+            p.run("passing")
+            report = evidence.trace(p.root)
+            self.assertTrue(report["complete"], report)
+
+
 class G5EvidenceTests(unittest.TestCase):
     """D-06 in `decisions.decide` and AC-07."""
 

@@ -181,11 +181,14 @@
     {
       "id": "TEST-001",
       "kind": "unit",
-      "requires": [
-        "lfe check-action (política do core, PR-4)"
-      ],
       "covers": [
         "SEC-001"
+      ],
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests_unit.test_core_rules.Sec001ProductionLock"
       ]
     },
     {
@@ -195,11 +198,7 @@
         "python3",
         "-m",
         "unittest",
-        "tests.test_contracts",
-        "tests.test_vs01_example"
-      ],
-      "requires": [
-        "executar na raiz do repositório"
+        "tests_unit.test_core_rules.Nfr001ValidArtifacts"
       ],
       "covers": [
         "NFR-001"
@@ -212,9 +211,7 @@
         "python3",
         "-m",
         "unittest",
-        "discover",
-        "-s",
-        "tests_e2e"
+        "tests_e2e.test_vs01.Test003AddPersistMark"
       ],
       "requires": [
         "python:playwright"
@@ -232,9 +229,7 @@
         "python3",
         "-m",
         "unittest",
-        "discover",
-        "-s",
-        "tests_e2e"
+        "tests_e2e.test_vs01.Test004Errors"
       ],
       "requires": [
         "python:playwright"
@@ -251,9 +246,7 @@
         "python3",
         "-m",
         "unittest",
-        "discover",
-        "-s",
-        "tests_e2e"
+        "tests_e2e.test_vs01.Test005Keyboard"
       ],
       "requires": [
         "python:playwright"
