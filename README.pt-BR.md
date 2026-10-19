@@ -97,6 +97,7 @@ A skill não inventa integrações ou preços: se não houver conector de Figma,
 
 - **[MANUAL MESTRE — Tudo sobre funcionamento, instalação, GitHub e manutenção](docs/MANUAL-MESTRE.pt-BR.md)** — a página principal, completa e preservada no repositório.
 
+- **[Motor `lfe`: trava, lembra e prova — passo a passo](docs/LFE-CLI.pt-BR.md)** — aprovações só suas, retomada automática e recibos de teste.
 - **[Instalar e usar em ChatGPT, Claude, Gemini CLI, Codex, DeepSeek, Qwen e outros](docs/INSTALACAO-E-USO.pt-BR.md)** — com comandos, diferenças entre plataformas, conectores, exemplos, retomada e troubleshooting.
 - **[Publicar no GitHub (macOS) e corrigir erros de caminho](docs/PUBLICACAO-GITHUB-MAC.md)** — comando independente do diretório atual e diagnóstico.
 - **[Dois prompts mestres originais: design e engenharia](docs/PROMPTS-MESTRES.pt-BR.md)** — para consulta e fallback em qualquer IA.
