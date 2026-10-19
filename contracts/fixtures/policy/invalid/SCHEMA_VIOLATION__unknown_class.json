@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "lfe.policy/0.1",
+  "pathClasses": [
+    {
+      "glob": "app/**",
+      "class": "allowed"
+    }
+  ],
+  "commandClasses": [
+    {
+      "pattern": "^ls\\b",
+      "class": "docs"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "lfe.policy/0.1",
+  "pathClasses": [
+    {
+      "glob": ".lfe/HANDOFF.md",
+      "class": "lfe_state"
+    },
+    {
+      "glob": ".claude/settings.json",
+      "class": "lfe_state"
+    },
+    {
+      "glob": ".claude/settings.local.json",
+      "class": "lfe_state"
+    },
+    {
+      "glob": ".claude/hooks/**",
+      "class": "lfe_state"
+    },
+    {
+      "glob": ".claude/skills/layout-first-engineering/**",
+      "class": "lfe_state"
+    },
+    {
+      "glob": ".lfe/**",
+      "class": "docs"
+    },
+    {
+      "glob": "docs/**",
+      "class": "docs"
+    },
+    {
+      "glob": "**/*.md",
+      "class": "docs"
+    },
+    {
+      "glob": "prototype/**",
+      "class": "prototype"
+    },
+    {
+      "glob": "directions/**",
+      "class": "prototype"
+    },
+    {
+      "glob": "**/.env",
+      "class": "secret"
+    },
+    {
+      "glob": "**/.env.*",
+      "class": "secret"
+    },
+    {
+      "glob": "**/*.pem",
+      "class": "secret"
+    },
+    {
+      "glob": "**/*.key",
+      "class": "secret"
+    },
+    {
+      "glob": "**/id_rsa*",
+      "class": "secret"
+    },
+    {
+      "glob": "**/id_ed25519*",
+      "class": "secret"
+    }
+  ],
+  "commandClasses": [
+    {
+      "pattern": "^\\s*(?:cd\\s+[^;&|`$<>\\n]+&&\\s*)?(?![^\\n]*\\s(?:-exec|-execdir|-ok|-okdir|-delete|-fprint\\w*|-fls|--pre|--output|--ext-diff|--textconv)\\b)(?:ls|pwd|cat|head|tail|wc|grep|rg|find|stat|which|echo|diff|du|df|date|whoami|uname)\\b[^;&|`$<>\\n]*$",
+      "class": "docs"
+    },
+    {
+      "pattern": "^\\s*(?:cd\\s+[^;&|`$<>\\n]+&&\\s*)?(?![^\\n]*\\s(?:-exec|-execdir|-ok|-okdir|-delete|-fprint\\w*|-fls|--pre|--output|--ext-diff|--textconv)\\b)git\\s+(?:status|log|diff|show|branch|rev-parse|ls-files|blame|remote\\s+-v)\\b[^;&|`$<>\\n]*$",
+      "class": "docs"
+    },
+    {
+      "pattern": "^\\s*(?:cd\\s+[^;&|`$<>\\n]+&&\\s*)?(?:[A-Za-z_][A-Za-z0-9_]*=\\S*\\s+)*(?:lfe|python3?\\s+-m\\s+lfe|python3?\\s+\\S*lfe\\.py)(?:\\s+--root\\s+\\S+)?\\s+(?:status|propose|artifact|validate|init|record-chat-approval|check-action|version|next|question|handoff|trace|impact|doctor|verify-report|render|stage|export|import|import-md|show-policy)\\b[^;&|`$<>\\n]*$",
+      "class": "docs"
+    },
+    {
+      "pattern": "^\\s*[\\w.-]+\\s+(?:--version|-V|version)\\s*$",
+      "class": "docs"
+    }
+  ]
+}

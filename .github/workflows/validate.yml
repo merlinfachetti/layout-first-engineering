@@ -22,7 +22,12 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          # The skill promises Python 3.10+; the last version listed becomes the default `python`.
+          python-version: |
+            3.10
+            3.12
+      - name: Tests on the oldest supported Python (3.10)
+        run: python3.10 -m unittest discover -s tests
       - name: Validate skill files and gate logic
         run: python -m unittest discover -s tests -v
       - name: Validate initial state template

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/merlinfachetti/layout-first-engineering/contracts/policy.schema.json",
+  "title": "LFE Policy v0.1 (RFC-0001, 8.5)",
+  "description": "Classifies agent actions. pathClasses use project-relative globs (* within one segment, ** across segments, ? one character; matched case-insensitively). commandClasses use regular expressions searched anywhere in the command. When several rules match, the most restrictive class wins; nothing matched means production_code.",
+  "type": "object",
+  "required": ["schemaVersion", "pathClasses", "commandClasses"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"type": "string", "pattern": "^lfe\\.policy/0\\.1$"},
+    "pathClasses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["glob", "class"],
+        "additionalProperties": false,
+        "properties": {
+          "glob": {"type": "string", "minLength": 1},
+          "class": {"$ref": "#/$defs/actionClass"}
+        }
+      }
+    },
+    "commandClasses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pattern", "class"],
+        "additionalProperties": false,
+        "properties": {
+          "pattern": {"type": "string", "minLength": 1},
+          "class": {"$ref": "#/$defs/actionClass"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "actionClass": {
+      "enum": ["docs", "prototype", "lfe_state", "lfe_human_command", "production_code",
+               "deploy", "publish", "cost", "delete", "secret"]
+    }
+  }
+}
