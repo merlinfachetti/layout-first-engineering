@@ -34,6 +34,8 @@ The validator checks relative images and basic document markers, **not** Figma p
 | VS-01 end-to-end proof in Chromium (TEST-001…005, FR-001…005, UX-001, SEC-001, NFR-001) | GitHub Actions `vs01-proof`, ubuntu-24.04, Playwright 1.49.1 | **pass**, trace complete; approvals in this run are **simulated** | run `39231842025` on `8660d03`, artifact `vs01-proof` (receipts, TEST_REPORT.json) |
 | Same proof without a browser | maintainer Mac, Python 3.11 | E2E `not_executed` (`tool_unavailable:playwright`), trace incomplete, exit 6 — as designed | `tests/test_vs01_proof.py` |
 | PreToolUse / SessionStart hooks via the exact plugin command | local shell with Claude Code hook payloads | deny before gates, allow docs, exit 2 when engine missing, context injected | `tests/test_plugin.py` |
+| Release v0.2.0 as a user gets it: skill zip from the GitHub Release, checksum, install, `lfe version/init/check-action/studio` | maintainer Mac, clean folder | **pass** (`lfe 0.2.0`; `app/` denied with `GATE_NOT_APPROVED`) | release `v0.2.0`, `SHA256SUMS.txt` |
+| Plugin install from GitHub (`claude plugin marketplace add` + `install`) in an isolated Claude config | maintainer Mac, Claude Code 2.1.221 | **pass** — `lfe 0.2.0` enabled: 5 skills, 3 hooks, ~248 always-on tokens; installed PreToolUse hook denies `app/` | `claude plugin details lfe@layout-first-engineering` |
 | Real headless Claude Code session (`scripts/agent_evals.py`, 5 cases) | maintainer Mac, Claude Code 2.1.221 | **blocked** — CLI login expired ("Failed to authenticate") | rerun after `claude` → `/login` |
 | `claude plugin eval` | maintainer account | **blocked** — feature in early access for this account | — |
 
