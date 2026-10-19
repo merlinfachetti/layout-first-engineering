@@ -63,7 +63,7 @@ def cmd_hook_session_start(args):
     try:
         context = handoff.brief(handoff.write(args.root))
     except LfeError as exc:
-        context = f"LFE state could not be loaded ({exc}). Do not guess the project state; run `lfe status`."
+        context = f"LFE state could not be loaded ({exc.code}). Do not guess the project state; run `lfe status`."
     print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": context}}))
     return 0
 
