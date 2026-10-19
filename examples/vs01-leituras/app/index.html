@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lista de leituras local: adicione títulos e marque o que já leu. Os dados ficam só neste navegador.">
+  <title>Minhas leituras</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <!--
+    Contrato com o teste E2E (TEST-003 a TEST-005). Mudar um destes IDs exige mudar o teste:
+      #reading-form     formulário de adicionar
+      #reading-title    campo do título (rótulo: "Próxima leitura")
+      #reading-submit   botão Adicionar
+      #reading-error    erro de validação, aria-live (FR-004)
+      #storage-error    erro de armazenamento, role="alert" (FR-005)
+      #reading-status   anúncios de sucesso, role="status"
+      #reading-list     lista; cada item é li.entry[data-id] com input.entry-check (FR-003)
+      #reading-summary  contagem "N para ler, N lidas"
+      #empty-state      estado vazio
+  -->
+  <main class="page">
+    <header class="masthead">
+      <h1>Minhas leituras</h1>
+      <p class="lede">Os livros que você quer ler, na ordem em que chegaram.</p>
+    </header>
+
+    <div id="storage-error" class="notice" role="alert" hidden></div>
+
+    <form id="reading-form" class="add-form" novalidate>
+      <label class="add-label" for="reading-title">Próxima leitura</label>
+      <div class="add-row">
+        <input id="reading-title" class="add-input" name="title" type="text" maxlength="200"
+               autocomplete="off" required aria-required="true" aria-describedby="reading-error">
+        <button id="reading-submit" class="button" type="submit">Adicionar</button>
+      </div>
+      <p id="reading-error" class="field-error" aria-live="assertive"></p>
+    </form>
+
+    <section class="contents" aria-labelledby="contents-title">
+      <div class="contents-head">
+        <h2 id="contents-title">Sumário</h2>
+        <p id="reading-summary" class="summary"></p>
+      </div>
+      <ul id="reading-list" class="entries"></ul>
+      <div id="empty-state" class="empty" hidden>
+        <p class="empty-title">A lista começa com um título.</p>
+        <p>Escreva acima o que você quer ler a seguir e escolha Adicionar.</p>
+      </div>
+      <noscript>
+        <p class="notice">Esta lista precisa de JavaScript para guardar as leituras neste navegador.</p>
+      </noscript>
+    </section>
+
+    <p id="reading-status" class="visually-hidden" role="status" aria-live="polite"></p>
+
+    <footer class="colophon">
+      <p>As leituras ficam guardadas só neste navegador. Nada é enviado pela internet.</p>
+    </footer>
+  </main>
+</body>
+</html>

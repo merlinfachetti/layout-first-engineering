@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "lfe.baseline/0.1",
+  "id": "DESIGN-001",
+  "revision": 1,
+  "title": "Minhas leituras, direção A (Sumário)",
+  "medium": "local-html",
+  "mediumDecisionId": "DEC-002",
+  "fidelity": "static-layout",
+  "screens": [
+    {
+      "screenId": "UI-001",
+      "name": "Minhas leituras",
+      "goal": "Adicionar um título e marcar o que já foi lido, com os dados guardados só neste navegador",
+      "states": [
+        "default",
+        "empty",
+        "error"
+      ],
+      "viewports": [
+        {
+          "width": 390,
+          "height": 844
+        },
+        {
+          "width": 1280,
+          "height": 800
+        }
+      ],
+      "prototype": {
+        "path": "prototype/index.html",
+        "query": "state=default"
+      },
+      "preview": {
+        "path": "prototype/previews/ui-001-default-390x844.png"
+      }
+    }
+  ],
+  "tokens": {
+    "path": "prototype/tokens.json"
+  },
+  "flows": [
+    {
+      "id": "FLOW-001",
+      "steps": [
+        "UI-001"
+      ]
+    }
+  ],
+  "provenance": [
+    {
+      "asset": "títulos, datas e textos de exemplo",
+      "source": "escritos para esta demo; não citam obras reais",
+      "license": "MIT"
+    },
+    {
+      "asset": "tipografia",
+      "source": "fontes do sistema operacional; nada é baixado",
+      "license": "não redistribuídas"
+    }
+  ],
+  "files": [
+    {
+      "path": "prototype/index.html",
+      "sha256": "sha256:06737f8453cd7e431c9ac71561af896fb5da1627f38ee60f58aef0ecc280b3a8"
+    },
+    {
+      "path": "prototype/tokens.json",
+      "sha256": "sha256:087ae3dcd8bcae6f3d2539b6290b03dc8d36c44ce26692737c5fb33c895950f7"
+    },
+    {
+      "path": "prototype/previews/ui-001-default-390x844.png",
+      "sha256": "sha256:5b93cb691e830e64626e05f362f114bcb7b471bf5b807387aa6ef09652608696"
+    },
+    {
+      "path": "prototype/previews/ui-001-default-1280x800.png",
+      "sha256": "sha256:2831f97f60504208ddaf78b7da205295b006c2e3200bcf125d1847d5e1d07d3f"
+    },
+    {
+      "path": "prototype/previews/ui-001-empty-390x844.png",
+      "sha256": "sha256:fdb72f27c20246c3a70479e3c12d9b5a4c825859ef103f985a506991e8b96d79"
+    },
+    {
+      "path": "prototype/previews/ui-001-error-390x844.png",
+      "sha256": "sha256:7df6d27a598c372c4cfa857a0b694f0df74b4d6df6c429b9d582cda469f51f93"
+    },
+    {
+      "path": "prototype/previews/ui-001-storage-error-390x844.png",
+      "sha256": "sha256:3f7a3d1107716da5bf3d5e43a5f82557b667cc1471be49074d0b260e59e09a7c"
+    }
+  ]
+}

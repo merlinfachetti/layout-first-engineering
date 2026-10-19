@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="pt-BR" data-state="default">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo UI-001: Minhas leituras</title>
+  <style>
+/* Direção A (Sumário). Cópia congelada dos estilos para o protótipo; tokens em tokens.json. */
+
+:root {
+  --color-surface-page: #f4f5f0;
+  --color-surface-raised: #ffffff;
+  --color-surface-error: #f8e6e2;
+  --color-surface-highlight: #e3ee9e;
+  --color-text-primary: #1f2a30;
+  --color-text-muted: #4f5a60;
+  --color-text-inverse: #f4f5f0;
+  --color-text-error: #a12a1f;
+  --color-border-control: #1f2a30;
+  --color-border-subtle: #c7ccc6;
+  --color-border-error: #a12a1f;
+  --color-decor-leader: #8c9590;
+  --color-accent: #1e5c4f;
+  --color-focus: #1e5c4f;
+
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", P052, "Book Antiqua", Georgia, serif;
+  --size-measure: 40rem;
+  --size-check: 1.5rem;
+  --border-control: 2px;
+  --border-focus: 3px;
+  --radius: 3px;
+  --motion-highlight: 1400ms;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  font-variant-numeric: oldstyle-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: var(--border-focus) solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* ---- Página ---------------------------------------------------------- */
+
+.page {
+  max-width: calc(var(--size-measure) + 2.5rem);
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 2.375rem;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  margin: 0.5rem 0 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ---- Aviso de armazenamento (FR-005) ---------------------------------- */
+
+.notice {
+  margin: 2rem 0 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--color-border-error);
+  background: var(--color-surface-error);
+  color: var(--color-text-primary);
+}
+
+.notice[hidden] {
+  display: none;
+}
+
+.notice strong {
+  color: var(--color-text-error);
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice p + p {
+  margin-top: 0.25rem;
+}
+
+/* ---- Formulário (FR-001, FR-004) -------------------------------------- */
+
+.add-form {
+  margin-top: 2.5rem;
+}
+
+.add-label {
+  display: block;
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+.add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  margin-top: 0.25rem;
+}
+
+.add-input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  padding: 0.35rem 0;
+  border: 0;
+  border-bottom: var(--border-control) solid var(--color-border-control);
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.375rem;
+  line-height: 1.3;
+}
+
+.add-input:focus-visible {
+  outline-offset: 4px;
+}
+
+.add-input[aria-invalid="true"] {
+  border-bottom-color: var(--color-border-error);
+}
+
+.button {
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: var(--border-control) solid var(--color-border-control);
+  border-radius: var(--radius);
+  background: var(--color-border-control);
+  color: var(--color-text-inverse);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.field-error {
+  min-height: 1.55em;
+  margin: 0.5rem 0 0;
+  color: var(--color-text-error);
+  font-size: 0.9375rem;
+}
+
+/* ---- Sumário (a lista) ------------------------------------------------ */
+
+.contents {
+  margin-top: 3rem;
+}
+
+.contents-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.contents-head h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.summary {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: var(--size-check) minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 0.75rem;
+  padding: 0.85rem 0;
+}
+
+.entry-check {
+  appearance: none;
+  -webkit-appearance: none;
+  align-self: start;
+  width: var(--size-check);
+  height: var(--size-check);
+  margin: 0.2rem 0 0;
+  border: var(--border-control) solid var(--color-border-control);
+  border-radius: var(--radius);
+  background: var(--color-surface-raised) center / 1.05rem no-repeat;
+  cursor: pointer;
+}
+
+.entry-check:checked {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8.6l3.6 3.4 7.4-8' fill='none' stroke='%23f4f5f0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.entry-line {
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.entry-title {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: 1.1875rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.entry-leader {
+  flex: 1 1 1.5rem;
+  min-width: 1.5rem;
+  height: 1.3em;
+  margin: 0 0.5rem;
+  background-image: radial-gradient(circle, var(--color-decor-leader) 1.1px, transparent 1.6px);
+  background-position: left bottom 0.32em;
+  background-repeat: repeat-x;
+  background-size: 0.5rem 0.5rem;
+}
+
+.entry-date {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-style: italic;
+  white-space: nowrap;
+  line-height: 1.3;
+  padding-bottom: 0.1em;
+}
+
+.entry.is-done .entry-title {
+  color: var(--color-text-muted);
+}
+
+.entry.is-new .entry-title {
+  animation: marca-texto var(--motion-highlight) ease-out 1;
+}
+
+@keyframes marca-texto {
+  from {
+    background-color: var(--color-surface-highlight);
+  }
+
+  60% {
+    background-color: var(--color-surface-highlight);
+  }
+
+  to {
+    background-color: transparent;
+  }
+}
+
+/* ---- Vazio ------------------------------------------------------------ */
+
+.empty {
+  padding: 2rem 0 0;
+}
+
+.empty[hidden] {
+  display: none;
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 1.375rem;
+}
+
+.empty p:not(.empty-title) {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+}
+
+/* ---- Rodapé ----------------------------------------------------------- */
+
+.colophon {
+  margin-top: 4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.colophon p {
+  margin: 0;
+}
+
+/* ---- Telas largas: título maior e marcação na margem ------------------- */
+
+@media (min-width: 56rem) {
+  .page {
+    padding-top: 5rem;
+  }
+
+  .masthead h1 {
+    font-size: 3.25rem;
+  }
+
+  .entries {
+    margin-left: calc(-1 * (var(--size-check) + 1rem));
+  }
+
+  .entry {
+    column-gap: 1rem;
+  }
+
+  .entry-title {
+    font-size: 1.375rem;
+  }
+
+  .entry-date {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .entry-check:checked {
+    background-image: none;
+    background-color: CanvasText;
+  }
+
+  .entry-leader {
+    background-image: none;
+  }
+}
+
+/* ---- Só do protótipo: barra de estados e troca de estado ------------- */
+
+.proto-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px dashed var(--color-border-subtle);
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  font: 0.875rem/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.proto-bar p {
+  margin: 0;
+}
+
+.proto-bar ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proto-bar a {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius);
+  color: var(--color-text-primary);
+}
+
+.proto-bar a[aria-current="page"] {
+  background: var(--color-border-control);
+  color: var(--color-text-inverse);
+  text-decoration: none;
+}
+
+.only-empty,
+.only-error,
+.only-storage {
+  display: none;
+}
+
+[data-state="empty"] .only-empty,
+[data-state="error"] .only-error,
+[data-state="storage-error"] .only-storage {
+  display: revert;
+}
+
+[data-state="empty"] .not-empty {
+  display: none;
+}
+
+[data-state="error"] .add-input {
+  border-bottom-color: var(--color-border-error);
+}
+  </style>
+</head>
+<body>
+  <nav class="proto-bar" aria-label="Estados do protótipo">
+    <p>Protótipo UI-001, direção A. Estado:</p>
+    <ul>
+      <li><a href="?state=default" data-state-link="default">padrão</a></li>
+      <li><a href="?state=empty" data-state-link="empty">vazio</a></li>
+      <li><a href="?state=error" data-state-link="error">erro de validação</a></li>
+      <li><a href="?state=storage-error" data-state-link="storage-error">erro de armazenamento</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <header class="masthead">
+      <h1>Minhas leituras</h1>
+      <p class="lede">Os livros que você quer ler, na ordem em que chegaram.</p>
+    </header>
+
+    <div class="notice only-storage" role="alert">
+      <p><strong>Não foi possível salvar “Bordado para dias de chuva”.</strong></p>
+      <p>O navegador recusou a gravação: o armazenamento local pode estar cheio ou bloqueado. A leitura não foi adicionada; o título continua no campo.</p>
+    </div>
+
+    <form class="add-form" id="proto-form" novalidate>
+      <label class="add-label" for="proto-title">Próxima leitura</label>
+      <div class="add-row">
+        <input id="proto-title" class="add-input" type="text" maxlength="200" autocomplete="off"
+               required aria-required="true" aria-describedby="proto-error">
+        <button class="button" type="submit">Adicionar</button>
+      </div>
+      <p id="proto-error" class="field-error" aria-live="assertive"><span class="only-error">Escreva um título antes de adicionar. Espaços em branco não contam.</span></p>
+    </form>
+
+    <section class="contents" aria-labelledby="contents-title">
+      <div class="contents-head">
+        <h2 id="contents-title">Sumário</h2>
+        <p class="summary not-empty">4 para ler, 2 lidas</p>
+      </div>
+
+      <ul class="entries not-empty">
+        <li class="entry">
+          <input class="entry-check" type="checkbox" id="p1">
+          <div class="entry-line"><label class="entry-title" for="p1">O inventário das marés</label><span class="entry-leader" aria-hidden="true"></span></div>
+          <time class="entry-date" datetime="2026-10-17"><span class="visually-hidden">adicionada em </span>17 out.</time>
+        </li>
+        <li class="entry">
+          <input class="entry-check" type="checkbox" id="p2">
+          <div class="entry-line"><label class="entry-title" for="p2">Cartas a um relojoeiro</label><span class="entry-leader" aria-hidden="true"></span></div>
+          <time class="entry-date" datetime="2026-10-11"><span class="visually-hidden">adicionada em </span>11 out.</time>
+        </li>
+        <li class="entry is-done">
+          <input class="entry-check" type="checkbox" id="p3" checked>
+          <div class="entry-line"><label class="entry-title" for="p3">Pequeno tratado das esperas</label><span class="entry-leader" aria-hidden="true"></span></div>
+          <time class="entry-date" datetime="2026-10-03"><span class="visually-hidden">adicionada em </span>3 out.</time>
+        </li>
+        <li class="entry">
+          <input class="entry-check" type="checkbox" id="p4">
+          <div class="entry-line"><label class="entry-title" for="p4">A cidade sob a serra</label><span class="entry-leader" aria-hidden="true"></span></div>
+          <time class="entry-date" datetime="2026-09-28"><span class="visually-hidden">adicionada em </span>28 set.</time>
+        </li>
+        <li class="entry is-done">
+          <input class="entry-check" type="checkbox" id="p5" checked>
+          <div class="entry-line"><label class="entry-title" for="p5">Manual do jardim noturno, com notas de quem plantou à luz de lanterna</label><span class="entry-leader" aria-hidden="true"></span></div>
+          <time class="entry-date" datetime="2026-09-14"><span class="visually-hidden">adicionada em </span>14 set.</time>
+        </li>
+        <li class="entry">
+          <input class="entry-check" type="checkbox" id="p6">
+          <div class="entry-line"><label class="entry-title" for="p6">Os mapas que não fizemos</label><span class="entry-leader" aria-hidden="true"></span></div>
+          <time class="entry-date" datetime="2026-09-02"><span class="visually-hidden">adicionada em </span>2 set.</time>
+        </li>
+      </ul>
+
+      <div class="empty only-empty">
+        <p class="empty-title">A lista começa com um título.</p>
+        <p>Escreva acima o que você quer ler a seguir e escolha Adicionar.</p>
+      </div>
+    </section>
+
+    <footer class="colophon">
+      <p>As leituras ficam guardadas só neste navegador. Nada é enviado pela internet.</p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var allowed = ["default", "empty", "error", "storage-error"];
+      var asked = new URLSearchParams(window.location.search).get("state");
+      var state = allowed.indexOf(asked) >= 0 ? asked : "default";
+      document.documentElement.setAttribute("data-state", state);
+      var links = document.querySelectorAll("[data-state-link]");
+      for (var i = 0; i < links.length; i += 1) {
+        if (links[i].getAttribute("data-state-link") === state) {
+          links[i].setAttribute("aria-current", "page");
+        }
+      }
+      var input = document.getElementById("proto-title");
+      if (state === "error") {
+        input.setAttribute("aria-invalid", "true");
+      }
+      if (state === "storage-error") {
+        input.value = "Bordado para dias de chuva";
+      }
+      // Protótipo estático: o formulário não grava nada.
+      document.getElementById("proto-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+      });
+    })();
+  </script>
+</body>
+</html>

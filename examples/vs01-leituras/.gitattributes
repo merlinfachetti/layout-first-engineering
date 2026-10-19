@@ -1,0 +1,2 @@
+# Os hashes em .lfe/ valem para os bytes exatos destes arquivos: nada de conversão de fim de linha.
+* -text

@@ -1,0 +1,36 @@
+{
+  "id": "vs01-leituras",
+  "title": "Lista de leituras",
+  "summary": "Primeira fatia vertical do LFE (RFC-0002): uma lista de leituras local, do visual ao app, com cada gate proposto e esperando decisão humana.",
+  "status": "draft",
+  "statusRule": "draft até existirem tests_e2e/ com Playwright fixado e recibos pass para TEST-003, TEST-004 e TEST-005; só então pode virar ready.",
+  "locale": "pt-BR",
+  "spec": "RFC-0002",
+  "lfe": {
+    "root": ".",
+    "mode": "project",
+    "stage": "S1",
+    "approvalsIncluded": false
+  },
+  "stages": [
+    { "id": "S0", "name": "Intenção e público", "status": "done", "files": ["project.json"] },
+    { "id": "S1", "name": "Direções visuais", "status": "awaiting-decision", "gate": "G1", "artifacts": ["DIR-001"], "files": ["directions/A-editorial.html", "directions/B-biblioteca.html"] },
+    { "id": "S2", "name": "Protótipo e baseline", "status": "awaiting-decision", "gate": "G2", "artifacts": ["DESIGN-001"], "files": ["prototype/index.html", "prototype/tokens.json", "prototype/previews/"] },
+    { "id": "S3", "name": "Escopo e requisitos", "status": "awaiting-decision", "gate": "G3", "artifacts": ["DESIGN-001", "SCOPE-001"], "files": [".lfe/requirements.json"] },
+    { "id": "S4", "name": "Arquitetura", "status": "awaiting-decision", "gate": "G4", "artifacts": ["SCOPE-001", "ADR-001"], "files": [".lfe/adr/ADR-001.md"] },
+    { "id": "S5-S6", "name": "Implementação", "status": "reference-included", "note": "app/ vem pronto para a demo ser reproduzível offline; num projeto real só seria escrito com G2, G3 e G4 válidos.", "files": ["app/index.html", "app/app.js", "app/styles.css"] },
+    { "id": "S7", "name": "Testes e evidências", "status": "pending", "gate": "G5", "note": "E2E pendente: tests_e2e/ e a versão do Playwright chegam num PR próprio." },
+    { "id": "S8", "name": "Checklist de release", "status": "not_started", "gate": "G6", "note": "Sem deploy nesta fatia." }
+  ],
+  "tests": {
+    "static": "tests/test_vs01_example.py",
+    "e2e": {
+      "status": "pending",
+      "path": "tests_e2e/",
+      "covers": ["TEST-003", "TEST-004", "TEST-005"],
+      "reason": "Playwright ainda não foi fixado nem adicionado ao repositório."
+    },
+    "manualReview": { "id": "TEST-006", "status": "pending" }
+  },
+  "requires": { "python": ">=3.10", "browser": "qualquer navegador atual; sem rede" }
+}
