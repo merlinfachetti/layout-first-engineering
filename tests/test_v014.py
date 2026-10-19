@@ -21,6 +21,9 @@ class CandidateStructureTests(unittest.TestCase):
             'assets/REPOSITORY_STATE.md',
             'assets/INTERACTION_CONTRACT.md',
             'scripts/verify_visual_baseline.py',
+            'references/08-autonomous-execution-and-blocker-recovery.md',
+            'assets/TOOL_BLOCKER.md',
+            'assets/GATE_ACCEPTANCE_WITH_EXCEPTIONS.md',
         ]
         skill = (SKILL / 'SKILL.md').read_text(encoding='utf-8')
         for path in required:
