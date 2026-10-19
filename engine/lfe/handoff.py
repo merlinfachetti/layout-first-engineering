@@ -91,7 +91,12 @@ def render_markdown(doc):
              f"- **{t['next']}:** {doc['nextAction']}", "",
              f"## {t['gates']}", "", "| Gate | Status | Decision | Bound to | Notes |", "| --- | --- | --- | --- | --- |"]
     for g in doc["gates"]:
-        notes = "; ".join(g["reasons"]).replace("|", "/") or "—"
+        reasons = list(g["reasons"])
+        if g["channel"] == "simulated-human":
+            reasons.insert(0, "SIMULATED (demo), not a human decision")
+        elif g["channel"] == "chat-quote":
+            reasons.insert(0, "from a chat quote (unverified)")
+        notes = "; ".join(reasons).replace("|", "/") or "—"
         lines.append(f"| {g['gate']} | {g['status']} | {g['decisionId'] or '—'} | {', '.join(g['boundTo']) or '—'} | {notes} |")
     lines += ["", f"## {t['questions']}", ""]
     lines += [f"- {q['id']} ({q['class']}, {q['stage']}): {q['question']}" for q in doc["openQuestions"]] or [f"- {t['none']}"]
