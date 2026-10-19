@@ -449,6 +449,9 @@ barreira contra autoaprovação; a regra `lfe_human_command` do hook é a segund
 | Instrução maliciosa dentro de design, issue ou página | Conteúdo de artefato nunca é interpretado como comando pelo core (I-09); a política só lê metadados estruturados | Comportamento do LLM medido em evals (PR `test/agent-evals`) |
 | Segredo em recibo ou log | E-05, ambiente por lista permitida | Padrões de detecção não são exaustivos |
 | Path traversal ou symlink | S-01 | — |
+| Pacote de `lfe import` forjado (cadeia de hash recalculada) | A cadeia só prova que o pacote não foi editado, não quem decidiu: aprovações dentro de um pacote só passam a valer com confirmação de uma pessoa em terminal interativo (digitar `IMPORT`); o modo volta sempre para `project`; cache do estado conferido contra o ledger | Pessoa que confirma um pacote de origem desconhecida |
+| Pacote que tenta gravar fora do projeto ou plantar configuração | `lfe import` só grava caminhos referenciados pelo estado, pelos artefatos e pelos recibos; recusa `.git/`, `.claude/`, `.github/` e similares; nunca sobrescreve arquivo existente; limites de tamanho | — |
+| Texto do projeto injetado no contexto de uma nova sessão | O hook `SessionStart` achata e limita o texto vindo do estado, envolve-o em `<lfe-project-data>` e coloca as regras do motor depois; recibos inválidos são ignorados | O texto continua visível ao modelo como dado |
 | Falha do próprio core | Hook falha fechado (nega) para classes de escrita, aberto para leitura | Pode interromper a sessão; mensagem explica como seguir |
 
 ## 13. Plano de testes dos contratos
