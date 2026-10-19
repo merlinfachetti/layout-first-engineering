@@ -1,0 +1,11 @@
+{
+  "name": "lfe",
+  "version": "0.1.4-rc.1",
+  "description": "Layout-First Engineering: design-first, human-led product workflow with an engine that locks production code until you approve G2–G4, remembers where the project stopped and proves results with test receipts.",
+  "author": {"name": "Merlin Fachetti", "url": "https://github.com/merlinfachetti"},
+  "homepage": "https://github.com/merlinfachetti/layout-first-engineering",
+  "repository": "https://github.com/merlinfachetti/layout-first-engineering",
+  "license": "MIT",
+  "keywords": ["design-first", "ux", "product", "approval-gates", "workflow", "pt-br"],
+  "skills": ["./layout-first-engineering"]
+}

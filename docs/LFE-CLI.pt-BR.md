@@ -11,7 +11,7 @@ Requisito: Python 3.10 ou mais novo, sem nada para instalar (só biblioteca padr
 
 ## 1. Onde fica o comando
 
-O lançador vem dentro da skill. Use o caminho da pasta onde a skill está instalada:
+Com o **plugin do Claude Code** (ver README), os hooks e os comandos `/lfe:*` já vêm configurados. Para usar o `lfe` no terminal, o lançador vem dentro da skill; use o caminho da pasta onde ela está instalada:
 
 | Instalação | Comando |
 |---|---|

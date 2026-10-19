@@ -1,0 +1,4 @@
+#!/bin/sh
+# Thin wrapper so `lfe` works from a clone or an installed plugin. Python 3.10+, standard library only.
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec python3 "$here/../layout-first-engineering/scripts/lfe.py" "$@"
