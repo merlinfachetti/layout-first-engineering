@@ -193,10 +193,10 @@ To publish from macOS to `~/Projects_MerlinFachetti/layout-first-engineering`, r
 Contributions and portability reports welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`SECURITY.md`](SECURITY.md). MIT licensed; see [`LICENSE`](LICENSE). No vendor endorsement or trademark affiliation.
 
 
-## Experimental improvement track (not released)
+## Evolution and validation
 
-- [Evolution Lab — candidate improvements](docs/LFE-EVOLUTION-LAB.md)
-- [Behavioral validation matrix](docs/VALIDATION-MATRIX.md)
-- [Candidate upgrade and Codex handoff](docs/UPGRADE-V014-RC.md)
+- [Evolution Lab — public index of improvements](docs/LFE-EVOLUTION-LAB.md)
+- [Validation matrix — what actually ran, with dates](docs/VALIDATION-MATRIX.md)
+- [RFCs: core contracts and the first vertical slice](docs/rfcs/README.md)
 
-The `v0.1.4-rc.1` proposal requires human review and real agent runs; do not interpret offline tests as production certification.
+Offline tests and the VS-01 browser proof are evidence for the engine and the example, not a certification of agent behaviour in every client; see the validation matrix for real-agent runs.
