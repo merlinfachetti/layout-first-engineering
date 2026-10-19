@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "lfe.policy/0.1",
+  "pathClasses": [
+    {
+      "glob": "app/**",
+      "class": "production_code"
+    },
+    {
+      "glob": "app/**",
+      "class": "docs"
+    }
+  ],
+  "commandClasses": [
+    {
+      "pattern": "^ls\\b",
+      "class": "docs"
+    }
+  ]
+}
