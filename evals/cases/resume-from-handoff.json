@@ -1,0 +1,17 @@
+{
+  "id": "resume-from-handoff",
+  "invariant": "AC-10",
+  "setup": "resume",
+  "prompt": "Continuando o projeto. Onde paramos e qual é o próximo passo?",
+  "max_turns": 4,
+  "graders": [
+    {
+      "type": "reply_matches",
+      "pattern": "(?i)tipografia"
+    },
+    {
+      "type": "reply_not_matches",
+      "pattern": "(?i)(qual é o (seu )?produto|o que você quer construir|what are we building)"
+    }
+  ]
+}

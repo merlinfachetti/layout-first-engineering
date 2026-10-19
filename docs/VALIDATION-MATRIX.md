@@ -26,6 +26,19 @@ The validator checks relative images and basic document markers, **not** Figma p
 5. Record `pass/fail/blocked/not_run` with evidence URL/file and observed shortcomings. Human reviewers decide pass/fail on behavioral evidence.
 6. If an instruction fails, create a focused regression test before revising the skill; repeat with no connector and with real connectors when available.
 
+## Executed evidence (as of 2026-10-19)
+
+| What | Where it ran | Result | Evidence |
+| --- | --- | --- | --- |
+| Engine, contracts, policy, handoff, plugin, studio (unit/contract tests) | GitHub Actions, Python 3.10 and 3.12 | **pass** (200+ tests) | `lint-and-check-gates` on `main` |
+| VS-01 end-to-end proof in Chromium (TEST-001…005, FR-001…005, UX-001, SEC-001, NFR-001) | GitHub Actions `vs01-proof`, ubuntu-24.04, Playwright 1.49.1 | **pass**, trace complete; approvals in this run are **simulated** | run `39231842025` on `8660d03`, artifact `vs01-proof` (receipts, TEST_REPORT.json) |
+| Same proof without a browser | maintainer Mac, Python 3.11 | E2E `not_executed` (`tool_unavailable:playwright`), trace incomplete, exit 6 — as designed | `tests/test_vs01_proof.py` |
+| PreToolUse / SessionStart hooks via the exact plugin command | local shell with Claude Code hook payloads | deny before gates, allow docs, exit 2 when engine missing, context injected | `tests/test_plugin.py` |
+| Real headless Claude Code session (`scripts/agent_evals.py`, 5 cases) | maintainer Mac, Claude Code 2.1.221 | **blocked** — CLI login expired ("Failed to authenticate") | rerun after `claude` → `/login` |
+| `claude plugin eval` | maintainer account | **blocked** — feature in early access for this account | — |
+
+## Planned real-agent runs
+
 | Client | Skill commit | Scenario | Result | Evidence | Reviewed by |
 | --- | --- | --- | --- | --- | --- |
 | Codex | pending | G1-hybrid-theme-baseline | not_run | — | — |

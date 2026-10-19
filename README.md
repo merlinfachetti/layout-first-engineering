@@ -177,7 +177,10 @@ python3 layout-first-engineering/scripts/verify_project.py layout-first-engineer
 python3 -m unittest discover -s tests -v
 ```
 
-Tests check structure and decision-gate logic; they **do not test actual AI behavior**. Human/evaluation testing across each model and connector is still required; see [`examples/acceptance-scenarios.md`](examples/acceptance-scenarios.md).
+Unit and contract tests cover the `lfe` engine, policy, hooks, plugin and studio. The VS-01 slice is proven end to
+end in a real browser by the `vs01-proof` CI job (`sh scripts/vs01-proof.sh <dir>` locally). Agent behaviour is a
+separate question: `python3 scripts/agent_evals.py` runs real Claude Code sessions with deterministic grading;
+results and their dates live in [`docs/VALIDATION-MATRIX.md`](docs/VALIDATION-MATRIX.md).
 
 ## Maintainer and GitHub release
 

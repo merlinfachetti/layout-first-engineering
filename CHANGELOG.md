@@ -1,6 +1,23 @@
 # Changelog
 
-## Unreleased — v0.1.4-rc.1 candidate (not an official release)
+## Unreleased — v0.2.0 candidate (not an official release)
+
+- **Engine `lfe` (RFC-0001):** strict contracts v0.1, project state, hash-chained decision ledger, gate status
+  computed from the ledger and current file hashes (stale on change), human-only approvals at an interactive
+  terminal (G1 may come from a chat quote), stage rules.
+- **Locks:** action policy and Claude Code `PreToolUse` hook deny production code before G2+G3+G4, agent-made
+  approvals, and deploy/publish/cost/delete actions; fails closed.
+- **Proves:** evidence receipts (`lfe run`), `verify-report`, traceability; G5 requires a clean passing receipt
+  for every `must` requirement.
+- **Remembers:** generated handoff, next action and open questions, `SessionStart`/`Stop` hooks,
+  export/import that never elevates decisions (hardened after a security review).
+- **Shows:** `lfe studio` read-only visual page; redesigned lifecycle diagram (EN/pt-BR).
+- **Ships:** engine inside the skill (`scripts/lfe.py`), Claude Code plugin with `/lfe:status|next|resume|studio`,
+  reproducible release zips, step-by-step guides.
+- **VS-01:** reading-list example with two directions, prototype, app, and an end-to-end Chromium proof in CI.
+- **Behavioural evals:** `scripts/agent_evals.py` (5 cases, deterministic grading); real runs pending a logged-in CLI.
+
+## v0.1.4-rc.1 method track (merged, part of the candidate above)
 
 - Added optional repository stewardship protocol S0–S9 and auditable publication state.
 - Added required visual G1 baseline template with local image proof and theme/hybrid support.

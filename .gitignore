@@ -13,3 +13,4 @@ dist/
 # Local tool output
 .playwright-mcp/
 .lfe/studio.html
+evals/results/
