@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "lfe.policy/0.1",
+  "pathClasses": [
+    {
+      "glob": "src/**",
+      "class": "production_code"
+    },
+    {
+      "glob": "design/**",
+      "class": "prototype"
+    },
+    {
+      "glob": "notes/*.txt",
+      "class": "docs"
+    }
+  ],
+  "commandClasses": [
+    {
+      "pattern": "^\\s*make\\s+deploy\\b",
+      "class": "deploy"
+    }
+  ]
+}

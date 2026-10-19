@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "lfe.policy/0.1",
+  "pathClasses": [
+    {
+      "glob": "app/**",
+      "class": "production_code",
+      "allowAgent": true
+    }
+  ],
+  "commandClasses": [
+    {
+      "pattern": "^ls\\b",
+      "class": "docs"
+    }
+  ]
+}

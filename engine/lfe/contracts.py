@@ -30,6 +30,7 @@ KNOWN = {
     "action": {0: 1},
     "policy-decision": {0: 1},
     "evidence": {0: 1},
+    "policy": {0: 1},
 }
 VERSION_RE = re.compile(r"^lfe\.([a-z-]+)/(\d+)\.(\d+)$")
 ARTIFACT_PREFIX = {
@@ -314,6 +315,28 @@ def _policy_decision(doc):
     return []
 
 
+def _policy(doc):
+    issues = []
+    seen = set()
+    for i, rule in enumerate(doc["pathClasses"]):
+        if unsafe_path(rule["glob"]):
+            issues.append(Issue("UNSAFE_PATH", f"$.pathClasses[{i}].glob",
+                                f"{rule['glob']!r} must be relative to the project root (S-01)"))
+        if rule["glob"] in seen:
+            issues.append(Issue("DUPLICATE_RULE", f"$.pathClasses[{i}].glob", f"{rule['glob']!r} is listed twice"))
+        seen.add(rule["glob"])
+    seen = set()
+    for i, rule in enumerate(doc["commandClasses"]):
+        try:
+            re.compile(rule["pattern"])
+        except re.error as exc:
+            issues.append(Issue("INVALID_PATTERN", f"$.commandClasses[{i}].pattern", f"not a regular expression: {exc}"))
+        if rule["pattern"] in seen:
+            issues.append(Issue("DUPLICATE_RULE", f"$.commandClasses[{i}].pattern", "pattern is listed twice"))
+        seen.add(rule["pattern"])
+    return issues
+
+
 def _evidence(doc):
     issues = []
     if doc["status"] == "pass":
@@ -340,4 +363,5 @@ SEMANTIC = {
     "action": _action,
     "policy-decision": _policy_decision,
     "evidence": _evidence,
+    "policy": _policy,
 }
