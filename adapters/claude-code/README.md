@@ -1,5 +1,7 @@
 # Claude Code adapter — action policy / política de ações
 
+> **Easiest path / caminho mais fácil:** install the Claude Code plugin (`claude plugin install lfe@layout-first-engineering`, see the README); it ships these hooks already configured. The manual setup below is for projects that copy the skill folder instead.
+
 [Português](#português) · [English](#english)
 
 ---

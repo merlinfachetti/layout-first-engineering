@@ -1,0 +1,12 @@
+{
+  "name": "layout-first-engineering",
+  "description": "Layout-First Engineering for Claude Code",
+  "owner": {"name": "Merlin Fachetti", "url": "https://github.com/merlinfachetti"},
+  "plugins": [
+    {
+      "name": "lfe",
+      "source": "./",
+      "description": "Design-first workflow skill, lfe engine, approval-gate policy hook and resume hooks"
+    }
+  ]
+}
