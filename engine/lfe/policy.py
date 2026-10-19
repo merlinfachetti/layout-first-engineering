@@ -47,6 +47,11 @@ _SIMPLE = r"[^;&|`$<>\n]*$"          # a single command: no chaining, redirectio
 _CD = r"^\s*(?:cd\s+[^;&|`$<>\n]+&&\s*)?"
 # Options that make an otherwise read-only command execute or write (find -exec, rg --pre, git --output).
 _NO_EXEC = r"(?![^\n]*\s(?:-exec|-execdir|-ok|-okdir|-delete|-fprint\w*|-fls|--pre|--output|--ext-diff|--textconv)\b)"
+_ENV = r"(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*"
+# `lfe` subcommands the agent may run at any stage; approve/reject/revoke are built-in denials.
+_LFE_AGENT_COMMANDS = (r"(?:status|propose|artifact|validate|init|record-chat-approval|check-action|version|next|"
+                       r"question|handoff|trace|impact|doctor|verify-report|render|stage|export|import|import-md|"
+                       r"show-policy)\b")
 _PROTECTED_RE = r"\.lfe/(?:state\.json|decisions\.jsonl|policy\.json|evidence\b)"
 
 BUILTIN_PATHS = [
@@ -98,6 +103,7 @@ DEFAULT_POLICY = {
         {"glob": ".claude/settings.json", "class": "lfe_state"},
         {"glob": ".claude/settings.local.json", "class": "lfe_state"},
         {"glob": ".claude/hooks/**", "class": "lfe_state"},
+        {"glob": ".claude/skills/layout-first-engineering/**", "class": "lfe_state"},
         {"glob": ".lfe/**", "class": "docs"},
         {"glob": "docs/**", "class": "docs"},
         {"glob": "**/*.md", "class": "docs"},
@@ -111,14 +117,12 @@ DEFAULT_POLICY = {
         {"glob": "**/id_ed25519*", "class": "secret"},
     ],
     "commandClasses": [
-        {"pattern": _CD + _NO_EXEC + r"(?:ls|pwd|cat|head|tail|wc|grep|rg|find|tree|stat|file|which|echo|diff|du|df|date|"
+        {"pattern": _CD + _NO_EXEC + r"(?:ls|pwd|cat|head|tail|wc|grep|rg|find|stat|which|echo|diff|du|df|date|"
                           r"whoami|uname)\b" + _SIMPLE, "class": "docs"},
         {"pattern": _CD + _NO_EXEC + r"git\s+(?:status|log|diff|show|branch|rev-parse|ls-files|blame|remote\s+-v)\b" + _SIMPLE,
          "class": "docs"},
-        {"pattern": _CD + r"(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*(?:lfe|python3?\s+-m\s+lfe)(?:\s+--root\s+\S+)?\s+"
-                          r"(?:status|propose|artifact|validate|init|record-chat-approval|check-action|version|next|question|"
-                          r"handoff|trace|impact|doctor|verify-report|render|stage|export|import|import-md|show-policy)\b"
-                          + _SIMPLE, "class": "docs"},
+        {"pattern": _CD + _ENV + r"(?:lfe|python3?\s+-m\s+lfe|python3?\s+\S*lfe\.py)(?:\s+--root\s+\S+)?\s+"
+                          + _LFE_AGENT_COMMANDS + _SIMPLE, "class": "docs"},
         {"pattern": r"^\s*[\w.-]+\s+(?:--version|-V|version)\s*$", "class": "docs"},
     ],
 }
@@ -172,12 +176,48 @@ def classify_path(rel: str, policy) -> str:
     return _most_restrictive({r["class"] for r in rules if glob_regex(r["glob"]).fullmatch(rel)})
 
 
-def classify_command(command: str, policy) -> str:
+# Variables that change which code a command loads. Path lists are checked entry by entry; the
+# others can inject code by themselves and are never trusted.
+_ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)=(\S*)")
+_PATH_LISTS = {"PYTHONPATH", "PATH", "NODE_PATH", "PERL5LIB", "RUBYLIB", "LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH",
+               "DYLD_FRAMEWORK_PATH"}
+_CODE_VARS = {"PYTHONHOME", "PYTHONSTARTUP", "PYTHONUSERBASE", "PYTHONINSPECT", "LD_PRELOAD", "LD_AUDIT",
+              "NODE_OPTIONS", "BASH_ENV", "ENV", "RUBYOPT", "PERL5OPT", "GIT_EXEC_PATH", "GIT_CONFIG_GLOBAL",
+              "GIT_DIR", "GIT_WORK_TREE"}
+_SCRIPT = re.compile(r"\bpython3?(?:\.\d+)?\s+(?:-\S+\s+)*([^\s-]\S*\.py)\b")
+
+
+def _agent_writable(root: Path, path: str, policy) -> bool:
+    """True when the agent could have written `path`: inside the project and not protected."""
+    path = os.path.expanduser(path.strip("'\""))
+    spellings = project_paths(root, path)
+    if spellings is None:
+        return False  # outside the project: file tools are denied there (UNSAFE_PATH)
+    return any(classify_path(rel, policy) not in ALWAYS_DENIED for rel in spellings)
+
+
+def untrusted_code(root: Path, command: str, policy) -> bool:
+    """An allowlisted command must only load code the agent cannot write (no module or env hijack)."""
+    for name, value in _ASSIGNMENT.findall(command):
+        if name in _CODE_VARS or (name.startswith("DYLD_") and name not in _PATH_LISTS):
+            return True
+        if name in _PATH_LISTS and any(_agent_writable(root, entry or ".", policy) for entry in value.split(":")):
+            return True
+    # `python -m` imports from the current directory, and a `cd` can point it at a writable folder.
+    if re.search(r"(?:^|[;&|\s])cd\s", command) and re.search(r"\bpython3?(?:\.\d+)?\s+(?:-\S+\s+)*-m\b", command):
+        return True
+    return any(_agent_writable(root, script, policy) for script in _SCRIPT.findall(command))
+
+
+def classify_command(command: str, policy, root: Path | None = None) -> str:
     rules = BUILTIN_COMMANDS + policy["commandClasses"]
     matched = {r["class"] for r in rules if re.search(r["pattern"], command)}
     if any(p.search(command) for p in contracts.SECRET_PATTERNS):
         matched.add("secret")
-    return _most_restrictive(matched)
+    cls = _most_restrictive(matched)
+    if cls in ALLOWED_CLASSES and root is not None and untrusted_code(root, command, policy):
+        return "production_code"
+    return cls
 
 
 def project_paths(root: Path, target: str):
@@ -266,7 +306,7 @@ def decide(root: Path, request, policy=None):
             return deny("production_code", "UNSAFE_PATH", f"{target!r} resolves outside the project")
         classes.update(classify_path(rel, policy) for rel in spellings)
     if request.get("command"):
-        classes.add(classify_command(request["command"], policy))
+        classes.add(classify_command(request["command"], policy, root))
     cls = _most_restrictive(classes)
     if request["actor"] == "human":
         return _decision(True, cls, message="the policy restricts the agent; people act through their own channel")

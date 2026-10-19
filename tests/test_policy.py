@@ -135,10 +135,41 @@ class AlwaysDeniedTests(unittest.TestCase):
                 with self.subTest(command=command):
                     code, d = check(tmp, "--command", command)
                     self.assertEqual((code, d["class"]), (3, "production_code"))
+            for command in ("tree -o app/x.js", "file -C -m prototype/magic"):
+                with self.subTest(command=command):
+                    self.assertEqual(check(tmp, "--command", command)[1]["class"], "production_code")
             for command in ("ls -la", "find . -name '*.md'", "git log --oneline -5", "cd docs && grep -n x a.md"):
                 with self.subTest(command=command):
                     code, d = check(tmp, "--command", command)
                     self.assertEqual((code, d["class"]), (0, "docs"))
+
+    def test_allowlisted_lfe_commands_cannot_load_agent_written_code(self):
+        # Before S6 the agent may write prototype/ and docs; it must not plant a fake `lfe` there and
+        # run it through an allowlisted command (module or environment hijack).
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as engine:
+            Project(tmp)
+            write(Path(tmp) / "prototype/lfe/__main__.py", "open('.lfe/state.json', 'w')")
+            for command in ("PYTHONPATH=prototype python3 -m lfe status",
+                            f"PYTHONPATH={tmp}/prototype python3 -m lfe status",
+                            f"PYTHONPATH={engine}:prototype python3 -m lfe status",
+                            "PYTHONPATH= python3 -m lfe status",
+                            "cd prototype && python3 -m lfe status",
+                            "python3 prototype/lfe.py status", "python3 docs/lfe.py propose G2 --artifact DESIGN-001",
+                            "PATH=prototype:/usr/bin lfe status", "LD_PRELOAD=prototype/x.so lfe status",
+                            "DYLD_INSERT_LIBRARIES=prototype/x.dylib ls", "PYTHONSTARTUP=prototype/s.py lfe status",
+                            "NODE_OPTIONS=--require=./prototype/x.js ls"):
+                with self.subTest(command=command):
+                    code, d = check(tmp, "--command", command)
+                    self.assertEqual((code, d["class"]), (3, "production_code"))
+            for command in (f"PYTHONPATH={engine} python3 -m lfe status",
+                            "python3 ~/.claude/skills/layout-first-engineering/scripts/lfe.py propose G2 --artifact DESIGN-001",
+                            "python3 .claude/skills/layout-first-engineering/scripts/lfe.py status",
+                            "lfe --root . next 'propor G2'"):
+                with self.subTest(command=command):
+                    code, d = check(tmp, "--command", command)
+                    self.assertEqual((code, d["class"]), (0, "docs"))
+            code, d = check(tmp, "--target", ".claude/skills/layout-first-engineering/scripts/lfe.py")
+            self.assertEqual((code, d["class"]), (3, "lfe_state"))
 
     def test_human_commands_are_denied_in_every_spelling(self):
         with tempfile.TemporaryDirectory() as tmp:
