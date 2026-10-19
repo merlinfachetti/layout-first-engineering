@@ -61,6 +61,6 @@ def register(sub):
     ver.set_defaults(func=cmd_verify_report)
 
     tr = sub.add_parser("trace", help="requirements → tests → passing receipts")
-    tr.add_argument("--check", action="store_true", help="exit 6 if an implemented requirement lacks evidence")
+    tr.add_argument("--check", action="store_true", help="exit 6 if a must or implemented requirement lacks a clean passing receipt")
     tr.add_argument("--json", action="store_true")
     tr.set_defaults(func=cmd_trace)

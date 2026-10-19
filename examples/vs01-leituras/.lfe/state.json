@@ -20,9 +20,9 @@
     },
     "SCOPE-001": {
       "kind": "requirements-set",
-      "revision": 1,
+      "revision": 2,
       "path": ".lfe/requirements.json",
-      "sha256": "sha256:3c068c812f62be276432e3da9afd0b1efd6c81332d8703032832f953253dc135"
+      "sha256": "sha256:e1483703166695adc8b5cbf054148ccd68c19d87e4ce0008e693ee51a5608613"
     },
     "ADR-001": {
       "kind": "architecture-decision",
@@ -58,5 +58,5 @@
     }
   },
   "nextAction": "Escolher a direção A ou B (G1); depois revisar o protótipo e aprovar G2 no terminal",
-  "updatedAt": "2026-10-19T04:43:04Z"
+  "updatedAt": "2026-10-19T09:35:25Z"
 }

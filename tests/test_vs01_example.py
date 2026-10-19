@@ -98,15 +98,19 @@ class LedgerAndGates(unittest.TestCase):
         self.entries = ledger.read(EXAMPLE)  # raises LEDGER_TAMPERED if the chain is broken
 
     def test_ledger_holds_only_agent_proposals(self):
-        self.assertEqual([e["id"] for e in self.entries], ["PROP-001", "PROP-002", "PROP-003", "PROP-004"])
-        self.assertEqual([e["gate"] for e in self.entries], ["G1", "G2", "G3", "G4"])
+        # Proposals only: approvals are human (or simulated by `lfe demo` in a separate copy).
+        self.assertTrue(self.entries)
         for entry in self.entries:
             self.assertEqual((entry["kind"], entry["channel"]), ("proposal", "agent"))
+        self.assertEqual(sorted({e["gate"] for e in self.entries}), ["G1", "G2", "G3", "G4"])
 
-    def test_proposals_bind_the_current_revisions(self):
+    def test_latest_proposal_of_each_gate_binds_the_current_revisions(self):
+        latest = {}
         for entry in self.entries:
+            latest[entry["gate"]] = entry  # older proposals stay in the history, superseded
+        for gate, entry in sorted(latest.items()):
             for item in entry["scope"]["artifacts"]:
-                with self.subTest(entry["id"], artifact=item["id"]):
+                with self.subTest(gate=gate, artifact=item["id"]):
                     current = self.state["artifacts"][item["id"]]
                     self.assertEqual((item["revision"], item["sha256"]), (current["revision"], current["sha256"]))
 

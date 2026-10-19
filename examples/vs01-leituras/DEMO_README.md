@@ -207,11 +207,20 @@ Mudar um destes IDs em `app/index.html` exige mudar o teste E2E.
 
 Esta demo prova menos do que parece à primeira vista. O que ela **não** prova:
 
-- **E2E pendente.** `tests_e2e/` ainda não existe e a versão do Playwright não foi fixada.
-  TEST-003, TEST-004 e TEST-005 só geram recibos `not_executed`, então G5 não pode ser aprovado.
-  O comportamento do app foi conferido à mão durante a construção, sem recibo.
-- **TEST-001 depende da política do core** (`lfe check-action`, PR-4), que ainda não está na
-  `main`. Hoje nada impede, por código, um agente de escrever em `app/` antes de G2–G4.
+- **E2E com navegador real.** `tests_e2e/test_vs01.py` cobre FR-001..FR-005 e UX-001 (teclado em 390×844 e
+  1280×800) com Playwright 1.49.1 e Chromium. A prova completa roda com um comando, na raiz do repositório:
+
+  ```bash
+  sh scripts/vs01-proof.sh /tmp/lfe-vs01
+  ```
+
+  Ela copia o exemplo para `/tmp/lfe-vs01`, aprova os gates como **simulados**, roda TEST-001 a TEST-005 com
+  `lfe run`, confere os recibos e a rastreabilidade e grava `TEST_REPORT.json`, `.lfe/HANDOFF.md` e
+  `.lfe/studio.html`. Sem o Playwright instalado, TEST-003 a TEST-005 ficam `not_executed` e a
+  rastreabilidade fica **incompleta** (saída 6). Isso é proposital: sem prova, nada passa. No GitHub, o job
+  `vs01-proof` instala o navegador e roda tudo a cada PR; os recibos ficam como artefato do job.
+- **Política do core em uso.** TEST-001 prova, com o motor real, que escrever em `app/` é negado antes de
+  G2, G3 e G4 e que o agente não consegue rodar `lfe approve`.
 - **O app vem pronto antes das aprovações.** Num projeto real, `app/` só seria escrito depois de
   G2, G3 e G4 válidos. Aqui ele vem junto para a demo rodar offline e ser reproduzível.
 - **A decisão de meio não tem comando próprio.** A baseline cita `DEC-002` porque, seguindo os

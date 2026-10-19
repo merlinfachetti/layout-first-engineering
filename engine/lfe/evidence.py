@@ -318,7 +318,9 @@ def trace(root: Path):
             tests = sorted(set(item["testRefs"]) | {t["id"] for t in req_set["tests"] if item["id"] in t["covers"]})
             covering = [r for r in receipts if r["testId"] in tests]
             passing = [r["id"] for r in covering if r["status"] == "pass" and not r["sourceRevision"]["dirty"]]
-            needed = item["status"] in ("implemented", "verified")
+            # Every `must` needs proof, whatever its status: flipping a status inside the approved
+            # scope would itself change the scope hash, so status alone cannot gate G5 (D-06).
+            needed = item["status"] in ("implemented", "verified") or item["priority"] == "must"
             row = {"scope": req_set["id"], "id": item["id"], "status": item["status"], "tests": tests,
                    "receipts": [r["id"] for r in covering], "passing": passing, "ok": bool(passing) or not needed}
             if not row["ok"]:
