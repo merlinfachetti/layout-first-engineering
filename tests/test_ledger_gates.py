@@ -152,8 +152,7 @@ class AuditProbeTests(unittest.TestCase):
             r = p.results()
             self.assertEqual(r["G2"]["status"], "blocked")
             with self.assertRaises(LfeError) as ctx:
-                decisions.set_stage(p.root, "S3")  # no gate needed for S3: allowed
-                decisions.set_stage(p.root, "S6")
+                decisions.set_stage(p.root, "S3")  # G1 and G2 are not both valid: refused
             self.assertEqual(ctx.exception.code, "STAGE_GATE_VIOLATION")
 
 

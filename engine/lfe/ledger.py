@@ -39,10 +39,13 @@ def read(root: Path):
     return entries
 
 
-def next_id(entries, kind):
+def next_id(entries, kind, floor=0):
+    """Next free id. `floor` (decisions only) keeps the ledger after ids the project already uses
+    in its own Markdown, so DEC numbers never collide after `lfe adopt` (#28)."""
     prefix = "PROP-" if kind == "proposal" else "DEC-"
     taken = [int(e["id"][len(prefix):]) for e in entries if e["id"].startswith(prefix)]
-    return f"{prefix}{(max(taken) + 1 if taken else 1):03d}"
+    start = max(taken + ([floor] if kind == "decision" else [])) + 1 if taken or (floor and kind == "decision") else 1
+    return f"{prefix}{start:03d}"
 
 
 def append(root: Path, entry):

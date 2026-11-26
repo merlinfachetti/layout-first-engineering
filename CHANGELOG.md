@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- **Stage rules (#25):** entering S2–S9 needs the gate that closes the previous stage (S2 needs G1 … S9 needs G6);
+  stages can no longer be skipped. Legacy imports keep their place up to S5 while approvals wait for reconfirmation.
+- **Chat approvals for chat-only owners (#27):** opt-in `lfe chat-approvals enable` with the owner's quote; G2–G6
+  then accept `record-chat-approval` when the quote carries the proposal's confirmation code (`lfe propose` prints
+  it) and a `--message-ref`. Stored as `chat-quote` / `unverified`; disabling makes them stop counting.
+- **G1 composition (#26):** `--primary`, `--theme-variant THEME=DIR`, `--complementary DIR=USAGE`,
+  `--non-negotiable`; shorthand JSON is normalized; `--help` shows examples; invalid JSON is `BAD_COMPOSITION`.
+- **Numbering:** optional `state.numbering.decisionFloor` keeps ledger ids after ids the project already uses.
+
 ## 0.2.0 — 2026-10-19
 
 - **Engine `lfe` (RFC-0001):** strict contracts v0.1, project state, hash-chained decision ledger, gate status

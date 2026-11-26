@@ -39,7 +39,7 @@ A última linha deve mostrar `lfe 0.2.0` e a lista de contratos. Os exemplos aba
 
 | Quem | Comandos |
 |---|---|
-| **Agente** (Claude, Codex, …) | `init`, `artifact`, `propose`, `record-chat-approval G1`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
+| **Agente** (Claude, Codex, …) | `init`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 se ativado), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
 | **Você, no seu terminal** | `approve`, `reject`, `revoke`; confirmar um `import` que traga aprovações |
 
 `lfe approve` recusa rodar sem um terminal interativo e pede que você digite o nome do gate.
@@ -53,13 +53,31 @@ O agente não consegue aprovar por você.
 3. **Pedir uma decisão.** O agente propõe o gate amarrado ao conteúdo exato: `lfe propose G1 --artifact DIR-001`
 4. **Decidir.**
    - G1 pode vir da sua fala no chat; o agente registra a citação com `lfe record-chat-approval G1 --quote "..."`.
-   - G2 a G6 só com você, no seu terminal: `lfe approve G2`. O comando mostra o que você aprova, o que destrava e o que **não** destrava, e pede que você digite `G2`.
+   - G2 a G6 com você, no seu terminal: `lfe approve G2`. O comando mostra o que você aprova, o que destrava e o que **não** destrava, e pede que você digite `G2`.
+   - Se você só trabalha pelo chat (celular, sessão na nuvem), veja a seção 4a: você responde com o código que o `propose` mostrou.
 5. **Ver onde está:** `lfe status`. Mostra cada gate calculado, os motivos e `production code: locked|unlocked`.
 6. **Se algo mudar depois de aprovado** (ex.: o protótipo), o gate vira `stale` sozinho e o código de produção volta a ficar bloqueado até você aprovar a nova revisão.
-7. **Avançar de estágio:** `lfe stage S6`. É recusado se G2, G3 ou G4 não estiverem válidos.
+7. **Avançar de estágio:** cada estágio exige o gate que fecha o anterior (S2 exige G1, S3 exige G2, S4 exige G3, S5 a S7 exigem G4, S8 exige G5, S9 exige G6). `lfe stage S6` destrava o código de produção. Voltar de estágio é sempre permitido.
 8. **Provar com testes:** `lfe run TEST-003 --req FR-001 -- python3 -m unittest tests_e2e.test_vs01`. Grava um recibo. Ferramenta ausente vira `not_executed`, nunca `pass`.
 9. **Conferir rastreabilidade:** `lfe trace --check`. Cada requisito implementado precisa de teste e recibo `pass`. G5 só pode ser aprovado com isso completo.
 10. **Pausar e retomar:** `lfe next "próxima ação"` e `lfe question add "dúvida" --class blocker` guardam o contexto, e `lfe handoff` gera `.lfe/HANDOFF.md`. Com os hooks do Claude Code (seção 5), a sessão nova já começa sabendo onde parou.
+
+## 4a. Aprovar pelo chat (dono sem terminal)
+
+Desligado por padrão. A pessoa ativa uma vez, com as próprias palavras:
+
+```bash
+lfe chat-approvals enable --gates G2,G3,G4,G5,G6 --quote "<mensagem dela, literal>" --message-ref "<id ou link da mensagem>"
+```
+
+A partir daí, `lfe propose G3 …` mostra um código como `G3-7f3a2c`. A pessoa responde `aprovo G3-7f3a2c` e o
+agente registra com `lfe record-chat-approval G3 --quote "aprovo G3-7f3a2c" --message-ref "<id>"`. O código vem do
+hash daquela proposta: a aprovação só vale para o conteúdo proposto, e conteúdo novo gera proposta e código novos.
+A decisão fica como `chat-quote`, `authenticity: unverified`, e deixa de contar se a opção for desligada.
+Troca consciente: o terminal *impede* autoaprovação; a citação no chat a torna *detectável*.
+
+G1 híbrido sem JSON: `--primary A --theme-variant dark=A --theme-variant light=B --complementary "C=coleções"`
+(`lfe record-chat-approval --help` mostra também o formato JSON).
 
 ## 4. Levar o projeto para outra pasta ou outra ferramenta
 

@@ -68,6 +68,8 @@
       "properties": {
         "quote": {"type": "string"},
         "quotedAt": {"$ref": "#/$defs/timestamp"},
+        "messageRef": {"type": "string", "minLength": 1},
+        "confirmationCode": {"type": "string", "pattern": "^G[1-6]-[0-9a-f]{6}$"},
         "receipts": {"type": "array", "items": {"type": "string", "pattern": "^EVID-[0-9]{3,}$"}}
       }
     },
