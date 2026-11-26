@@ -39,7 +39,7 @@ A última linha deve mostrar `lfe 0.2.0` e a lista de contratos. Os exemplos aba
 
 | Quem | Comandos |
 |---|---|
-| **Agente** (Claude, Codex, …) | `init`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 se ativado), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
+| **Agente** (Claude, Codex, …) | `init`, `adopt`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 se ativado), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
 | **Você, no seu terminal** | `approve`, `reject`, `revoke`; confirmar um `import` que traga aprovações |
 
 `lfe approve` recusa rodar sem um terminal interativo e pede que você digite o nome do gate.
@@ -61,6 +61,26 @@ O agente não consegue aprovar por você.
 8. **Provar com testes:** `lfe run TEST-003 --req FR-001 -- python3 -m unittest tests_e2e.test_vs01`. Grava um recibo. Ferramenta ausente vira `not_executed`, nunca `pass`.
 9. **Conferir rastreabilidade:** `lfe trace --check`. Cada requisito implementado precisa de teste e recibo `pass`. G5 só pode ser aprovado com isso completo.
 10. **Pausar e retomar:** `lfe next "próxima ação"` e `lfe question add "dúvida" --class blocker` guardam o contexto, e `lfe handoff` gera `.lfe/HANDOFF.md`. Com os hooks do Claude Code (seção 5), a sessão nova já começa sabendo onde parou.
+
+## 3a. Projeto que já está andando: `lfe adopt`
+
+O `lfe init` começa em S0. Para um projeto que já tem `PROJECT_STATE.md`, `DECISIONS.md`, protótipos e capturas:
+
+```bash
+lfe adopt --dry-run
+```
+
+```bash
+lfe adopt
+```
+
+O primeiro mostra o plano validado contra os contratos e não grava nada. O segundo lê a tabela de gates com
+tolerância (colunas extras, `aprovado ✅`, `Etapa atual: S5`…), continua os ids do ledger depois do maior `DEC-###`
+que já existe no seu Markdown, gera rascunhos tipados em `.lfe/adopted/` (direções a partir dos protótipos, telas a
+partir de `docs/evidence/*.png` com o tamanho real, requisitos a partir de ids FR-/NFR- ou da tabela MoSCoW, ADRs e
+relatório do G5 como estão) e propõe cada gate que o Markdown diz estar aprovado. Essas aprovações ficam como
+`imported-legacy`, mantêm o projeto no lugar até S5 e não destravam nada até você reconfirmar cada uma
+(`lfe approve G2` ou o código pelo chat). O arquivo `.lfe/ADOPTION.md` lista o que revisar.
 
 ## 4a. Aprovar pelo chat (dono sem terminal)
 

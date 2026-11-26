@@ -9,6 +9,9 @@
   it) and a `--message-ref`. Stored as `chat-quote` / `unverified`; disabling makes them stop counting.
 - **G1 composition (#26):** `--primary`, `--theme-variant THEME=DIR`, `--complementary DIR=USAGE`,
   `--non-negotiable`; shorthand JSON is normalized; `--help` shows examples; invalid JSON is `BAD_COMPOSITION`.
+- **`lfe adopt` (#28):** start the engine on a project already under way: tolerant PROJECT_STATE reader, ledger
+  ids continue after the project's own `DEC-###`, draft typed artifacts generated from prototypes, evidence images,
+  scope Markdown and ADRs, and a ready proposal (with confirmation code) for every gate approved in the Markdown.
 - **Numbering:** optional `state.numbering.decisionFloor` keeps ledger ids after ids the project already uses.
 
 ## 0.2.0 — 2026-10-19
