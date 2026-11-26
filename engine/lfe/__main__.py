@@ -154,7 +154,8 @@ def cmd_chat_approvals(args):
     if args.action == "enable":
         cfg = decisions.set_chat_approvals(args.root, [g.strip() for g in args.gates.split(",")], args.quote,
                                            args.message_ref)
-        print(f"chat approvals enabled for G1, {', '.join(cfg['gates'])} (quote recorded, {cfg['messageRef']})")
+        print(f"chat approvals enabled for {', '.join(cfg['gates'])}, besides G1, which always accepts a chat quote "
+              f"(quote recorded, {cfg['messageRef']})")
         print("each approval must quote the confirmation code printed by `lfe propose`")
     elif args.action == "disable":
         decisions.disable_chat_approvals(args.root)
@@ -162,6 +163,12 @@ def cmd_chat_approvals(args):
     else:
         cfg = workspace.load_state(args.root).get("chatApprovals")
         print(json.dumps(cfg or {"gates": []}, indent=2, ensure_ascii=False))
+    return EXIT_OK
+
+
+def cmd_reconfirm(args):
+    recorded = decisions.reconfirm(args.root, args.quote, args.message_ref, actor=args.actor)
+    print(f"recorded from one chat message: {', '.join(recorded)} approved (authenticity: unverified)")
     return EXIT_OK
 
 
@@ -260,6 +267,15 @@ def build_parser():
     cha.add_argument("--quote", default="", help="the person's message asking for chat approvals, verbatim")
     cha.add_argument("--message-ref", default="", help="id or link of that chat message")
     cha.set_defaults(func=cmd_chat_approvals)
+
+    rec = sub.add_parser("reconfirm", help="agent: record every gate whose confirmation code is in one chat message",
+                         description="For adopted projects: the person replies once with several codes "
+                                     "(e.g. 'reconfirmo G1-aaaaaa G2-bbbbbb'); each gate is checked as in "
+                                     "record-chat-approval.")
+    rec.add_argument("--quote", required=True, help="the person's message, verbatim")
+    rec.add_argument("--message-ref", required=True, help="id or link of that chat message")
+    rec.add_argument("--as", dest="actor")
+    rec.set_defaults(func=cmd_reconfirm)
 
     stg = sub.add_parser("stage", help="move to a stage; refused when its gates are not valid")
     stg.add_argument("stage", choices=STAGES)

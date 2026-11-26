@@ -169,6 +169,32 @@ def record_chat_approval(root: Path, gate, quote, *, option=None, composition=No
     return _commit(root, state, entry)
 
 
+def reconfirm(root: Path, quote, message_ref, actor=None):
+    """Record every gate whose current confirmation code appears in one chat message, in gate order.
+
+    For adopted projects the owner can answer "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc" once instead
+    of one message per gate. Each gate still goes through `record_chat_approval`, so the opt-in, the
+    code of the latest proposal, the message reference and the G5 evidence rule all apply.
+    """
+    state = workspace.load_state(root)
+    entries = ledger.read(root)
+    found = []
+    for gate in GATES:
+        proposal = _latest_proposal(entries, gate)
+        if proposal and gates.confirmation_code(proposal).lower() in quote.lower():
+            found.append(gate)
+    if not found:
+        raise LfeError("CONFIRMATION_CODE_MISSING", "the message contains no current confirmation code; "
+                       "`lfe status` shows them in the next action", 6)
+    recorded = []
+    for gate in found:
+        if gate != "G1" and gate not in gates.chat_gates(state):
+            raise LfeError("CHANNEL_NOT_ALLOWED", f"{gate} is not enabled for chat approvals; recorded so far: "
+                           f"{', '.join(recorded) or 'none'}", 6)
+        recorded.append(record_chat_approval(root, gate, quote, actor=actor, message_ref=message_ref)["gate"])
+    return recorded
+
+
 def normalize_composition(raw):
     """Accept the shapes people and agents actually write and return the contract shape.
 
@@ -219,7 +245,8 @@ def normalize_composition(raw):
 
 def set_chat_approvals(root: Path, gate_list, quote, message_ref):
     """Opt the project in to chat approvals for the listed gates, with the person's own words (#27)."""
-    gate_list = sorted(set(gate_list))
+    # G1 always accepts a chat quote; listing it is harmless, so it is ignored rather than refused.
+    gate_list = sorted(set(gate_list) - {"G1"})
     bad = [g for g in gate_list if g not in GATES[1:]]
     if bad or not gate_list:
         raise LfeError("BAD_GATES", "list gates from G2 to G6, e.g. --gates G2,G3,G4", 2)

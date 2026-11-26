@@ -3,7 +3,7 @@ name: layout-first-engineering
 description: Guide design-first website and application creation from visual concept through product discovery, UX/UI sign-off, architecture, budgeting, secure engineering, testing and delivery, with an engine (lfe) that locks production code until the person approves. Use when a user wants to create, redesign or extend a website, web app, mobile app, SaaS, platform, landing page, dashboard, screen, page, flow or UI feature, or asks for a new product, MVP or sibling app; also when a repository contains PROJECT_STATE.md, DESIGN_HANDOFF.md or .lfe/. Behave as product manager, creative director, engineering manager and senior software architect. Resume work from project state and ask only questions needed at each checkpoint.
 license: MIT
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   author: "Merlin Fachetti (@merlinfachetti)"
 ---
 
@@ -35,7 +35,7 @@ A user-directed, design-led product-to-production workflow. **Start with the int
   - never edit the gate table by hand; refresh `PROJECT_STATE.md` with `lfe render`;
   - only the person approves G2–G6, by typing `lfe approve` in their own terminal; a chat quote records G1, and G2–G6 only after the person opted in with `lfe chat-approvals enable` and replied with the confirmation code that `lfe propose` printed (never invent or paraphrase it);
   - `lfe stage` refuses a stage whose previous gate is not valid; never work around it, ask for the gate;
-  - a project already under way enters through `lfe adopt` (run `--dry-run` first); never `lfe init` on it, which restarts at S0. Adopted approvals must be reconfirmed; `lfe import-md` remains for files that follow the template exactly.
+  - a project already under way enters through `lfe adopt` (run `--dry-run` first); never `lfe init` on it, which restarts at S0. Adopted approvals must be reconfirmed (one chat message with all codes, recorded by `lfe reconfirm`, when chat approvals are enabled); if the product is already at S6+, warn the person before committing hooks that code stays locked until then; `lfe import-md` remains for files that follow the template exactly.
 - Read `references/01-conversation-and-state.md` now. Load the stage-specific reference when reaching that stage; avoid loading all references at once.
 
 ## Staged state machine

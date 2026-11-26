@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1 — 2026-11-26
+
+From the first real adoption (a product already in production):
+
+- **`lfe reconfirm`:** one chat message with several confirmation codes records every gate it names, each checked
+  like `record-chat-approval` (opt-in, latest proposal, message reference, G5 evidence).
+- **`lfe adopt`:** the plan and `--dry-run` warn first when the Markdown is at S6+ and code edits will stay locked
+  until G1–G4 are reconfirmed; the next action points to `lfe reconfirm`.
+- **`lfe chat-approvals enable`:** `G1` in `--gates` is accepted (it always takes a chat quote) and the success line
+  no longer reads as if G1 had been enabled by the flag.
+
 ## 0.3.0 — 2026-11-26
 
 Field fixes from running LFE on two real products, focused on making it work in every setup: cloud sessions,

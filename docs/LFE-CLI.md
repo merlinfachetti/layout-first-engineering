@@ -58,6 +58,9 @@ prototypes, baseline screens from `docs/evidence/*.png` with their real size, re
 MoSCoW table, ADRs and the G5 report as they are), and proposes every gate the Markdown says was approved.
 Those approvals are recorded as `imported-legacy`, keep the project's place up to S5, and unlock nothing until you
 reconfirm each one (`lfe approve G2`, or the chat code). `.lfe/ADOPTION.md` lists what to review.
+For a product already at S6 or later, `--dry-run` warns that code edits stay locked until G1–G4 are reconfirmed:
+ask the owner for **one** message with all codes and record it with
+`lfe reconfirm --quote "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc G4-dddddd" --message-ref "<id>"`, then commit the hooks.
 
 ## Automated G5 checks: `lfe gate G5`
 

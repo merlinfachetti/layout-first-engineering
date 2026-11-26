@@ -359,6 +359,12 @@ def plan(root: Path, state_file: Path | None = None):
         else:
             notes.append(f"{gate} was approved in Markdown but has no {', '.join(k for k in needed if k not in kinds)}; "
                          "it cannot be proposed yet")
+    stage_number = int((parsed["stage"] or "S0")[1])
+    if stage_number >= 6:
+        notes.insert(0, f"PRODUCTION CODE WILL BE LOCKED: the Markdown says {parsed['stage']}, but adopted approvals "
+                        "never unlock code, so the project is recorded at S5 and the PreToolUse hook denies code "
+                        "edits until G1–G4 are reconfirmed. Ask the owner for one message with all codes and record "
+                        "it with `lfe reconfirm`, before committing the hooks (`lfe install --project`)")
     pid = parsed["fields"].get("projectId") or root.name
     pid = re.sub(r"[^a-z0-9]+", "-", pid.lower()).strip("-")[:64].strip("-") or "adopted-project"
     return {"root": str(root), "source": rel(root, source) if source else None, "stage": parsed["stage"] or "S0",
@@ -414,8 +420,8 @@ def apply(root: Path, the_plan, project_id=None, name=None, locale="pt-BR"):
     pending = [g for g in the_plan["legacyGates"] if g in codes]
     if pending:
         state["nextAction"] = ("Reconfirm adopted gates " + ", ".join(f"{g} ({codes[g]})" for g in pending)
-                               + ": `lfe approve <gate>` in a terminal, or by chat with the code after "
-                               "`lfe chat-approvals enable`")
+                               + ": `lfe approve <gate>` in a terminal, or one chat message with all codes "
+                               "recorded by `lfe reconfirm` (after `lfe chat-approvals enable`)")
     else:
         state["nextAction"] = "Review the adopted artifacts in .lfe/adopted/ and propose the next gate"
     gates.refresh_cache(state, results)

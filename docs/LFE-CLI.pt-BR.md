@@ -33,7 +33,7 @@ source ~/.zshrc
 lfe version
 ```
 
-A última linha deve mostrar `lfe 0.3.0` e a lista de contratos. Os exemplos abaixo usam o apelido `lfe`.
+A última linha deve mostrar `lfe 0.3.1` e a lista de contratos. Os exemplos abaixo usam o apelido `lfe`.
 
 ## 2. Quem roda o quê
 
@@ -81,6 +81,9 @@ partir de `docs/evidence/*.png` com o tamanho real, requisitos a partir de ids F
 relatório do G5 como estão) e propõe cada gate que o Markdown diz estar aprovado. Essas aprovações ficam como
 `imported-legacy`, mantêm o projeto no lugar até S5 e não destravam nada até você reconfirmar cada uma
 (`lfe approve G2` ou o código pelo chat). O arquivo `.lfe/ADOPTION.md` lista o que revisar.
+Num produto que já está em S6 ou depois, o `--dry-run` avisa que a edição de código fica travada até G1–G4 serem
+reconfirmados: peça ao dono **uma** mensagem com todos os códigos e registre com
+`lfe reconfirm --quote "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc G4-dddddd" --message-ref "<id>"`; só então faça commit dos hooks.
 
 ## 3b. Checagem automática do G5: `lfe gate G5`
 

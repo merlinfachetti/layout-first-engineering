@@ -49,7 +49,7 @@ _CD = r"^\s*(?:cd\s+[^;&|`$<>\n]+&&\s*)?"
 _NO_EXEC = r"(?![^\n]*\s(?:-exec|-execdir|-ok|-okdir|-delete|-fprint\w*|-fls|--pre|--output|--ext-diff|--textconv)\b)"
 _ENV = r"(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*"
 # `lfe` subcommands the agent may run at any stage; approve/reject/revoke are built-in denials.
-_LFE_AGENT_COMMANDS = (r"(?:status|propose|artifact|validate|init|record-chat-approval|chat-approvals|adopt|gate|install|"
+_LFE_AGENT_COMMANDS = (r"(?:status|propose|artifact|validate|init|record-chat-approval|chat-approvals|reconfirm|adopt|gate|install|"
                        r"check-action|version|next|"
                        r"question|handoff|trace|impact|doctor|verify-report|render|stage|export|import|import-md|"
                        r"show-policy)\b")
