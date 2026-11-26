@@ -17,7 +17,7 @@ Com o **plugin do Claude Code** (ver README), os hooks e os comandos `/lfe:*` j�
 |---|---|
 | Claude Code, pessoal | `python3 ~/.claude/skills/layout-first-engineering/scripts/lfe.py` |
 | Claude Code, no projeto | `python3 .claude/skills/layout-first-engineering/scripts/lfe.py` |
-| Clone do repositório | `python3 layout-first-engineering/scripts/lfe.py` |
+| Clone do repositório | `bin/lfe`, ou `python3 layout-first-engineering/scripts/lfe.py` (a pasta da skill dentro do clone; a raiz do clone não tem `scripts/`) |
 
 Para não digitar o caminho toda vez, crie um apelido no terminal (macOS/Linux, zsh):
 
@@ -83,7 +83,7 @@ relatório do G5 como estão) e propõe cada gate que o Markdown diz estar aprov
 (`lfe approve G2` ou o código pelo chat). O arquivo `.lfe/ADOPTION.md` lista o que revisar.
 Num produto que já está em S6 ou depois, o `--dry-run` avisa que a edição de código fica travada até G1–G4 serem
 reconfirmados: peça ao dono **uma** mensagem com todos os códigos e registre com
-`lfe reconfirm --quote "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc G4-dddddd" --message-ref "<id>"`; só então faça commit dos hooks.
+`lfe reconfirm --quote "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc G4-dddddd" --message-ref "<id>"` (acrescente `--option A` e `--primary`/`--theme-variant` para manter a composição do G1); só então faça commit dos hooks.
 
 ## 3b. Checagem automática do G5: `lfe gate G5`
 

@@ -16,7 +16,7 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 |---|---|
 | Claude Code, personal | `python3 ~/.claude/skills/layout-first-engineering/scripts/lfe.py` |
 | Claude Code, project | `python3 .claude/skills/layout-first-engineering/scripts/lfe.py` |
-| Repository clone | `python3 layout-first-engineering/scripts/lfe.py` |
+| Repository clone | `bin/lfe`, or `python3 layout-first-engineering/scripts/lfe.py` (the skill folder inside the clone; the clone root has no `scripts/`) |
 
 ## Who runs what
 
@@ -60,7 +60,7 @@ Those approvals are recorded as `imported-legacy`, keep the project's place up t
 reconfirm each one (`lfe approve G2`, or the chat code). `.lfe/ADOPTION.md` lists what to review.
 For a product already at S6 or later, `--dry-run` warns that code edits stay locked until G1–G4 are reconfirmed:
 ask the owner for **one** message with all codes and record it with
-`lfe reconfirm --quote "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc G4-dddddd" --message-ref "<id>"`, then commit the hooks.
+`lfe reconfirm --quote "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc G4-dddddd" --message-ref "<id>"` (add `--option A`, `--primary`/`--theme-variant` to keep the G1 composition), then commit the hooks.
 
 ## Automated G5 checks: `lfe gate G5`
 

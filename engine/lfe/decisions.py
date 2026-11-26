@@ -169,12 +169,13 @@ def record_chat_approval(root: Path, gate, quote, *, option=None, composition=No
     return _commit(root, state, entry)
 
 
-def reconfirm(root: Path, quote, message_ref, actor=None):
+def reconfirm(root: Path, quote, message_ref, actor=None, option=None, composition=None):
     """Record every gate whose current confirmation code appears in one chat message, in gate order.
 
     For adopted projects the owner can answer "reconfirmo G1-aaaaaa G2-bbbbbb G3-cccccc" once instead
     of one message per gate. Each gate still goes through `record_chat_approval`, so the opt-in, the
     code of the latest proposal, the message reference and the G5 evidence rule all apply.
+    `option` and `composition` apply to G1 only (adopted Markdown rarely carries them in a typed form).
     """
     state = workspace.load_state(root)
     entries = ledger.read(root)
@@ -191,7 +192,8 @@ def reconfirm(root: Path, quote, message_ref, actor=None):
         if gate != "G1" and gate not in gates.chat_gates(state):
             raise LfeError("CHANNEL_NOT_ALLOWED", f"{gate} is not enabled for chat approvals; recorded so far: "
                            f"{', '.join(recorded) or 'none'}", 6)
-        recorded.append(record_chat_approval(root, gate, quote, actor=actor, message_ref=message_ref)["gate"])
+        g1 = {"option": option, "composition": composition} if gate == "G1" else {}
+        recorded.append(record_chat_approval(root, gate, quote, actor=actor, message_ref=message_ref, **g1)["gate"])
     return recorded
 
 
