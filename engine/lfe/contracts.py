@@ -231,11 +231,19 @@ def _decision(doc):
     if channel == "agent":
         issues.append(Issue("CHANNEL_NOT_ALLOWED", "$.channel", "the agent channel can only propose (I-03)"))
     if channel == "chat-quote":
-        if gate != "G1":
-            issues.append(Issue("CHANNEL_NOT_ALLOWED", "$.channel",
-                                "a chat quote can only record G1 (DEC-RFC-002, I-02)"))
-        if not doc.get("evidence", {}).get("quote", "").strip():
+        evidence = doc.get("evidence", {})
+        if not evidence.get("quote", "").strip():
             issues.append(Issue("MISSING_EVIDENCE", "$.evidence.quote", "chat-quote needs the verbatim user message"))
+        # G2–G6 by chat only with the project opt-in (checked when gates are computed), a message
+        # reference and the confirmation code of the exact proposal, quoted by the person.
+        if gate != "G1":
+            if not evidence.get("messageRef", "").strip():
+                issues.append(Issue("MISSING_EVIDENCE", "$.evidence.messageRef",
+                                    f"a chat approval of {gate} needs a reference to the person's message"))
+            code = evidence.get("confirmationCode", "")
+            if not code or code.lower() not in evidence.get("quote", "").lower():
+                issues.append(Issue("MISSING_EVIDENCE", "$.evidence.confirmationCode",
+                                    f"a chat approval of {gate} must quote the proposal's confirmation code"))
     # A legacy import has no registered artifact to bind; it never counts anyway (N-4, I-08).
     if verdict == "approved" and not doc["scope"]["artifacts"] and channel != "imported-legacy":
         issues.append(Issue("EMPTY_SCOPE", "$.scope.artifacts", "an approval must be bound to artifact hashes (D-05)"))

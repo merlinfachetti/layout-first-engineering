@@ -31,12 +31,24 @@ MEANING = {
 VALID = ("approved", "not_applicable")
 
 
-def channel_allows(channel, gate, mode):
+def chat_gates(state):
+    """Gates the project accepts from a chat quote: always G1, plus the opt-in list (#27)."""
+    return {"G1", *((state.get("chatApprovals") or {}).get("gates") or [])}
+
+
+def confirmation_code(proposal):
+    """Short code bound to one proposal's hash. The person quotes it to approve by chat, which
+    ties the approval to the exact content proposed: new content, new proposal, new code."""
+    return f"{proposal['gate']}-{proposal['hash'][len('sha256:'):][:6]}"
+
+
+def channel_allows(channel, gate, mode, chat=("G1",)):
     """D-03: which channels can make a decision count."""
     if channel in ("human-cli", "studio-export"):
         return True, None
     if channel == "chat-quote":
-        return gate == "G1", "a chat quote only counts for G1"
+        return gate in chat, (f"a chat quote only counts for {', '.join(sorted(chat))}; enable chat approvals "
+                              f"for {gate} with `lfe chat-approvals enable` or approve it with `lfe approve`")
     if channel == "simulated-human":
         return mode == "demo", "simulated decisions only count in a demo workspace"
     if channel == "imported-legacy":
@@ -91,7 +103,7 @@ def evaluate(root: Path, state, entries):
             result["reasons"].append(f"revoked by {decision['id']}: {decision.get('rationale', '')}")
             continue
 
-        allowed, why = channel_allows(decision["channel"], gate, state["mode"])
+        allowed, why = channel_allows(decision["channel"], gate, state["mode"], chat_gates(state))
         if not allowed:
             result["status"] = "needs_revision"
             result["reasons"].append(why)
@@ -119,14 +131,25 @@ def is_valid(results, gate):
     return results[gate]["status"] in VALID
 
 
-def stage_problems(results, stage):
-    """S-03 and S-04 on computed gates."""
-    number = int(stage[1])
-    needed = (["G2", "G3", "G4"] if number >= 6 else []) + (["G5"] if number >= 8 else [])
-    problems = [f"{stage} requires {g} valid (now {results[g]['status']})" for g in needed if not is_valid(results, g)]
-    if number == 9 and not is_valid(results, "G6"):
-        problems.append(f"S9 requires G6 approved or not_applicable (now {results['G6']['status']})")
-    return problems
+# Entering a stage requires every gate that closes the stages before it (S-03, S-04). This is
+# the SKILL.md table read as a rule: S2 needs G1, S3 needs G2, S4 needs G3, S5–S7 need G4,
+# S8 needs G5 and S9 needs G6. Going back to an earlier stage is always allowed.
+STAGE_REQUIRES = {
+    "S0": [], "S1": [], "S2": ["G1"], "S3": ["G1", "G2"], "S4": ["G1", "G2", "G3"],
+    "S5": ["G1", "G2", "G3", "G4"], "S6": ["G1", "G2", "G3", "G4"], "S7": ["G1", "G2", "G3", "G4"],
+    "S8": ["G1", "G2", "G3", "G4", "G5"], "S9": GATES,
+}
+
+
+def stage_problems(results, stage, tolerate=()):
+    """Gates that must be valid before `stage` can be entered, with their current status.
+
+    `tolerate` lists gates accepted as pending reconfirmation (imported history, see mdbridge);
+    it never applies from S6 up, where production code starts.
+    """
+    tolerated = set(tolerate) if int(stage[1]) < 6 else set()
+    return [f"{stage} requires {g} valid (now {results[g]['status']})"
+            for g in STAGE_REQUIRES[stage] if not is_valid(results, g) and g not in tolerated]
 
 
 def cache_problems(state, entries):

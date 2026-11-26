@@ -22,7 +22,7 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 
 | Who | Commands |
 |---|---|
-| **Agent** | `init`, `artifact`, `propose`, `record-chat-approval G1`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
+| **Agent** | `init`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 when enabled), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
 | **You, in your own terminal** | `approve`, `reject`, `revoke`; confirming an `import` that carries approvals |
 
 `lfe approve` refuses to run without an interactive terminal and asks you to type the gate name.
@@ -32,14 +32,33 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 1. `lfe init my-idea "My idea"`
 2. `lfe artifact DIR-001 --kind direction-set --path .lfe/directions/DIR-001.json` — the agent registers content by hash.
 3. `lfe propose G1 --artifact DIR-001` — a gate bound to that exact content.
-4. G1: `lfe record-chat-approval G1 --quote "..."`. G2–G6: **you** run `lfe approve G2`.
+4. G1: `lfe record-chat-approval G1 --quote "..."`. G2–G6: **you** run `lfe approve G2`, or, when you only work
+   through chat, reply with the confirmation code `propose` printed (see "Chat-only owners" below).
 5. `lfe status` — computed gates, reasons, `production code: locked|unlocked`.
 6. Content changed after approval: the gate turns `stale` and production code locks again.
-7. `lfe stage S6` — refused unless G2, G3 and G4 are valid.
+7. `lfe stage S2` — each stage needs the gate that closes the one before it (S2 needs G1, S3 G2, S4 G3,
+   S5–S7 G4, S8 G5, S9 G6); `lfe stage S6` unlocks production code. Going back is always allowed.
 8. `lfe run TEST-003 --req FR-001 -- <command>` — evidence receipt; missing tools are `not_executed`.
 9. `lfe trace --check` — every implemented requirement needs a passing receipt; G5 requires it.
 10. `lfe next`, `lfe question`, `lfe handoff` — resumable context; Claude Code hooks in
     [adapters/claude-code/session-hooks.md](../adapters/claude-code/session-hooks.md).
+
+## Chat-only owners (mobile, cloud sessions)
+
+Off by default. When the person has no terminal, they opt in once, in their own words:
+
+```bash
+lfe chat-approvals enable --gates G2,G3,G4,G5,G6 --quote "<their message, verbatim>" --message-ref "<message id or link>"
+```
+
+From then on `lfe propose G3 …` prints a code such as `G3-7f3a2c`. The person replies `aprovo G3-7f3a2c` and the
+agent records it with `lfe record-chat-approval G3 --quote "aprovo G3-7f3a2c" --message-ref "<id>"`. The code is
+derived from that proposal's hash, so an approval only matches the content that was proposed; new content means a
+new proposal and a new code. Decisions are stored as `chat-quote`, `authenticity: unverified`, and stop counting if
+chat approvals are disabled. Trade-off: the terminal *prevents* self-approval; a chat quote makes it *detectable*.
+
+Hybrid G1 without JSON: `--primary A --theme-variant dark=A --theme-variant light=B --complementary "C=collections"`
+(`lfe record-chat-approval --help` shows the JSON shape too).
 
 Portable bundle: `lfe export --out p.lfe.json` and `lfe --root ../copy import p.lfe.json` (you confirm any approvals it carries).
 Try it without deciding anything: `lfe demo examples/vs01-leituras --workdir /tmp/lfe-demo` (simulated approvals, always labelled).

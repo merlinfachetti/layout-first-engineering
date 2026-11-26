@@ -29,7 +29,7 @@ spec.loader.exec_module(verify)
 TEMPLATE = (SKILL / "assets/PROJECT_STATE.md").read_text(encoding="utf-8")
 
 
-def legacy(stage="S7", approved=("G2", "G3", "G4")):
+def legacy(stage="S7", approved=("G1", "G2", "G3", "G4")):
     """A hand-maintained PROJECT_STATE.md as the chat-only workflow produces it."""
     text = TEMPLATE.replace("**Current stage:** S0", f"**Current stage:** {stage}")
     for n, gate in enumerate(approved, start=1):
@@ -199,7 +199,7 @@ class ImportTests(unittest.TestCase):
             (root / "PROJECT_STATE.md").write_text(legacy("S7"), encoding="utf-8")
             report = mdbridge.import_md(root, root / "PROJECT_STATE.md", project_id="legado")
             self.assertEqual((report["importedStage"], report["stage"]), ("S7", "S5"))
-            self.assertEqual(report["imported"], ["G2", "G3", "G4"])
+            self.assertEqual(report["imported"], ["G1", "G2", "G3", "G4"])
             state = workspace.load_state(root)
             self.assertEqual(state["stage"], "S5")
             self.assertIn("reconfirm", state["nextAction"])
@@ -224,13 +224,15 @@ class ImportTests(unittest.TestCase):
             r = rows(out)
             self.assertEqual([r[g][2] for g in ("G1", "G2", "G3")], ["needs_revision", "needs_revision", "not_started"])
             self.assertIn("reconfirmar", r["G1"][5])
-            self.assertIn("**Current stage:** S4", out)
+            # S4 needs G3, which the file never approved: the stage is lowered to S3.
+            self.assertIn("**Current stage:** S3", out)
             self.assertEqual(check(out)[0], [])
             # A second import of the rendered file adds nothing: no row is approved any more.
             other = Path(tmp) / "copia"
             other.mkdir()
             report = mdbridge.import_md(other, root / "PROJECT_STATE.md", project_id="copia")
-            self.assertEqual((report["stage"], report["imported"]), ("S4", []))
+            # Nothing approved any more, so nothing tolerates the gates S3 needs: back to S1.
+            self.assertEqual((report["stage"], report["imported"]), ("S1", []))
             self.assertEqual(mdbridge.render(root, root / "PROJECT_STATE.md"), "unchanged")
 
     def test_import_never_replaces_a_human_decision(self):
@@ -239,7 +241,7 @@ class ImportTests(unittest.TestCase):
             p.through_g4()
             (p.root / "legacy.md").write_text(legacy("S6"), encoding="utf-8")
             report = mdbridge.import_md(p.root, p.root / "legacy.md")
-            self.assertEqual((report["imported"], report["skipped"]), ([], ["G2", "G3", "G4"]))
+            self.assertEqual((report["imported"], report["skipped"]), ([], ["G1", "G2", "G3", "G4"]))
             self.assertEqual(report["stage"], "S6")
             results = gates.evaluate(p.root, workspace.load_state(p.root), ledger.read(p.root))
             self.assertTrue(all(gates.is_valid(results, g) for g in ("G2", "G3", "G4")))

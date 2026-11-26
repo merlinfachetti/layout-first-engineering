@@ -32,7 +32,8 @@ A user-directed, design-led product-to-production workflow. **Start with the int
 - **If the engine is available (`python3 <this skill folder>/scripts/lfe.py`, called `lfe` below; guide: `docs/LFE-CLI.md` in the repository), `.lfe/` is the source of truth for project state:**
   - read state with `lfe status`; register content with `lfe artifact` and request a gate with `lfe propose`;
   - never edit the gate table by hand; refresh `PROJECT_STATE.md` with `lfe render`;
-  - only the person approves G2–G6, by typing `lfe approve` in their own terminal (a chat quote records at most G1);
+  - only the person approves G2–G6, by typing `lfe approve` in their own terminal; a chat quote records G1, and G2–G6 only after the person opted in with `lfe chat-approvals enable` and replied with the confirmation code that `lfe propose` printed (never invent or paraphrase it);
+  - `lfe stage` refuses a stage whose previous gate is not valid; never work around it, ask for the gate;
   - a legacy `PROJECT_STATE.md` enters through `lfe import-md`; imported approvals must be reconfirmed.
 - Read `references/01-conversation-and-state.md` now. Load the stage-specific reference when reaching that stage; avoid loading all references at once.
 

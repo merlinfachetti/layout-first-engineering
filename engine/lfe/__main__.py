@@ -79,7 +79,14 @@ def cmd_artifact(args):
 def cmd_propose(args):
     entry = decisions.propose(args.root, args.gate, args.artifact)
     print(f"{entry['id']} proposes {args.gate}: " + ", ".join(f"{a['id']}@r{a['revision']}" for a in entry["scope"]["artifacts"]))
-    print("waiting for a human decision: `lfe approve` must be typed by the person, in their own terminal")
+    code = gates.confirmation_code(entry)
+    print(f"confirmation code: {code}")
+    print("waiting for a human decision: the person types `lfe approve` in their own terminal", end="")
+    if args.gate in gates.chat_gates(workspace.load_state(args.root)):
+        print(f", or replies in chat with \"aprovo {code}\" (record it with `lfe record-chat-approval {args.gate} "
+              f"--quote ... --message-ref ...`)")
+    else:
+        print()
     return EXIT_OK
 
 
@@ -113,11 +120,48 @@ def cmd_revoke(args):
     return EXIT_OK
 
 
+def _composition(args):
+    raw = None
+    if args.composition:
+        try:
+            raw = json.loads(args.composition)
+        except json.JSONDecodeError as exc:
+            raise LfeError("BAD_COMPOSITION", f"--composition is not valid JSON ({exc.msg}); see `lfe "
+                           "record-chat-approval --help` for an example, or use --primary/--theme-variant", 2) from None
+    if args.primary or args.theme_variant or args.complementary or args.non_negotiable:
+        raw = dict(raw or {})
+        if args.primary:
+            raw["primary"] = args.primary
+        raw.setdefault("primary", args.option)
+        if args.theme_variant:
+            raw["themeVariants"] = list(raw.get("themeVariants") or []) + args.theme_variant
+        if args.complementary:
+            raw["complementary"] = list(raw.get("complementary") or []) + args.complementary
+        if args.non_negotiable:
+            raw["nonNegotiables"] = list(raw.get("nonNegotiables") or []) + args.non_negotiable
+    return raw
+
+
 def cmd_chat_approval(args):
-    composition = json.loads(args.composition) if args.composition else None
     entry = decisions.record_chat_approval(args.root, args.gate, args.quote, option=args.option,
-                                           composition=composition, actor=args.actor)
+                                           composition=_composition(args), actor=args.actor,
+                                           message_ref=args.message_ref)
     print(f"{entry['id']} recorded from chat quote: {args.gate} approved (authenticity: unverified)")
+    return EXIT_OK
+
+
+def cmd_chat_approvals(args):
+    if args.action == "enable":
+        cfg = decisions.set_chat_approvals(args.root, [g.strip() for g in args.gates.split(",")], args.quote,
+                                           args.message_ref)
+        print(f"chat approvals enabled for G1, {', '.join(cfg['gates'])} (quote recorded, {cfg['messageRef']})")
+        print("each approval must quote the confirmation code printed by `lfe propose`")
+    elif args.action == "disable":
+        decisions.disable_chat_approvals(args.root)
+        print("chat approvals disabled: only G1 can be recorded from chat; earlier chat approvals of G2–G6 no longer count")
+    else:
+        cfg = workspace.load_state(args.root).get("chatApprovals")
+        print(json.dumps(cfg or {"gates": []}, indent=2, ensure_ascii=False))
     return EXIT_OK
 
 
@@ -180,13 +224,42 @@ def build_parser():
     rev.add_argument("--as", dest="actor")
     rev.set_defaults(func=cmd_revoke)
 
-    chat = sub.add_parser("record-chat-approval", help="agent: record the user's verbatim G1 choice from chat")
+    chat = sub.add_parser(
+        "record-chat-approval", help="agent: record the person's verbatim chat approval (G1; G2–G6 when enabled)",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""examples:
+  # G1, simple choice
+  lfe record-chat-approval G1 --quote "Quero a A" --option A
+  # G1, hybrid composition without JSON
+  lfe record-chat-approval G1 --quote "A no dark, B no light, coleções da C" \\
+      --primary A --theme-variant dark=A --theme-variant light=B \\
+      --complementary "C=coleções" --non-negotiable "contraste AA"
+  # the same composition as JSON (the contract shape)
+  --composition '{"primary":"A","themeVariants":[{"theme":"dark","direction":"A"}],
+                  "complementary":[{"direction":"C","usage":"coleções"}],"nonNegotiables":["contraste AA"]}'
+  # G2–G6 (after `lfe chat-approvals enable`): quote the code printed by `lfe propose`
+  lfe record-chat-approval G3 --quote "aprovo G3-7f3a2c" --message-ref "<chat message id or link>"
+""")
     chat.add_argument("gate", choices=GATES)
-    chat.add_argument("--quote", required=True)
+    chat.add_argument("--quote", required=True, help="the person's message, verbatim")
+    chat.add_argument("--message-ref", help="id or link of that chat message (required for G2–G6)")
     chat.add_argument("--option")
-    chat.add_argument("--composition", help="JSON: {primary, themeVariants, complementary, nonNegotiables}")
+    chat.add_argument("--composition", help="G1 only, JSON: {primary, themeVariants, complementary, nonNegotiables}")
+    chat.add_argument("--primary", help="G1 composition: main direction (defaults to --option)")
+    chat.add_argument("--theme-variant", action="append", metavar="THEME=DIRECTION")
+    chat.add_argument("--complementary", action="append", metavar="DIRECTION=USAGE")
+    chat.add_argument("--non-negotiable", action="append", metavar="TEXT")
     chat.add_argument("--as", dest="actor")
     chat.set_defaults(func=cmd_chat_approval)
+
+    cha = sub.add_parser("chat-approvals", help="opt in/out of chat approvals for G2–G6 (owner's quote required)",
+                         description="For owners who only work through chat (mobile, cloud sessions). Off by "
+                                     "default. Each chat approval must then quote the proposal's confirmation code.")
+    cha.add_argument("action", choices=["enable", "disable", "show"])
+    cha.add_argument("--gates", default="G2,G3,G4,G5,G6", help="comma-separated, default G2,G3,G4,G5,G6")
+    cha.add_argument("--quote", default="", help="the person's message asking for chat approvals, verbatim")
+    cha.add_argument("--message-ref", default="", help="id or link of that chat message")
+    cha.set_defaults(func=cmd_chat_approvals)
 
     stg = sub.add_parser("stage", help="move to a stage; refused when its gates are not valid")
     stg.add_argument("stage", choices=STAGES)

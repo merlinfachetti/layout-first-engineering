@@ -231,7 +231,10 @@ def import_md(root: Path, source: Path, project_id=None, name=None):
 
     results = gates.evaluate(root, state, entries)
     stage = imported_stage
-    while gates.stage_problems(results, stage):
+    # Imported approvals keep the project's place up to S5 while they wait for reconfirmation;
+    # they never count for S6 and up (N-4).
+    legacy = {e["gate"] for e in entries if e["kind"] == "decision" and e["channel"] == "imported-legacy"}
+    while gates.stage_problems(results, stage, tolerate=legacy):
         stage = f"S{int(stage[1]) - 1}"
     state["stage"] = stage
     gates.refresh_cache(state, results)
