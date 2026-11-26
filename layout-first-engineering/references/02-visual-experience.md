@@ -38,7 +38,7 @@ Create an initial information architecture and visually coherent prototype for t
 
 Components: tokens, semantic colors, type scales, spacing, surfaces, breakpoints, focus/hover/disabled, aria semantics, reusable patterns, media and illustrations, localization and RTL if applicable, loading/empty/error/success, motion duration/easing and reduced motion.
 
-If design tool allows, deliver actual editable nodes/components with link and a verified creation action. If not, deliver a structured artifact with screen-by-screen annotations, design tokens and interaction descriptions. Static AI images cannot stand in for actual editable prototypes when editability is required.
+Choose and operate the design tool with `references/09-design-tools-and-fallback.md`: Penpot is the default free path any MCP client can drive; when a plan limit stops a tool (for example the Figma Starter MCP quota, which also counts writes), record it, switch automatically and tell the person in one message. If design tool allows, deliver actual editable nodes/components with link and a verified creation action. If not, deliver a structured artifact with screen-by-screen annotations, design tokens and interaction descriptions. Static AI images cannot stand in for actual editable prototypes when editability is required.
 
 ### B.1. Interaction contract for visually rich elements
 

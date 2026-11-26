@@ -22,7 +22,7 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 
 | Who | Commands |
 |---|---|
-| **Agent** | `init`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 when enabled), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
+| **Agent** | `init`, `adopt`, `install`, `gate`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 when enabled), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
 | **You, in your own terminal** | `approve`, `reject`, `revoke`; confirming an `import` that carries approvals |
 
 `lfe approve` refuses to run without an interactive terminal and asks you to type the gate name.
@@ -42,6 +42,38 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 9. `lfe trace --check` — every implemented requirement needs a passing receipt; G5 requires it.
 10. `lfe next`, `lfe question`, `lfe handoff` — resumable context; Claude Code hooks in
     [adapters/claude-code/session-hooks.md](../adapters/claude-code/session-hooks.md).
+
+## A project already under way: `lfe adopt`
+
+`lfe init` starts at S0. For a project with its own `PROJECT_STATE.md`, `DECISIONS.md`, prototypes and screenshots:
+
+```bash
+lfe adopt --dry-run   # the plan, validated against the contracts; writes nothing
+lfe adopt
+```
+
+It reads the gate table tolerantly (extra columns, `aprovado ✅`, `Etapa atual: S5`…), continues ledger ids after
+the highest `DEC-###` already in your Markdown, generates draft typed artifacts in `.lfe/adopted/` (directions from
+prototypes, baseline screens from `docs/evidence/*.png` with their real size, requirements from FR-/NFR- ids or the
+MoSCoW table, ADRs and the G5 report as they are), and proposes every gate the Markdown says was approved.
+Those approvals are recorded as `imported-legacy`, keep the project's place up to S5, and unlock nothing until you
+reconfirm each one (`lfe approve G2`, or the chat code). `.lfe/ADOPTION.md` lists what to review.
+
+## Automated G5 checks: `lfe gate G5`
+
+```bash
+lfe gate G5 --lighthouse lh-mobile.json --lighthouse lh-desktop.json --axe axe.json
+```
+
+Reads standard Lighthouse JSON and axe-core results and checks them against a budget (defaults: performance ≥ 90,
+accessibility ≥ 95, best practices ≥ 90, SEO ≥ 90, LCP ≤ 2500 ms, CLS ≤ 0.1, TBT ≤ 200 ms, no critical or serious
+axe violations; override in `.lfe/budget.json`). Exit 3 on failure. It prints a unittest-style summary, so it becomes
+an ordinary receipt: `lfe run TEST-020 --req NFR-001 -- python3 <skill>/scripts/lfe.py gate G5 --lighthouse ...`.
+
+## Cloud sessions: `lfe install --project`
+
+Vendors the skill, engine and hooks into `.claude/` so sessions without your plugins still load them; commit it.
+`lfe install --check` exits 3 when the copy is missing, modified or outdated.
 
 ## Chat-only owners (mobile, cloud sessions)
 

@@ -52,7 +52,8 @@ def channel_allows(channel, gate, mode, chat=("G1",)):
     if channel == "simulated-human":
         return mode == "demo", "simulated decisions only count in a demo workspace"
     if channel == "imported-legacy":
-        return False, "imported from Markdown; reconfirm with `lfe approve`"
+        return False, ("imported from Markdown; reconfirm with `lfe approve` (or by chat with the proposal code "
+                       "when chat approvals are enabled)")
     return False, "the agent channel can only propose"
 
 

@@ -1,9 +1,9 @@
 ---
 name: layout-first-engineering
-description: Guide design-first website and application creation from visual concept through product discovery, UX/UI sign-off, architecture, budgeting, secure engineering, testing and delivery. Use when a user wants to create a website, web app, SaaS, platform or digital product with human-led decisions, proactive questions and an approved layout as the visual source of truth. Behave as product manager, creative director, engineering manager and senior software architect. Resume work from project state and ask only questions needed at each checkpoint.
+description: Guide design-first website and application creation from visual concept through product discovery, UX/UI sign-off, architecture, budgeting, secure engineering, testing and delivery, with an engine (lfe) that locks production code until the person approves. Use when a user wants to create, redesign or extend a website, web app, mobile app, SaaS, platform, landing page, dashboard, screen, page, flow or UI feature, or asks for a new product, MVP or sibling app; also when a repository contains PROJECT_STATE.md, DESIGN_HANDOFF.md or .lfe/. Behave as product manager, creative director, engineering manager and senior software architect. Resume work from project state and ask only questions needed at each checkpoint.
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   author: "Merlin Fachetti (@merlinfachetti)"
 ---
 
@@ -29,12 +29,13 @@ A user-directed, design-led product-to-production workflow. **Start with the int
 - Establish tool reality: model/client, read/write filesystem, browser, design service, image generation, code execution, git, deployment; each `available / unavailable / unknown`. Do not assume a specific Figma, MagicPath, Framer, v0, Lovable, GitHub or cloud connector exists.
 - If the user is new: ask for **what the product is**, **who it serves**, and optionally **visual references/desired feel**. Start visual discovery even if budget/stack isn't known. Offer a default direction only as a proposal.
 - Give a compact orientation: current stage, next concrete deliverable, and the next decision required.
+- **Engine first, every session.** Run `lfe status`. If `.lfe/` is missing but the repository has LFE documents, run `lfe adopt --dry-run` and then `lfe adopt`; for a brand-new product run `lfe init`. In a cloud or CI session where this skill was not installed as a plugin, run `lfe install --project` once and commit `.claude/` so later sessions load the skill and its hooks. Following the method without the engine is a process failure: say so to the person instead of continuing silently.
 - **If the engine is available (`python3 <this skill folder>/scripts/lfe.py`, called `lfe` below; guide: `docs/LFE-CLI.md` in the repository), `.lfe/` is the source of truth for project state:**
   - read state with `lfe status`; register content with `lfe artifact` and request a gate with `lfe propose`;
   - never edit the gate table by hand; refresh `PROJECT_STATE.md` with `lfe render`;
   - only the person approves G2–G6, by typing `lfe approve` in their own terminal; a chat quote records G1, and G2–G6 only after the person opted in with `lfe chat-approvals enable` and replied with the confirmation code that `lfe propose` printed (never invent or paraphrase it);
   - `lfe stage` refuses a stage whose previous gate is not valid; never work around it, ask for the gate;
-  - a legacy `PROJECT_STATE.md` enters through `lfe import-md`; imported approvals must be reconfirmed.
+  - a project already under way enters through `lfe adopt` (run `--dry-run` first); never `lfe init` on it, which restarts at S0. Adopted approvals must be reconfirmed; `lfe import-md` remains for files that follow the template exactly.
 - Read `references/01-conversation-and-state.md` now. Load the stage-specific reference when reaching that stage; avoid loading all references at once.
 
 ## Staged state machine
@@ -58,7 +59,7 @@ Status for each gate: `not_started | exploring | proposed | approved | needs_rev
 
 ## Stage procedures / references
 
-- **S0–S2:** Read `references/02-visual-experience.md`. Present meaningful contrasting concepts (not three color variations). Use real images/assets when licensed or generated with permitted tools; mark inspiration vs deliverable. For early visuals, favor design artifacts; do not use production-code generation as a substitute unless the user explicitly chooses a coded prototype.
+- **S0–S2:** Read `references/02-visual-experience.md` and, for editable design work, `references/09-design-tools-and-fallback.md` (tool choice, plan limits, automatic fallback, Penpot setup). Present meaningful contrasting concepts (not three color variations). Use real images/assets when licensed or generated with permitted tools; mark inspiration vs deliverable. For early visuals, favor design artifacts; do not use production-code generation as a substitute unless the user explicitly chooses a coded prototype.
 - **S3:** Read `references/03-product-discovery.md`. Challenge attractive but unworkable interactions, accessibility failures, privacy implications, missing roles, error states and operational requirements. Revise the design only with user sign-off; keep a traceability map.
 - **S4:** Read `references/04-architecture-costs.md`. Research *current* technology maturity, pricing and licenses using available trustworthy sources. Compare at least two credible stacks where material; recommend one, with trade-offs and migration/lock-in strategy. If live lookup unavailable, mark all prices `UNVERIFIED` and give formulas/ranges explicitly as assumptions rather than market quotes.
 - **S5–S8:** Read `references/05-delivery-and-quality.md`, then `references/06-security-and-governance.md` when designing auth/data/CI/CD, before sensitive integration, and before launch. Apply appropriate engineering rigor, not boilerplate infrastructure.

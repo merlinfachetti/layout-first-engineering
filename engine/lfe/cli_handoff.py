@@ -55,10 +55,29 @@ def _hook_payload():
         return {}
 
 
+# Documents the LFE method leaves behind. When a repository has them but no `.lfe/`, the agent is
+# following the method from memory, without the engine (issue #29): say so at session start.
+LFE_SIGNS = ("PROJECT_STATE.md", "docs/PROJECT_STATE.md", "DESIGN_HANDOFF.md", "docs/DESIGN_HANDOFF.md",
+             "docs/APPROVED_VISUAL_BASELINE.md", "APPROVED_VISUAL_BASELINE.md")
+
+
+def _launcher():
+    script = Path(sys.argv[0]).resolve() if sys.argv and sys.argv[0] else None
+    return f"python3 {script}" if script and script.name == "lfe.py" else "lfe"
+
+
 def cmd_hook_session_start(args):
     """SessionStart hook: inject where the project stopped. Silent when LFE is not in use."""
     _hook_payload()
     if not (args.root / STATE_FILE).exists():
+        signs = [s for s in LFE_SIGNS if (args.root / s).is_file()]
+        if signs:
+            launcher = _launcher()
+            context = (f"LFE NOT ACTIVE: this repository has Layout-First Engineering documents ({', '.join(signs)}) "
+                       "but no .lfe/ engine state, so gates are not enforced and nothing records approvals. Before "
+                       f"any product work, run `{launcher} --root . adopt --dry-run`, show the plan to the person, then "
+                       f"`{launcher} --root . adopt`. Never run `lfe init` here (it restarts at S0).")
+            print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": context}}))
         return 0
     try:
         context = handoff.brief(handoff.write(args.root))

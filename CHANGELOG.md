@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-11-26
+
+Field fixes from running LFE on two real products, focused on making it work in every setup: cloud sessions,
+chat-only owners, projects already under way and free design-tool plans.
+
 
 - **Stage rules (#25):** entering S2–S9 needs the gate that closes the previous stage (S2 needs G1 … S9 needs G6);
   stages can no longer be skipped. Legacy imports keep their place up to S5 while approvals wait for reconfirmation.
@@ -9,6 +13,17 @@
   it) and a `--message-ref`. Stored as `chat-quote` / `unverified`; disabling makes them stop counting.
 - **G1 composition (#26):** `--primary`, `--theme-variant THEME=DIR`, `--complementary DIR=USAGE`,
   `--non-negotiable`; shorthand JSON is normalized; `--help` shows examples; invalid JSON is `BAD_COMPOSITION`.
+- **`lfe adopt` (#28):** start the engine on a project already under way: tolerant PROJECT_STATE reader, ledger
+  ids continue after the project's own `DEC-###`, draft typed artifacts generated from prototypes, evidence images,
+  scope Markdown and ADRs, and a ready proposal (with confirmation code) for every gate approved in the Markdown.
+- **Cloud sessions (#29):** `lfe install --project` vendors skill, engine and hooks into `.claude/` (merged into
+  existing settings, `--check` for drift); SessionStart warns "LFE NOT ACTIVE" in repositories with LFE documents but
+  no `.lfe/`; the skill description names concrete triggers; installed copies now find their own templates.
+- **Design tools (#30):** `references/09-design-tools-and-fallback.md`: Penpot as the default free, provider-neutral
+  MCP path, dated plan limits (Figma Starter quota counts writes; one mode per collection), automatic fallback rules
+  and exact Penpot setup steps. `figma`/`penpot` baselines now require `sourceUrl`.
+- **`lfe gate G5` (#31):** Lighthouse and axe-core JSON against a budget (`.lfe/budget.json`), unittest-style
+  summary so `lfe run` records it as an evidence receipt.
 - **Numbering:** optional `state.numbering.decisionFloor` keeps ledger ids after ids the project already uses.
 
 ## 0.2.0 — 2026-10-19
