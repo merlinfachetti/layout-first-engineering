@@ -22,7 +22,7 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 
 | Who | Commands |
 |---|---|
-| **Agent** | `init`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 when enabled), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
+| **Agent** | `init`, `adopt`, `artifact`, `propose`, `record-chat-approval` (G1; G2–G6 when enabled), `chat-approvals`, `run`, `trace`, `render`, `next`, `question`, `handoff`, `status` |
 | **You, in your own terminal** | `approve`, `reject`, `revoke`; confirming an `import` that carries approvals |
 
 `lfe approve` refuses to run without an interactive terminal and asks you to type the gate name.
@@ -42,6 +42,22 @@ Requirement: Python 3.10+, nothing to install (standard library only). Full Port
 9. `lfe trace --check` — every implemented requirement needs a passing receipt; G5 requires it.
 10. `lfe next`, `lfe question`, `lfe handoff` — resumable context; Claude Code hooks in
     [adapters/claude-code/session-hooks.md](../adapters/claude-code/session-hooks.md).
+
+## A project already under way: `lfe adopt`
+
+`lfe init` starts at S0. For a project with its own `PROJECT_STATE.md`, `DECISIONS.md`, prototypes and screenshots:
+
+```bash
+lfe adopt --dry-run   # the plan, validated against the contracts; writes nothing
+lfe adopt
+```
+
+It reads the gate table tolerantly (extra columns, `aprovado ✅`, `Etapa atual: S5`…), continues ledger ids after
+the highest `DEC-###` already in your Markdown, generates draft typed artifacts in `.lfe/adopted/` (directions from
+prototypes, baseline screens from `docs/evidence/*.png` with their real size, requirements from FR-/NFR- ids or the
+MoSCoW table, ADRs and the G5 report as they are), and proposes every gate the Markdown says was approved.
+Those approvals are recorded as `imported-legacy`, keep the project's place up to S5, and unlock nothing until you
+reconfirm each one (`lfe approve G2`, or the chat code). `.lfe/ADOPTION.md` lists what to review.
 
 ## Chat-only owners (mobile, cloud sessions)
 
