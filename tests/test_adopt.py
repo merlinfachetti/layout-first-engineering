@@ -147,6 +147,33 @@ class AdoptTests(unittest.TestCase):
             entries = ledger.read(root)
             self.assertEqual([e["id"] for e in entries if e["kind"] == "decision"][-1], "DEC-020")
 
+    def test_one_message_reconfirms_every_gate_it_names(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = project(tmp)
+            codes = adopt.adopt(root)["codes"]
+            decisions.set_chat_approvals(root, ["G1", "G2", "G3", "G4"], "aprova pelo chat", "m1")
+            quote = "reconfirmo " + " ".join(codes[g] for g in ("G1", "G2", "G3", "G4"))
+            self.assertEqual(decisions.reconfirm(root, quote, "m2", actor="PO"), ["G1", "G2", "G3", "G4"])
+            decisions.set_stage(root, "S6")
+            with self.assertRaises(LfeError) as ctx:
+                decisions.reconfirm(root, "ok, pode seguir", "m3")
+            self.assertEqual(ctx.exception.code, "CONFIRMATION_CODE_MISSING")
+
+    def test_reconfirm_stops_at_a_gate_that_is_not_enabled(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = project(tmp)
+            codes = adopt.adopt(root)["codes"]
+            with self.assertRaises(LfeError) as ctx:
+                decisions.reconfirm(root, f"{codes['G1']} {codes['G2']}", "m2")
+            self.assertEqual(ctx.exception.code, "CHANNEL_NOT_ALLOWED")
+            self.assertIn("G1", str(ctx.exception))
+
+    def test_dry_run_warns_when_a_live_product_will_be_locked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = project(tmp)
+            notes = adopt.adopt(root, dry_run=True)["plan"]["notes"]
+            self.assertTrue(notes[0].startswith("PRODUCTION CODE WILL BE LOCKED"))
+
     def test_existing_lfe_is_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = project(tmp)
