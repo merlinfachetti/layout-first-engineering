@@ -268,6 +268,9 @@ def _baseline(doc):
     if doc["medium"] == "local-html" and not doc.get("mediumDecisionId"):
         issues.append(Issue("MISSING_MEDIUM_DECISION", "$.mediumDecisionId",
                             "a coded prototype needs the decision that chose it (SKILL.md:55)"))
+    if doc["medium"] in ("figma", "penpot") and not doc.get("sourceUrl"):
+        issues.append(Issue("MISSING_SOURCE_URL", "$.sourceUrl",
+                            f"a {doc['medium']} baseline needs the file link as G2 evidence (references/09)"))
     ids = [s["screenId"] for s in doc["screens"]]
     for dup in sorted({i for i in ids if ids.count(i) > 1}):
         issues.append(Issue("DUPLICATE_ID", "$.screens", f"{dup} appears more than once"))

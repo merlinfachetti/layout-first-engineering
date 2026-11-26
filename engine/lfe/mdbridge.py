@@ -15,7 +15,10 @@ from pathlib import Path
 from . import gates, ledger, workspace
 from .workspace import GATES, LfeError
 
-SKILL_DIR = Path(__file__).resolve().parents[2] / "layout-first-engineering"
+# Repository clone: <repo>/engine/lfe and <repo>/layout-first-engineering. Installed skill (zip,
+# plugin or `lfe install --project`): <skill>/engine/lfe, so the skill folder is parents[2] itself.
+_BASE = Path(__file__).resolve().parents[2]
+SKILL_DIR = _BASE / "layout-first-engineering" if (_BASE / "layout-first-engineering" / "SKILL.md").is_file() else _BASE
 TEMPLATE = SKILL_DIR / "assets" / "PROJECT_STATE.md"
 BEGIN, END = "<!-- lfe:begin gates -->", "<!-- lfe:end gates -->"
 HEADER = ["| Gate | Description | Status | Decision ID | Approved on | Evidence |",

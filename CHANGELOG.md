@@ -12,6 +12,14 @@
 - **`lfe adopt` (#28):** start the engine on a project already under way: tolerant PROJECT_STATE reader, ledger
   ids continue after the project's own `DEC-###`, draft typed artifacts generated from prototypes, evidence images,
   scope Markdown and ADRs, and a ready proposal (with confirmation code) for every gate approved in the Markdown.
+- **Cloud sessions (#29):** `lfe install --project` vendors skill, engine and hooks into `.claude/` (merged into
+  existing settings, `--check` for drift); SessionStart warns "LFE NOT ACTIVE" in repositories with LFE documents but
+  no `.lfe/`; the skill description names concrete triggers; installed copies now find their own templates.
+- **Design tools (#30):** `references/09-design-tools-and-fallback.md`: Penpot as the default free, provider-neutral
+  MCP path, dated plan limits (Figma Starter quota counts writes; one mode per collection), automatic fallback rules
+  and exact Penpot setup steps. `figma`/`penpot` baselines now require `sourceUrl`.
+- **`lfe gate G5` (#31):** Lighthouse and axe-core JSON against a budget (`.lfe/budget.json`), unittest-style
+  summary so `lfe run` records it as an evidence receipt.
 - **Numbering:** optional `state.numbering.decisionFloor` keeps ledger ids after ids the project already uses.
 
 ## 0.2.0 — 2026-10-19

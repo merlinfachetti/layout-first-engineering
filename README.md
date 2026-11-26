@@ -105,6 +105,19 @@ claude plugin install lfe@layout-first-engineering
 Inside a session the same commands are `/plugin marketplace add merlinfachetti/layout-first-engineering`
 and `/plugin install lfe@layout-first-engineering`. Restart Claude Code afterwards. Guide: [docs/LFE-CLI.md](docs/LFE-CLI.md).
 
+### Claude Code in the cloud (claude.ai/code, project threads, CI agents)
+
+Cloud sessions start from a fresh clone and do not have your plugins. Vendor the skill, the engine and the hooks
+into the repository once, and commit them:
+
+```bash
+python3 /path/to/layout-first-engineering/layout-first-engineering/scripts/lfe.py --root /path/to/your-project install --project
+```
+
+This writes `.claude/skills/layout-first-engineering/` and merges the LFE hooks into `.claude/settings.json`
+(other settings are kept). `lfe install --check` tells whether the copy is current. A repository that has LFE
+documents but no `.lfe/` gets a "LFE NOT ACTIVE" notice at session start pointing to `lfe adopt`.
+
 ### Claude Code — skill folder only
 
 ```bash

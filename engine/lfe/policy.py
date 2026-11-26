@@ -283,7 +283,7 @@ def _production_check(root: Path):
             details.append(detail)
         return deny("production_code", code,
                     "production code needs G2, G3 and G4 approved and still bound to the current content; "
-                    + "; ".join(details) + ". Propose with `lfe propose`; the person approves in their terminal.",
+                    + "; ".join(details) + ". Propose with `lfe propose`; the person approves in their terminal (or by chat with the proposal code, when enabled).",
                     invalid)
     if int(state["stage"][1]) < 6:
         return deny("production_code", "STAGE_NOT_REACHED",

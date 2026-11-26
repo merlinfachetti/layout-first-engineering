@@ -118,6 +118,7 @@ Baixe o ZIP da skill ou clone o repositório. Copie **a pasta inteira** `layout-
   ```
 
   Dentro de uma sessão, os equivalentes são `/plugin marketplace add merlinfachetti/layout-first-engineering` e `/plugin install lfe@layout-first-engineering`. Guia: [docs/LFE-CLI.pt-BR.md](docs/LFE-CLI.pt-BR.md).
+- **Claude Code na nuvem (claude.ai/code, threads de projeto, agentes de CI):** essas sessões partem de um clone limpo, sem os seus plugins. Rode uma vez `python3 <pasta-do-lfe>/layout-first-engineering/scripts/lfe.py --root <seu-projeto> install --project` e faça commit de `.claude/`: a skill, o motor e os hooks passam a carregar em toda sessão daquele repositório. `lfe install --check` confere se a cópia está atual.
 - **Claude Code — só a pasta da skill:** coloque a pasta em `.claude/skills/` (no projeto) ou `~/.claude/skills/` (uso pessoal).
 - **Gemini CLI:** coloque em `.gemini/skills/` ou `.agents/skills/`; use `/skills list` para conferir. No repositório publicado, `gemini skills install <URL> --path layout-first-engineering` também é uma opção, conforme a versão.
 - **OpenAI Codex:** coloque em `.agents/skills/` (projeto) ou `~/.agents/skills/` (usuário).
