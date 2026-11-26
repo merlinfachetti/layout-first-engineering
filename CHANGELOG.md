@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-11-26
+
+Field fixes from running LFE on two real products, focused on making it work in every setup: cloud sessions,
+chat-only owners, projects already under way and free design-tool plans.
+
 
 - **Stage rules (#25):** entering S2–S9 needs the gate that closes the previous stage (S2 needs G1 … S9 needs G6);
   stages can no longer be skipped. Legacy imports keep their place up to S5 while approvals wait for reconfirmation.

@@ -11,6 +11,13 @@ This roadmap is directional, not a delivery commitment. File an Issue before und
 - [x] VS-01 example with two visual directions, prototype, app and an end-to-end proof in Chromium (CI).
 - [x] Read-only visual studio (`lfe studio`); CI on Python 3.10 and 3.12.
 
+## Done / Entregue (2026-11, v0.3.0)
+
+- [x] Stage moves enforce the previous gate; opt-in, code-bound chat approvals for chat-only owners.
+- [x] `lfe adopt` for projects already under way; `lfe install --project` for cloud sessions.
+- [x] Design-tool capabilities and automatic fallback (Penpot as the free, provider-neutral path).
+- [x] `lfe gate G5` on Lighthouse and axe-core JSON.
+
 ## Priorities / Prioridades
 
 - [ ] Run `scripts/agent_evals.py` with a logged-in Claude Code and record results in `docs/VALIDATION-MATRIX.md`.

@@ -3,7 +3,7 @@ name: layout-first-engineering
 description: Guide design-first website and application creation from visual concept through product discovery, UX/UI sign-off, architecture, budgeting, secure engineering, testing and delivery, with an engine (lfe) that locks production code until the person approves. Use when a user wants to create, redesign or extend a website, web app, mobile app, SaaS, platform, landing page, dashboard, screen, page, flow or UI feature, or asks for a new product, MVP or sibling app; also when a repository contains PROJECT_STATE.md, DESIGN_HANDOFF.md or .lfe/. Behave as product manager, creative director, engineering manager and senior software architect. Resume work from project state and ask only questions needed at each checkpoint.
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   author: "Merlin Fachetti (@merlinfachetti)"
 ---
 
