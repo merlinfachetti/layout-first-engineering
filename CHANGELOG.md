@@ -10,6 +10,8 @@ From the first real adoption (a product already in production):
   until G1–G4 are reconfirmed; the next action points to `lfe reconfirm`.
 - **`lfe chat-approvals enable`:** `G1` in `--gates` is accepted (it always takes a chat quote) and the success line
   no longer reads as if G1 had been enabled by the flag.
+- **`lfe reconfirm --option/--primary/--theme-variant/...`:** keeps the G1 choice and composition when reconfirming
+  an adopted project. Docs name `bin/lfe` as the launcher of a clone.
 
 ## 0.3.0 — 2026-11-26
 

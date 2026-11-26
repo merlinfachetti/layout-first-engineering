@@ -167,7 +167,8 @@ def cmd_chat_approvals(args):
 
 
 def cmd_reconfirm(args):
-    recorded = decisions.reconfirm(args.root, args.quote, args.message_ref, actor=args.actor)
+    recorded = decisions.reconfirm(args.root, args.quote, args.message_ref, actor=args.actor, option=args.option,
+                                   composition=_composition(args))
     print(f"recorded from one chat message: {', '.join(recorded)} approved (authenticity: unverified)")
     return EXIT_OK
 
@@ -275,6 +276,12 @@ def build_parser():
     rec.add_argument("--quote", required=True, help="the person's message, verbatim")
     rec.add_argument("--message-ref", required=True, help="id or link of that chat message")
     rec.add_argument("--as", dest="actor")
+    rec.add_argument("--option", help="G1 only: the chosen direction")
+    rec.add_argument("--composition", help="G1 only, JSON, as in record-chat-approval")
+    rec.add_argument("--primary", help="G1 composition: main direction (defaults to --option)")
+    rec.add_argument("--theme-variant", action="append", metavar="THEME=DIRECTION")
+    rec.add_argument("--complementary", action="append", metavar="DIRECTION=USAGE")
+    rec.add_argument("--non-negotiable", action="append", metavar="TEXT")
     rec.set_defaults(func=cmd_reconfirm)
 
     stg = sub.add_parser("stage", help="move to a stage; refused when its gates are not valid")

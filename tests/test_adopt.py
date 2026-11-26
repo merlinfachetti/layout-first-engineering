@@ -159,6 +159,16 @@ class AdoptTests(unittest.TestCase):
                 decisions.reconfirm(root, "ok, pode seguir", "m3")
             self.assertEqual(ctx.exception.code, "CONFIRMATION_CODE_MISSING")
 
+    def test_reconfirm_records_the_g1_composition(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = project(tmp)
+            codes = adopt.adopt(root)["codes"]
+            decisions.reconfirm(root, f"reconfirmo {codes['G1']}, A no dark e B no light", "m2", option="A",
+                                composition={"primary": "A", "themeVariants": ["dark=A", "light=B"]})
+            g1 = [e for e in ledger.read(root) if e["kind"] == "decision" and e["gate"] == "G1"][-1]
+            self.assertEqual((g1["channel"], g1["option"]), ("chat-quote", "A"))
+            self.assertEqual(len(g1["composition"]["themeVariants"]), 2)
+
     def test_reconfirm_stops_at_a_gate_that_is_not_enabled(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = project(tmp)
